@@ -99,9 +99,9 @@ export default function App({ params }) {
       body: formData,
     })
     if (res.ok) {
-      refresh()
+      // refresh()
       dispatch(fetchApp(params.id))
-      // toast.success('Berhasil diubah')
+      toast.success('Berhasil diubah')
       // reset()
     } else {
       // setError("errorMessage", { message: res.detail ?? "Terdapat username atau email yang sama", type: "error" });

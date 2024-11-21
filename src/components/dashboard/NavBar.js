@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect } from "react";
-import { Button, Image, Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
+import { Button, Image, Navbar, NavbarContent, NavbarItem, Spinner } from "@nextui-org/react";
 import MenuAccount from "./MenuAccount";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchApp } from "@/redux/slices/app";
@@ -19,7 +19,7 @@ export default function NavBar() {
     <Navbar maxWidth="full" className="z-50">
       <NavbarContent justify='start'>
         {app.logo !== "" &&
-        <Image src={app.logo} alt="logo" height={0} width={0} className="w-auto max-h-12" radius="none" />
+        <Image src={app.logo} fallbackSrc='/asset/noview.png' alt="logo" height={0} width={0} className="w-auto max-h-12 bg-no-repeat" radius="none" />
         }
         <div className="flex flex-col">
           <p className="font-bold text-lg hidden sm:block">{app.namaapp}</p>

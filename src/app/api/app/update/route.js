@@ -29,7 +29,7 @@ export async function PUT(req, res) {
   if (logoLama.logo !== "") {
     await unlink(join(process.cwd(), "public", logoLama.logo))
   }
-  if (logo) {
+  if (logo !== '') {
     const buffer = Buffer.from(await logo.arrayBuffer());
     const relativeUploadDir = `/asset/${new Date(Date.now())
       .toLocaleDateString("id-ID", {
@@ -58,13 +58,19 @@ export async function PUT(req, res) {
         );
       }
     }
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    const uniqueSuffix = `${new Date(Date.now())
+      .toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+      .replace(/\//g, "-")}-${Math.round(Math.random() * 1e9)}`;
     const filename = `${logo.name.replace(
       /\.[^/.]+$/,
       ""
     )}-${uniqueSuffix}.${mime.getExtension(logo.type)}`;
     await writeFile(`${uploadDir}/${filename}`, buffer);
-    fileUrl = `${relativeUploadDir}/${filename}`;
+    fileUrl = `/api/public${relativeUploadDir}/${filename}`;
   }
 
   let fileUrl2;
@@ -110,13 +116,19 @@ export async function PUT(req, res) {
         );
       }
     }
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    const uniqueSuffix = `${new Date(Date.now())
+      .toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+      .replace(/\//g, "-")}-${Math.round(Math.random() * 1e9)}`;
     const filename = `${favicon.name.replace(
       /\.[^/.]+$/,
       ""
     )}-${uniqueSuffix}.${mime.getExtension(favicon.type)}`;
     await writeFile(`${uploadDir}/${filename}`, buffer);
-    fileUrl2 = `${relativeUploadDir}/${filename}`;
+    fileUrl2 = `/api/public${relativeUploadDir}/${filename}`;
   }
   // Save to database
   let switcher;

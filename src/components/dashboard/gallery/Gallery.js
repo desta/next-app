@@ -136,7 +136,7 @@ export default function Gallery() {
                             <div className='flex gap-2 items-center'>
                                 <p className="text-primary text-small font-bold">Add new image</p>
                                 <Button color='secondary' size='sm' className='max-w-[100px]'>
-                                    <input type="file" onChange={handleFile} ref={fileUpload} className="opacity-0 z-10 absolute hover:cursor-pointer" multiple="multiple" name="files[]" />
+                                    <input type="file" onChange={handleFile} ref={fileUpload} className="opacity-0 z-10 absolute hover:cursor-pointer" multiple={true} name="files[]" />
                                     <span>Insert image</span>
                                 </Button>
                             </div>
