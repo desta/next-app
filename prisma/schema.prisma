@@ -1,0 +1,446 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  // provider  = "postgresql"
+  // url       = env("POSTGRES_PRISMA_URL")
+  // directUrl = env("POSTGRES_URL_NON_POOLING")
+
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Install {
+  id      Int           @id @default(0)
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  app     App           @relation(fields: [appId], references: [id], onDelete: Cascade)
+  menu    Menu[]
+  counter HomeCounter[]
+  userId  String
+  appId   Int
+}
+
+model User {
+  id                 String               @id @default(cuid())
+  name               String
+  username           String               @unique
+  email              String               @unique
+  emailVerified      DateTime?
+  image              String               @default("") @db.Text
+  password           String
+  akses              String               @default("User")
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  Authenticator      Authenticator[]
+  Session            Session[]
+  Account            Account[]
+  Install            Install[]
+  Ticket             Ticket[]
+  ticketReply        ticketReply[]
+  Quotation          Quotation[]
+  Article            Article[]
+  Comment            Comment[]
+  CommentReply       CommentReply[]
+  WhoCreateQuotation WhoCreateQuotation[]
+  DeliveryOrder      DeliveryOrder[]
+  Invoice            Invoice[]
+  Product            Product[]
+  Note               Note[]
+  Application        Application[]
+  Pages              Pages[]
+  Agenda             Agenda[]
+}
+
+model App {
+  id          Int       @id @default(0)
+  logo        String    @default("") @db.Text
+  favicon     String    @default("") @db.Text
+  namaapp     String    @db.Text
+  deskripsi   String    @default("")
+  googleLogin Boolean   @default(false)
+  homepage    String    @default("Dashboard")
+  Install     Install[]
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+model Faq {
+  id         Int    @id @default(autoincrement())
+  pertanyaan String @db.Text
+  jawaban    String @db.Text
+}
+
+model Smtp {
+  id             Int    @id @default(0)
+  alamatemail    String
+  password       String @db.Text
+  dashboardemail String
+  host           String
+  port           Int    @default(465)
+}
+
+model Mikrotik {
+  id       Int    @id @default(autoincrement())
+  ip       String
+  username String
+  password String
+}
+
+model Ticket {
+  id          Int           @id @default(autoincrement())
+  category    String
+  judul       String
+  deskripsi   String        @db.Text
+  tanggal     DateTime      @default(now())
+  status      String        @default("Open")
+  user        User          @relation(fields: [userId], references: [id])
+  userId      String
+  ticketReply ticketReply[]
+}
+
+model TicketCategory {
+  id       Int    @id @default(autoincrement())
+  category String
+}
+
+model ticketReply {
+  id        Int      @id @default(autoincrement())
+  reply     String   @db.Text
+  pemilikId String
+  tanggal   DateTime @default(now())
+  solusi    Int      @default(0)
+  ticket    Ticket   @relation(fields: [ticketId], references: [id])
+  ticketId  Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+}
+
+model Customers {
+  id         Int         @id @default(autoincrement())
+  perusahaan String      @default("")
+  pic        String
+  alamat     String      @default("") @db.Text
+  nohp       String      @default("")
+  email      String      @default("")
+  Quotation  Quotation[]
+}
+
+model Quotation {
+  id                   Int                @id @default(autoincrement())
+  customer             Customers          @relation(fields: [customersId], references: [id])
+  sales                User               @relation(fields: [userId], references: [id])
+  items                QuotationItems[]
+  tanggal              DateTime           @default(now())
+  customersId          Int
+  userId               String
+  invoice              Invoice[]
+  deliveryOrder        DeliveryOrder[]
+  createdBy            WhoCreateQuotation @relation(fields: [whoCreateQuotationId], references: [id])
+  whoCreateQuotationId Int
+}
+
+model WhoCreateQuotation {
+  id        Int         @id @default(autoincrement())
+  user      User        @relation(fields: [userId], references: [id])
+  Quotation Quotation[]
+  userId    String
+}
+
+model Invoice {
+  id          Int       @id @default(autoincrement())
+  tanggal     DateTime  @default(now())
+  po          String
+  createdBy   User      @relation(fields: [userId], references: [id])
+  quotation   Quotation @relation(fields: [quotationId], references: [id])
+  quotationId Int
+  userId      String
+}
+
+model DeliveryOrder {
+  id          Int       @id @default(autoincrement())
+  tanggal     DateTime  @default(now())
+  createdBy   User      @relation(fields: [userId], references: [id])
+  quotation   Quotation @relation(fields: [quotationId], references: [id])
+  quotationId Int
+  userId      String
+}
+
+model QuotationItems {
+  id          Int        @id @default(autoincrement())
+  item        String
+  qty         Int
+  harga       Int
+  total       Int
+  subTotal    Int        @default(0)
+  Quotation   Quotation? @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  quotationId Int?
+}
+
+model Component {
+  id      Int       @id @default(autoincrement())
+  title   String
+  content String    @default("") @db.Text
+  image   Gallery[]
+  urutan  Int
+  region  String
+  page    String
+  Pages   Pages[]
+}
+
+model Region {
+  id     Int    @id @default(autoincrement())
+  region String
+}
+
+model Article {
+  id              Int               @id @default(autoincrement())
+  title           String
+  content         String            @default("") @db.Text
+  publish         Boolean           @default(true)
+  category        ArticleCategory[]
+  tanggal         DateTime          @default(now())
+  update          DateTime          @updatedAt
+  createdBy       User              @relation(fields: [userId], references: [id])
+  userId          String
+  Comment         Comment[]
+  productImagesId Int
+  Gallery         Gallery[]
+}
+
+model ArticleCategory {
+  id       Int       @id @default(autoincrement())
+  category String    @unique
+  Article  Article[]
+}
+
+model Comment {
+  id           Int            @id @default(autoincrement())
+  nama         String
+  user         User?          @relation(fields: [userId], references: [id])
+  content      String         @db.Text
+  tanggal      DateTime       @default(now())
+  article      Article        @relation(fields: [articleId], references: [id])
+  articleId    Int
+  userId       String?
+  CommentReply CommentReply[]
+}
+
+model CommentReply {
+  id        Int      @id @default(autoincrement())
+  nama      String?
+  user      User?    @relation(fields: [userId], references: [id])
+  content   String   @db.Text
+  tanggal   DateTime @default(now())
+  comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId Int
+  userId    String?
+}
+
+model Application {
+  id            Int             @id @default(autoincrement())
+  title         String          @unique
+  content       String          @db.Text
+  publish       Boolean         @default(true)
+  gallery       Gallery[]
+  createdBy     User            @relation(fields: [userId], references: [id])
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now()) @updatedAt
+  ProductShadow ProductShadow[]
+  userId        String
+}
+
+model Urutan {
+  id     Int    @id @default(autoincrement())
+  urutan Int
+  nama   String @unique
+}
+
+model Product {
+  id             Int               @id @default(autoincrement())
+  title          String            @unique
+  description    String            @db.Text
+  spesifications String            @db.Text
+  publish        Boolean           @default(true)
+  productType    ProductType       @relation(fields: [productTypeId], references: [id])
+  category       ProductCategory[]
+  gallery        Gallery[]
+  createdBy      User              @relation(fields: [userId], references: [id])
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @default(now()) @updatedAt
+  userId         String
+  productTypeId  Int
+  ProductShadow  ProductShadow?
+  urutan         Int
+}
+
+model ProductShadow {
+  id          Int           @id @default(autoincrement())
+  urutan      Int
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt
+  Product     Product       @relation(fields: [productId], references: [id])
+  productId   Int           @unique
+  Application Application[]
+}
+
+model ProductType {
+  id              Int               @id @default(autoincrement())
+  productType     String            @unique
+  Product         Product[]
+  ProductCategory ProductCategory[]
+}
+
+model ProductCategory {
+  id            Int         @id @default(autoincrement())
+  productType   ProductType @relation(fields: [productTypeId], references: [id], onDelete: Cascade)
+  category      String      @unique
+  Product       Product[]
+  productTypeId Int
+}
+
+model Gallery {
+  id            Int           @id @default(autoincrement())
+  image         String        @default("") @db.Text
+  description   String        @default("no image description") @db.Text
+  categoryAsset String?
+  name          String?
+  alt           String        @default("image of something") @db.Text
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @default(now())
+  deletedAt     DateTime      @default(now())
+  Product       Product[]
+  article       Article[]
+  Application   Application[]
+  Pages         Pages[]
+  Component     Component[]
+}
+
+model Note {
+  id        Int    @id @default(autoincrement())
+  note      String @default("") @db.Text
+  createdBy User   @relation(fields: [userId], references: [id])
+  userId    String
+}
+
+model Menu {
+  id        Int       @id @default(autoincrement())
+  title     String
+  path      String
+  icon      String    @default("")
+  lokasi    String
+  urutan    Int
+  Install   Install?  @relation(fields: [installId], references: [id], onDelete: Cascade)
+  installId Int?
+  Submenu   Submenu[]
+}
+
+model Submenu {
+  id     Int    @id @default(autoincrement())
+  title  String
+  menu   Menu   @relation(fields: [menuId], references: [id])
+  path   String
+  icon   String @default("")
+  urutan Int
+  menuId Int
+}
+
+model HomeCounter {
+  id      Int       @id @default(autoincrement())
+  bulan   Bulan[]
+  counter Int
+  tahun   Tahun[]
+  Install Install[]
+}
+
+model Bulan {
+  id          Int           @id @default(autoincrement())
+  bulan       String        @unique
+  HomeCounter HomeCounter[]
+}
+
+model Tahun {
+  id          Int           @id @default(autoincrement())
+  tahun       Int           @unique
+  HomeCounter HomeCounter[]
+}
+
+model Pages {
+  id        Int             @id @default(autoincrement())
+  title     String          @unique
+  content   String          @db.Text
+  publish   Boolean         @default(true)
+  layout    String
+  category  PagesCategory[]
+  gallery   Gallery[]
+  createdBy User            @relation(fields: [userId], references: [id])
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @default(now()) @updatedAt
+  urutan    Int
+  userId    String
+  component Component[]
+  path      String
+}
+
+model PagesCategory {
+  id       Int     @id @default(autoincrement())
+  category String
+  Pages    Pages[]
+}
+
+model Agenda {
+  id          Int      @id @default(autoincrement())
+  content     String   @db.Text
+  createdBy   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tanggal     DateTime
+  hour        Int      @default(0)
+  minute      Int      @default(0)
+  second      Int      @default(0)
+  millisecond Int      @default(0)
+  userId      String
+}

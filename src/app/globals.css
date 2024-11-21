@@ -2,20 +2,199 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@layer base {
+    html {
+        scroll-behavior: smooth;
+        height: 100%;
+    }
+
+    body {
+        @apply bg-gray-100 min-h-full;
+    }
+
+    main {
+        @apply mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 bg-white;
+    }
+
+    .scrollbar-hide {
+        @apply overflow-y-hidden;
+    }
+
+    .scrollbar-width-auto {
+        @apply scrollbar-width-auto;
+    }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@layer components {}
+
+/* .elipsys-content {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+} */
+
+::-webkit-scrollbar {
+    width: 10px !important;
+    height: 10px !important;
+    background-color: transparent;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: none !important;
+    background-color: transparent !important;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #acacac;
+}
+
+::-webkit-scrollbar-corner {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.icon-sidebar {
+    position: fixed;
+}
+
+.user-image {
+    width: 100px;
+    height: 100px;
+}
+
+.label-space {
+    min-width: 100px;
+    display: inline-block;
+}
+
+.wrapper {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    z-index: 0;
+    align-items: center;
+}
+
+.wrapper img {
+    width: 100%;
+    height: auto;
+    /* max-height:100px; */
+}
+
+.wrapper .file-delete {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    bottom: -10px;
+    right: -20px;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    z-index: 10;
+    transition: all 1s;
+}
+
+.wrapper .file-delete:hover {
+    transform: scale(1.2);
+}
+
+.nav-avatar img {
+    width: auto;
+    max-height: 120px;
+}
+
+.tabel-edit {
+    padding: 0 !important;
+}
+
+.slide {
+    clear: both;
+    width: 100%;
+    height: 0px;
+    overflow: hidden;
+    text-align: center;
+    transition: .4s ease-out;
+}
+
+#touch {
+    position: absolute;
+    opacity: 0;
+    height: 0px;
+}
+
+#touch:checked+.slide {
+    height: 240px;
+}
+
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    position: absolute;
+    left: 100%;
+    top: 0;
+}
+
+.dropdown-content-right {
+    display: none;
+    position: absolute;
+}
+
+.dropdown:hover .dropdown-content-right {
+    display: block;
+    position: absolute;
+    right: 100%;
+    top: 0;
+}
+
+/* .codex-editor {
+    z-index: 999;
+}
+
+.codex-editor__redactor {
+    padding-bottom: 0 !important;
+    padding-top: 10px;
+}
+
+.ce-toolbar__content {
+    max-width: 80% !important;
+}
+
+.ce-block__content {
+    max-width: 100%;
+    margin: 0 auto;
+    padding-left: 10%;
+} */
+
+@media print {
+    .area-print {
+        padding: 50px;
+    }
+
+    @page {
+        size: A4;
+        padding: 10px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    @page {
+        size: A4;
+        margin: 0;
+    }
 }
