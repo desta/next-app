@@ -10,24 +10,24 @@ export default function NavBarItem({ params, session }) {
         <>
             <nav className="fixed w-full z-50 px-4 py-4 flex justify-between items-center bg-[#1e52db]">
                 <a className="text-2xl font-bold leading-none flex gap-2 items-center text-white" href="/">
-                    {params.logo !== '' && <img src={params.logo} alt="Logo" className="h-8 w-8" />}
+                    {params.logo !== '' && <img src={`/api/public${params.logo}`} alt="Logo" className="h-8 w-8" />}
                     {params.namaapp !== '' && params.namaapp}
                 </a>
                 <div className="flex items-center gap-6">
                     <ul className="hidden lg:flex lg:mx-auto lg:items-end lg:w-auto lg:space-x-6">
                         <li><a className="text-sm text-white hover:text-gray-500" href="/">Home</a></li>
                         <li className="text-gray-300">|</li>
-                        <li><a className="text-sm text-white hover:text-gray-500" href="#">About</a></li>
+                        <li><a className="text-sm text-white hover:text-gray-500" href="#about">About</a></li>
                         <li className="text-gray-300">|</li>
-                        <li><a className="text-sm text-white hover:text-gray-500" href="#">Solutions</a></li>
+                        <li><a className="text-sm text-white hover:text-gray-500" href="#solutions">Solutions</a></li>
                         <li className="text-gray-300">|</li>
-                        <li><a className="text-sm text-white hover:text-gray-500" href="#">Services</a></li>
+                        <li><a className="text-sm text-white hover:text-gray-500" href="#services">Services</a></li>
                         <li className="text-gray-300">|</li>
-                        <li><a className="text-sm text-white hover:text-gray-500" href="/product">Product</a></li>
+                        <li><a className="text-sm text-white hover:text-gray-500" href="#product">Product</a></li>
                         <li className="text-gray-300">|</li>
                         <li><a className="text-sm text-white hover:text-gray-500" href="/article">Article</a></li>
                         <li className="text-gray-300">|</li>
-                        <li><a className="text-sm text-white hover:text-gray-500" href="#">Contact</a></li>
+                        <li><a className="text-sm text-white hover:text-gray-500" href="#contact">Contact</a></li>
                     </ul>
                     <div>
                         <button className="flex items-center text-white p-3 lg:hidden" onClick={() => setOpen(!open)}>

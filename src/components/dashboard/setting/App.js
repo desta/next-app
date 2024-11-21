@@ -63,8 +63,9 @@ export default function App({ params }) {
       method: 'PUT',
       body: formData,
     })
-    setLogo("");
+    setLogo(null);
     dispatch(fetchApp())
+    router.refresh();
     toast.success('Berhasil hapus logo')
   }
 
@@ -76,8 +77,9 @@ export default function App({ params }) {
       method: 'PUT',
       body: formData,
     })
-    setFavicon("");
+    setFavicon(null);
     dispatch(fetchApp())
+    router.refresh();
     toast.success('Berhasil hapus favicon')
   }
 
@@ -99,9 +101,10 @@ export default function App({ params }) {
       body: formData,
     })
     if (res.ok) {
-      // refresh()
       dispatch(fetchApp(params.id))
-      toast.success('Berhasil diubah')
+      refresh()
+      // toast.success('Berhasil diubah')
+      // router.refresh()
       // reset()
     } else {
       // setError("errorMessage", { message: res.detail ?? "Terdapat username atau email yang sama", type: "error" });

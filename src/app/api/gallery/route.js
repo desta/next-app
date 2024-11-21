@@ -84,8 +84,7 @@ export async function POST(req) {
         // Save to database
         const result = await prisma.gallery.create({
           data: {
-            image: '/api/public' + fileUrl,
-            // image: fileUrl,
+            image: fileUrl,
             name: image.name,
           },
         });

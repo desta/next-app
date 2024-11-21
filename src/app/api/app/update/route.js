@@ -26,10 +26,10 @@ export async function PUT(req, res) {
     }
   })
 
-  if (logoLama.logo !== "") {
-    await unlink(join(process.cwd(), "public", logoLama.logo))
-  }
-  if (logo !== '') {
+  if (logo) {
+    if (logoLama.logo !== "") {
+      await unlink(join(process.cwd(), "public", logoLama.logo))
+    }
     const buffer = Buffer.from(await logo.arrayBuffer());
     const relativeUploadDir = `/asset/${new Date(Date.now())
       .toLocaleDateString("id-ID", {
@@ -70,7 +70,7 @@ export async function PUT(req, res) {
       ""
     )}-${uniqueSuffix}.${mime.getExtension(logo.type)}`;
     await writeFile(`${uploadDir}/${filename}`, buffer);
-    fileUrl = `/api/public${relativeUploadDir}/${filename}`;
+    fileUrl = `${relativeUploadDir}/${filename}`;
   }
 
   let fileUrl2;
@@ -83,11 +83,12 @@ export async function PUT(req, res) {
     }
   })
 
-  if (logoLama2.favicon !== "") {
-    await unlink(join(process.cwd(), "public", logoLama2.favicon))
-  }
+
 
   if (favicon) {
+    if (logoLama2.favicon !== "") {
+      await unlink(join(process.cwd(), "public", logoLama2.favicon))
+    }
     const buffer = Buffer.from(await favicon.arrayBuffer());
     const relativeUploadDir = `/asset/${new Date(Date.now())
       .toLocaleDateString("id-ID", {
@@ -128,7 +129,7 @@ export async function PUT(req, res) {
       ""
     )}-${uniqueSuffix}.${mime.getExtension(favicon.type)}`;
     await writeFile(`${uploadDir}/${filename}`, buffer);
-    fileUrl2 = `/api/public${relativeUploadDir}/${filename}`;
+    fileUrl2 = `${relativeUploadDir}/${filename}`;
   }
   // Save to database
   let switcher;

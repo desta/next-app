@@ -9,48 +9,23 @@ import { pagesList } from "@/utils/pages";
 import HomeCounter from "@/components/dashboard/counter/HomeCounter";
 import AxiomContactUs from "@/components/client/axiom/AxiomContactUs";
 import { useSession } from "next-auth/react";
-import { useSelector } from "react-redux";
-
-// export async function metadata() {
-//     const data = await prisma.app.findUnique({
-//         where: {
-//             id: 0,
-//         },
-//         select: {
-//             namaapp: true,
-//             deskripsi: true,
-//             favicon: true,
-//         }
-//     })
-
-//     return {
-//         title: data.namaapp,
-//         description: data.deskripsi,
-//         icons: {
-//             icon: data.favicon !== '' ? data.favicon : '/favicon.ico',
-//         },
-//     }
-// };
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchComponents } from "@/redux/slices/website/Components";
+import { fetchApp } from "@/redux/slices/app";
 
 export default function Homepage() {
     const session = useSession();
-    // const app = await prisma.app.findFirst();
+    const dispatch = useDispatch();
     const app = useSelector((state) => state.app.data);
     const pages = pagesList.axiom.page;
-    const components = useSelector((state) => state.Components.data.filter((component) => component.page === pages));
-    // const components = await prisma.component.findMany({
-    //     where: {
-    //         page: pages
-    //     },
-    //     orderBy: [
-    //         {
-    //             urutan: 'asc',
-    //         },
-    //     ],
-    //     include: {
-    //         image: true,
-    //     }
-    // });
+    const components = useSelector((state) => state.Components.data.filter((item) => item.page === pages));
+    
+    useEffect(() => {
+        dispatch(fetchComponents())
+        dispatch(fetchApp(0))
+    }, [])
+
     return (
         <>
             <HomeCounter />
@@ -83,7 +58,7 @@ export default function Homepage() {
                 </div>
             </section>
             {/* About */}
-            <section className="max-w-7xl mx-auto px-2 py-20">
+            <section className="max-w-7xl mx-auto px-2 py-20" id="about">
                 {components.filter((item) => item.region === pagesList.axiom.regions.about.region).map((c) => {
                     return (
                         <div key={c.id}>
@@ -116,7 +91,7 @@ export default function Homepage() {
             </section>
 
             {/* solution */}
-            <section className="bg-primary py-20">
+            <section className="bg-primary py-20" id="solutions">
                 <div className="max-w-7xl mx-auto px-2">
                     <h2 className="text-3xl font-bold text-center mb-10 text-white">SOLUTION AND SERVICES</h2>
                     <div className="container mx-auto px-2 text-sm lg:text-lg flex flex-wrap justify-center gap-4">
@@ -124,7 +99,7 @@ export default function Homepage() {
                             <div key={c.id} className="flip-container w-72 h-96 hover:cursor-pointer">
                                 <div className="flipper">
                                     <div className="front bg-black text-white rounded-2xl w-72 h-96">
-                                        <Image src={`/api/public/${c.image[0]?.image}`} alt="1" className="w-full h-60" />
+                                        <img src={`/api/public${c.image[0]?.image}`} alt="1" className="w-full h-60 bg-white" />
                                         <p className="p-2 text-lg lg:text-2xl font-bold text-center">{c.title}</p>
                                     </div>
                                     <div className="back bg-black text-white rounded-2xl w-72 h-96 p-4">
@@ -138,7 +113,7 @@ export default function Homepage() {
             </section>
 
             {/* services */}
-            <section className="bg-grey-100 py-20">
+            <section className="bg-grey-100 py-20" id="services">
                 <div className="max-w-7xl mx-auto px-2 text-sm lg:text-lg">
                     {components.filter((item) => item.region === pagesList.axiom.regions.services.region).map(c =>
                         <div className="py-5" key={c.id}>
@@ -155,7 +130,7 @@ export default function Homepage() {
             </section >
 
             {/* our product */}
-            <section className="bg-white py-20">
+            <section className="bg-white py-20" id="product">
                 <div className="max-w-7xl mx-auto px-2 text-center">
                     <div className="text-3xl font-bold">OUR PRODUCTS</div>
                     <div className="font-bold">Infrastructures</div>
@@ -230,7 +205,7 @@ export default function Homepage() {
             </section>
 
             {/* Contact */}
-            <section className="py-10 bg-white text-gray-600">
+            <section className="py-10 bg-white text-gray-600" id="contact">
                 <div className="max-w-7xl mx-auto px-2 py-16">
                     <div className="text-center">
                         <h2 className="text-3xl font-bold mb-4">Contact Us</h2>

@@ -23,7 +23,7 @@ export default function AddComponent() {
   const selectedImageToAdd = useSelector((state) => state.imageSelectorRedux.selectedImageToAdd)
 
   useEffect(() => {
-    dispatch(fetchPages())
+    // dispatch(fetchPages())
     dispatch(fetchGallery())
   }, [])
 

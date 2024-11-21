@@ -1,19 +1,31 @@
 export const pagesList = {
-    dashboard:{
+    dashboard: {
         id: 1,
         page: 'Dashboard',
-        path: '/',        
+        path: '/',
+        regions: {
+            cover: {
+                id: 1,
+                region: 'Cover',
+            },
+        },
     },
-    markindo:{
+    markindo: {
         id: 2,
         page: 'Markindo',
-        path: '/',        
+        path: '/',
+        regions: {
+            cover: {
+                id: 1,
+                region: 'Cover',
+            },
+        },
     },
-    axiom:{
+    axiom: {
         id: 3,
         page: 'Axiom',
         path: '/',
-        regions:{
+        regions: {
             cover: {
                 id: 1,
                 region: 'Cover',
@@ -68,7 +80,7 @@ export const pagesList = {
     //         footer: {
     //             id: 2,
     //             region: 'footer',
-        
+
     //         },
     //     }
     // },
@@ -83,5 +95,5 @@ export const pagesList = {
     //         },
     //     }
     // },
-        
+
 }
