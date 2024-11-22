@@ -4,7 +4,7 @@ import { useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import { HiMenu } from "react-icons/hi";
 
-export default function NavBarItem({ params, session }) {
+export default function AxiomNav({ params, session }) {
     const [open, setOpen] = useState(false);
     return (
         <>

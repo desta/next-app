@@ -229,8 +229,8 @@ model Component {
   image   Gallery[]
   urutan  Int
   region  String
-  page    String
-  Pages   Pages[]
+  // page    String
+  // Pages   Pages[]
 }
 
 model Region {
@@ -423,7 +423,7 @@ model Pages {
   updatedAt DateTime        @default(now()) @updatedAt
   urutan    Int
   userId    String
-  component Component[]
+  // component Component[]
   path      String
 }
 

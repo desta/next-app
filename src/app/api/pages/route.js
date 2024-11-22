@@ -15,7 +15,6 @@ export async function GET() {
       category: true,
       createdBy: true,
       gallery: true,
-      component: true,
     }
   })
   return Response.json(pages)

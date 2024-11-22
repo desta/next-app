@@ -25,10 +25,10 @@ export default function Edit({ params }) {
   useEffect(() => {
     dispatch(fetchPages())
     dispatch(fetchGallery())
-    const res = Object.keys(pagesList).filter((value) => {
-      return pagesList[value].page === page
-    })
-    setRegions(pagesList[res].regions)
+    // const res = Object.keys(pagesList).filter((value) => {
+    //   return pagesList[value].page === page
+    // })
+    // setRegions(pagesList[res].region)
   }, [])
 
   const handleSubmitForm = async (e) => {

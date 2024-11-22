@@ -24,7 +24,6 @@ export default function Tambah() {
     const [publish, setPublish] = useState(true)
     const [category, setCategory] = useState([])
     const [preview, setPreview] = useState()
-    const components = useSelector((state) => state.components.data);
 
     useEffect(() => {
         dispatch(fetchComponents());
@@ -181,7 +180,7 @@ export default function Tambah() {
                                     <label className="text-primary text-small font-bold">Image</label>
 
                                     <ImageSelector imageData={selectedImageToAdd} />
-                                    <Select
+                                    {/* <Select
                                         items={pagesCategory}
                                         selectionMode="multiple"
                                         labelPlacement='outside'
@@ -201,7 +200,7 @@ export default function Tambah() {
                                                 {item.category}
                                             </SelectItem>
                                         ))}
-                                    </Select>
+                                    </Select> */}
                                     <Switch isSelected={publish} onValueChange={setPublish} size='sm' className='pt-3'>
                                         Publish page
                                     </Switch>

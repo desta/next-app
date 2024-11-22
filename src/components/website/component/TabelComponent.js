@@ -23,7 +23,7 @@ import Edit from "./Edit";
 import Hapus from "./Hapus";
 import AddComponent from "./AddComponent";
 
-const INITIAL_VISIBLE_COLUMNS = ["title", "page", "region", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["title", "region", "actions"];
 
 export default function TabelComponent() {
   const [filterValue, setFilterValue] = React.useState("");
@@ -43,7 +43,6 @@ export default function TabelComponent() {
 
   const columns = [
     { uid: "title", name: "Title" },
-    { uid: "page", name: "Page", sortable: true },
     { uid: "region", name: "Region", sortable: true },
     { uid: "urutan", name: "Urutan", sortable: true },
     { uid: "actions", name: "Actions" },

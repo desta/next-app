@@ -8,8 +8,11 @@ import { auth } from "@/auth";
 import KontakKami from '@/components/client/markindo/KontakKami';
 import Footer from '@/components/client/markindo/Footer';
 import MarkindoNav from '@/components/client/markindo/MarkindoNav';
+import { pagesList } from '@/utils/pages';
+import AxiomNav from '@/components/client/axiom/AxiomNav';
+import AxiomContactUs from '@/components/client/axiom/AxiomContactUs';
 
-export async function metadata () {
+export async function metadata() {
   const data = await prisma.app.findUnique({
     where: {
       id: 0,
@@ -20,8 +23,8 @@ export async function metadata () {
       favicon: true,
     }
   })
-  
-  return{
+
+  return {
     title: data.namaapp,
     description: data.deskripsi,
     icons: {
@@ -62,22 +65,47 @@ export default async function layout({ children }) {
       menu: true,
     }
   });
-  
 
+  console.log(app)
   return (
-    <div className='flex flex-col justify-between min-h-screen'>
-      <div>
-        <MarkindoNav params={app} session={session} menu={menu} submenu={submenu} />
-        <div className='pt-[68px] pb-[100px]'>
-          <main className='py-5'>
-            {children}
-          </main>
-        </div>
-      </div>
-      <div>
-        <KontakKami />
-        <Footer params={app} />
-      </div>
-    </div>
+    <>
+      {
+        app.homepage === pagesList.markindo.page ?
+          <div className='flex flex-col justify-between min-h-screen'>
+            <div>
+              <MarkindoNav params={app} session={session} menu={menu} submenu={submenu} />
+              <div className='pt-[68px] pb-[100px]'>
+                <main className='py-5'>
+                  {children}
+                </main>
+              </div>
+            </div>
+            <div>
+              <KontakKami />
+              <Footer params={app} />
+            </div>
+          </div>
+          :
+          app.homepage === pagesList.axiom.page ?
+            <div className='flex flex-col justify-between min-h-screen' >
+              <div>
+                <AxiomNav params={app} session={session} menu={menu} submenu={submenu} />
+                <div className='pt-[68px] pb-[100px]'>
+                  <main className='py-5'>
+                    {children}
+                  </main>
+                </div>
+              </div>
+              <div>
+                <AxiomContactUs />
+              </div>
+            </div >
+            :
+            <div className='flex flex-col justify-between min-h-screen'>
+              No data
+            </div>
+      }
+
+    </>
   )
 }

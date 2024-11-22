@@ -10,6 +10,7 @@ import { Editor } from '@/components/Editor';
 import { fetchPages } from '@/redux/slices/pages/Pages';
 import ImageSelector from '@/components/imageSelector/ImageSelector';
 import { fetchGallery } from '@/redux/slices/gallery';
+import { fetchApp } from '@/redux/slices/app';
 
 export default function AddComponent() {
   const dispatch = useDispatch()
@@ -18,12 +19,17 @@ export default function AddComponent() {
   const [image, setImage] = useState([]);
   const [region, setRegion] = useState('')
   const [page, setPage] = useState('')
-  const [regions, setRegions] = useState([])
+  const [regions, setRegions] = useState('')
 
+  const app = useSelector((state) => state.app.data)
   const selectedImageToAdd = useSelector((state) => state.imageSelectorRedux.selectedImageToAdd)
 
+  const res = Object.keys(pagesList).filter((value) => {
+    return pagesList[value].page === app.homepage
+  })
+
   useEffect(() => {
-    // dispatch(fetchPages())
+    dispatch(fetchApp())
     dispatch(fetchGallery())
   }, [])
 
@@ -77,7 +83,7 @@ export default function AddComponent() {
                 <label className="text-primary text-small font-bold">Image</label>
                 <ImageSelector imageData={selectedImageToAdd} />
                 <div className="flex gap-3">
-                  <Select
+                  {/* <Select
                     labelPlacement='outside'
                     className="font-bold"
                     color='primary'
@@ -100,7 +106,7 @@ export default function AddComponent() {
                         {pagesList[item].page}
                       </SelectItem>
                     ))}
-                  </Select>
+                  </Select> */}
                   <Select
                     labelPlacement='outside'
                     className="font-bold"
@@ -113,11 +119,12 @@ export default function AddComponent() {
                     isRequired
                     onChange={(e) => setRegion(e.target.value)}
                   >
-                    {Object.keys(regions).map((item) => (
-                      <SelectItem key={regions[item].region}>
-                        {regions[item].region}
+                    {Object.keys(pagesList[res].regions).map((item) => {
+                      console.log('item', item)
+                      return <SelectItem key={item.id}>
+                        {item.region}
                       </SelectItem>
-                    ))}
+                    })}
                   </Select>
                 </div>
               </ModalBody>

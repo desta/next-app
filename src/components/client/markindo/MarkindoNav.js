@@ -14,7 +14,6 @@ export default function MarkindoNav() {
     const dispatch = useDispatch();
     const session = useSession()
     const app = useSelector((state) => state.app.data);
-    console.log('app', app)
 
     useEffect(() => {
         dispatch(fetchApp())

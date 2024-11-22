@@ -17,7 +17,7 @@ export async function POST(req) {
   const content = formData.get('content')
   const region = formData.get('region')
   const image = formData.getAll('image')
-  const page = formData.get('page')
+  // const page = formData.get('page')
 
   // console.log('img',image)
   let arr;
@@ -39,7 +39,6 @@ export async function POST(req) {
       image: { connect: arr },
       urutan: urut,
       region,
-      page
     },
   })
   return Response.json(component)
