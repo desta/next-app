@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { fetchComponents } from '@/redux/slices/website/Components';
 import Image from 'next/image';
-import { pagesList } from '@/utils/pages';
+import { PagesList } from '@/utils/Pages';
 import { Editor } from '@/components/Editor';
 import { fetchPages } from '@/redux/slices/pages/Pages';
 import ImageSelector from '@/components/imageSelector/ImageSelector';
@@ -17,17 +17,18 @@ export default function AddComponent() {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('');
   const [image, setImage] = useState([]);
-  const [region, setRegion] = useState('')
   const [page, setPage] = useState('')
-  const [regions, setRegions] = useState('')
+  const [region, setRegion] = useState('')
+  const [regions, setRegions] = useState([])
 
   const app = useSelector((state) => state.app.data)
   const selectedImageToAdd = useSelector((state) => state.imageSelectorRedux.selectedImageToAdd)
 
-  const res = Object.keys(pagesList).filter((value) => {
-    return pagesList[value].page === app.homepage
+  const a = Object.keys(PagesList).filter((x) => {
+    return PagesList[x].title === app.homepage
   })
 
+  console.log('a', app.homepage)
   useEffect(() => {
     dispatch(fetchApp())
     dispatch(fetchGallery())
@@ -83,7 +84,7 @@ export default function AddComponent() {
                 <label className="text-primary text-small font-bold">Image</label>
                 <ImageSelector imageData={selectedImageToAdd} />
                 <div className="flex gap-3">
-                  {/* <Select
+                  <Select
                     labelPlacement='outside'
                     className="font-bold"
                     color='primary'
@@ -94,19 +95,20 @@ export default function AddComponent() {
                     name="page"
                     isRequired
                     onChange={(e) => {
-                      const res = Object.keys(pagesList).filter((value) => {
-                        return pagesList[value].page === e.target.value
+                      const res = Object.keys(PagesList[a].pages).filter((item) => {
+                        return PagesList[a].pages[item].title === e.target.value
                       })
-                      setRegions(pagesList[res].regions)
+                      setRegions(PagesList[a].pages[res].regions)
                       setPage(e.target.value)
                     }}
                   >
-                    {Object.keys(pagesList).map((item) => (
-                      <SelectItem key={pagesList[item].page}>
-                        {pagesList[item].page}
+                    {Object.keys(PagesList[a].pages).map((item) => {
+                      // console.log('item', item)
+                      return <SelectItem key={PagesList[a].pages[item].title}>
+                        {PagesList[a].pages[item].title}
                       </SelectItem>
-                    ))}
-                  </Select> */}
+                    })}
+                  </Select>
                   <Select
                     labelPlacement='outside'
                     className="font-bold"
@@ -119,10 +121,9 @@ export default function AddComponent() {
                     isRequired
                     onChange={(e) => setRegion(e.target.value)}
                   >
-                    {Object.keys(pagesList[res].regions).map((item) => {
-                      console.log('item', item)
-                      return <SelectItem key={item.id}>
-                        {item.region}
+                    {Object.keys(regions).map((item) => {
+                      return <SelectItem key={regions[item].title}>
+                        {regions[item].title}
                       </SelectItem>
                     })}
                   </Select>

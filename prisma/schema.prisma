@@ -229,7 +229,7 @@ model Component {
   image   Gallery[]
   urutan  Int
   region  String
-  // page    String
+  page    String
   // Pages   Pages[]
 }
 

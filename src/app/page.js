@@ -4,7 +4,7 @@ import { prisma } from '@/libs/prisma'
 import { redirect } from 'next/navigation'
 import markindo from './(homepage)/markindo'
 import axiom from './(homepage)/axiom'
-import { pagesList } from '@/utils/pages'
+import { PagesList } from '@/utils/Pages'
 
 export async function metadata() {
   const data = await prisma.app.findUnique({
@@ -53,14 +53,14 @@ export default async function page() {
   })
   if (install === null) return redirect('/install')
   else {
-    if (app.homepage === pagesList.dashboard.page) {
+    if (app.homepage === PagesList.dashboard.title) {
       if (!session) return <LoginForm />
       else return redirect('/dashboard')
     }
-    else if (app.homepage === pagesList.markindo.page) {
+    else if (app.homepage === PagesList.markindo.title) {
       return markindo()
     }
-    else if (app.homepage === pagesList.axiom.page) {
+    else if (app.homepage === PagesList.axiom.title) {
       return axiom()
     }
     else {

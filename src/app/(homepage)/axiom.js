@@ -5,7 +5,7 @@ import NavBarItem from "@/components/client/axiom/AxiomNav";
 import { prisma } from "@/libs/prisma";
 import parse from 'html-react-parser';
 import { auth } from "@/auth";
-import { pagesList } from "@/utils/pages";
+import { PagesList } from "@/utils/Pages";
 import HomeCounter from "@/components/dashboard/counter/HomeCounter";
 import AxiomContactUs from "@/components/client/axiom/AxiomContactUs";
 export async function metadata() {
@@ -32,7 +32,7 @@ export async function metadata() {
 export default async function layout() {
   const session = await auth();
   const app = await prisma.app.findFirst();
-  const pages = pagesList.axiom.page;
+  const pages = PagesList.axiom.title;
   const components = await prisma.component.findMany({
     where: {
       page: pages
@@ -65,7 +65,7 @@ export default async function layout() {
             <li></li>
           </ul>
           <div className="w-full text-center -mt-[100px] font-bold">
-            {components.filter((item) => item.region === pagesList.axiom.regions.cover.region).map((c) => {
+            {components.filter((item) => item.region === pagesList.axiom.pages.home.regions.header.title).map((c) => {
               return (
                 <div key={c.id}>
                   <p className="">{c.title}</p>
@@ -79,7 +79,7 @@ export default async function layout() {
       </section>
       {/* About */}
       <section className="max-w-7xl mx-auto px-2 py-20">
-        {components.filter((item) => item.region === pagesList.axiom.regions.about.region).map((c) => {
+        {components.filter((item) => item.region === pagesList.axiom.pages.home.regions.header.title).map((c) => {
           return (
             <div key={c.id}>
               <p className="font-bold text-center">{c.title}</p>
@@ -89,7 +89,7 @@ export default async function layout() {
         }
         )}
         <div className="flex flex-col lg:flex-row gap-2 py-10">
-          {components.filter((item) => item.region === pagesList.axiom.regions.vision.region).map((c) => {
+          {components.filter((item) => item.region === pagesList.axiom.pages.home.regions.header.title).map((c) => {
             return (
               <div key={c.id} className="w-full lg:w-1/2 border border-gray-300 rounded-md p-4">
                 <p className="font-bold text-2xl flex gap-2"><i className="bi bi-layers-half"></i>{c.title}</p>
@@ -98,7 +98,7 @@ export default async function layout() {
             )
           }
           )}
-          {components.filter((item) => item.region === pagesList.axiom.regions.mission.region).map((c) => {
+          {components.filter((item) => item.region === pagesList.axiom.pages.home.regions.header.title).map((c) => {
             return (
               <div key={c.id} className="w-full lg:w-1/2 border border-gray-300 rounded-md p-4">
                 <p className="font-bold text-2xl flex gap-2"><i className="bi bi-layers-half"></i>{c.title}</p>
@@ -115,7 +115,7 @@ export default async function layout() {
         <div className="max-w-7xl mx-auto px-2">
           <h2 className="text-3xl font-bold text-center mb-10 text-white">SOLUTION AND SERVICES</h2>
           <div className="container mx-auto px-2 text-sm lg:text-lg flex flex-wrap justify-center gap-4">
-            {components.filter((item) => item.region === pagesList.axiom.regions.solution.region).map((c) =>
+            {components.filter((item) => item.region === pagesList.axiom.pages.home.regions.header.title).map((c) =>
               <div key={c.id} className="flip-container w-72 h-96 hover:cursor-pointer">
                 <div className="flipper">
                   <div className="front bg-black text-white rounded-2xl w-72 h-96">
@@ -135,7 +135,7 @@ export default async function layout() {
       {/* services */}
       <section className="bg-grey-100 py-20">
         <div className="max-w-7xl mx-auto px-2 text-sm lg:text-lg">
-          {components.filter((item) => item.region === pagesList.axiom.regions.services.region).map(c =>
+          {components.filter((item) => item.region === pagesList.axiom.pages.home.regions.header.title).map(c =>
             <div className="py-5" key={c.id}>
               <div className="flex gap-3 flex-col lg:flex-row">
                 <div className="order-2 lg:order-1 w-full ">

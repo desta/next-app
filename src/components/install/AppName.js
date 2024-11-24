@@ -1,4 +1,4 @@
-import { pagesList } from "@/utils/pages";
+import { PagesList, pagesList } from "@/utils/Pages";
 import { Button, Divider, Input, Select, SelectItem } from "@nextui-org/react";
 import { useState } from "react";
 import { MdDashboard } from "react-icons/md";
@@ -45,9 +45,9 @@ const AppName = ({ formData, handleChangeInput, handlePrevStep, handleNextStep }
           isRequired
           onChange={(e) => handleChangeInput(e)}
         >
-          {Object.keys(pagesList).map((item) => (
-            <SelectItem key={pagesList[item].page}>
-              {pagesList[item].page}
+          {Object.keys(PagesList).map((item) => (
+            <SelectItem key={PagesList[item].title}>
+              {PagesList[item].title}
             </SelectItem>
           ))}
         </Select>

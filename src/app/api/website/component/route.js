@@ -15,6 +15,7 @@ export async function POST(req) {
   const formData = await req.formData()
   const title = formData.get('title')
   const content = formData.get('content')
+  const page = formData.get('page')
   const region = formData.get('region')
   const image = formData.getAll('image')
   // const page = formData.get('page')
@@ -39,6 +40,7 @@ export async function POST(req) {
       image: { connect: arr },
       urutan: urut,
       region,
+      page,
     },
   })
   return Response.json(component)

@@ -3,14 +3,19 @@ import './Calendar.css';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAgendas } from '@/redux/slices/agendas';
-import { Button, Textarea, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Chip, TimeInput } from '@nextui-org/react'
-import Calendar from 'react-calendar';
+import { Button, Textarea, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Chip, TimeInput, Spinner } from '@nextui-org/react'
+// import Calendar from 'react-calendar';
 import { formatAgenda } from '@/components/Utils';
 import { BiEdit, BiPlus, BiTrash } from 'react-icons/bi';
 import EditAgenda from './EditAgenda';
 import HapusAgenda from './HapusAgenda';
 import { MdAccessTime } from "react-icons/md";
 import { toast } from 'react-hot-toast';
+import dynamic from 'next/dynamic';
+
+const Calendar = dynamic(() => import("react-calendar"), {
+    ssr: false, loading: () => <div className="flex gap-2 items-center"><Spinner size="sm" /><p>Loading...</p></div>,
+  });
 
 export default function Agenda() {
     const dispatch = useDispatch()

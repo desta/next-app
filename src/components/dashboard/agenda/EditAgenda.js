@@ -1,13 +1,16 @@
 "use client"
 import './Calendar.css';
-import Calendar from 'react-calendar';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input, Select, SelectItem, Textarea, Tooltip, TimeInput } from '@nextui-org/react'
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input, Select, SelectItem, Textarea, Tooltip, TimeInput, Spinner } from '@nextui-org/react'
 import React, { useEffect, useState, useRef, useMemo, forwardRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { BiEdit } from 'react-icons/bi';
 import { fetchAgendas } from '@/redux/slices/agendas';
+import dynamic from 'next/dynamic';
 
+const Calendar = dynamic(() => import("react-calendar"), {
+    ssr: false, loading: () => <div className="flex gap-2 items-center"><Spinner size="sm" /><p>Loading...</p></div>,
+  });
 export default function EditAgenda({ params, dataContent, dataTanggal, dataJam }) {
     const dispatch = useDispatch()
     const { isOpen, onOpen, onOpenChange } = useDisclosure();

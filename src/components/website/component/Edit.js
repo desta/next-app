@@ -6,10 +6,11 @@ import { toast } from 'react-hot-toast';
 import { BiEdit } from 'react-icons/bi';
 import { fetchComponents } from '@/redux/slices/website/Components';
 import { Editor } from '@/components/Editor';
-import { pagesList } from '@/utils/pages';
+import { PagesList } from '@/utils/Pages';
 import { fetchPages } from '@/redux/slices/pages/Pages';
 import ImageSelector from '@/components/imageSelector/ImageSelector';
 import { fetchGallery } from '@/redux/slices/gallery';
+import { fetchApp } from '@/redux/slices/app';
 
 export default function Edit({ params }) {
   const dispatch = useDispatch()
@@ -21,14 +22,20 @@ export default function Edit({ params }) {
   const [region, setRegion] = useState(params.region)
   const [urutan, setUrutan] = useState(params.urutan)
   const selectedImageToAdd = useSelector((state) => state.imageSelectorRedux.selectedImageToAdd)
+  const app = useSelector((state) => state.app.data)
+
+  const a = Object.keys(PagesList).filter((x) => {
+    return PagesList[x].title === app.homepage
+  })
 
   useEffect(() => {
+    dispatch(fetchApp())
     dispatch(fetchPages())
     dispatch(fetchGallery())
-    // const res = Object.keys(pagesList).filter((value) => {
-    //   return pagesList[value].page === page
-    // })
-    // setRegions(pagesList[res].region)
+    const res = Object.keys(PagesList[a].pages).filter((value) => {
+      return PagesList[a].pages[value].title === page
+    })
+    setRegions(PagesList[a].pages[res].regions)
   }, [])
 
   const handleSubmitForm = async (e) => {
@@ -101,16 +108,16 @@ export default function Edit({ params }) {
                     isRequired
                     selectedKeys={[page]}
                     onChange={(e) => {
-                      const res = Object.keys(pagesList).filter((value) => {
-                        return pagesList[value].page === e.target.value
+                      const res = Object.keys(PagesList[a].pages).filter((value) => {
+                        return PagesList[a].pages[value].title === e.target.value
                       })
-                      setRegions(pagesList[res].regions)
+                      setRegions(PagesList[a].pages[res].regions)
                       setPage(e.target.value)
                     }}
                   >
-                    {Object.keys(pagesList).map((item) => (
-                      <SelectItem key={pagesList[item].page}>
-                        {pagesList[item].page}
+                    {Object.keys(PagesList[a].pages).map((item) => (
+                      <SelectItem key={PagesList[a].pages[item].title}>
+                        {PagesList[a].pages[item].title}
                       </SelectItem>
                     ))}
                   </Select>
@@ -128,8 +135,8 @@ export default function Edit({ params }) {
                     onChange={(e) => setRegion(e.target.value)}
                   >
                     {Object.keys(regions).map((item) => (
-                      <SelectItem key={regions[item].region}>
-                        {regions[item].region}
+                      <SelectItem key={regions[item].title}>
+                        {regions[item].title}
                       </SelectItem>
                     ))}
                   </Select>

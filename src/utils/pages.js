@@ -1,99 +1,127 @@
-export const pagesList = {
+export const PagesList = {
     dashboard: {
         id: 1,
-        page: 'Dashboard',
-        path: '/',
-        regions: {
-            cover: {
+        title: 'Dashboard',
+        pages: {
+            homepage: {
                 id: 1,
-                region: 'Cover',
+                title: 'Homepage',
+                path: '/',
+                regions: {
+                    header: {
+                        id: 1,
+                        title: 'Header',
+                    },
+                    footer: {
+                        id: 2,
+                        title: 'Footer',
+                    },
+                },
             },
         },
     },
     markindo: {
         id: 2,
-        page: 'Markindo',
-        path: '/',
-        regions: {
-            cover: {
+        title: 'Markindo',
+        pages: {
+            homepage: {
                 id: 1,
-                region: 'Cover',
+                title: 'Homepage',
+                path: '/',
+                regions: {
+                    header: {
+                        id: 1,
+                        title: 'Header',
+                    },
+                    footer: {
+                        id: 2,
+                        title: 'Footer',
+                    }
+                }
+            },
+            products: {
+                id: 2,
+                title: 'Products',
+                path: '/products',
+                regions: {
+                    left: {
+                        id: 1,
+                        title: 'Left',
+                    },
+                    right: {
+                        id: 2,
+                        title: 'Right',
+                    },
+                },
             },
         },
     },
     axiom: {
         id: 3,
-        page: 'Axiom',
-        path: '/',
-        regions: {
-            cover: {
+        title: 'Axiom',
+        pages: {
+            homepage: {
                 id: 1,
-                region: 'Cover',
+                title: 'Homepage',
+                path: '/',
+                regions: {
+                    cover: {
+                        id: 1,
+                        title: 'Cover',
+                    },
+                    about: {
+                        id: 2,
+                        title: 'About',
+                    },
+                    vision: {
+                        id: 3,
+                        title: 'Vision',
+                    },
+                    mission: {
+                        id: 4,
+                        title: 'Mission',
+                    },
+                    solution: {
+                        id: 5,
+                        title: 'Solution',
+                    },
+                    services: {
+                        id: 6,
+                        title: 'Services',
+                    },
+                    infrastructure: {
+                        id: 7,
+                        title: 'Infrastructure',
+                    },
+                    aplication: {
+                        id: 8,
+                        title: 'Aplication',
+                    },
+                    customer: {
+                        id: 9,
+                        title: 'Customer',
+                    },
+                    footer: {
+                        id: 10,
+                        title: 'Footer',
+                    },
+                },
             },
-            about: {
+            article: {
                 id: 2,
-                region: 'About',
+                title: 'Article',
+                path: '/article',
+                regions: {
+                    top: {
+                        id: 1,
+                        title: 'Top',
+                    },
+                    bottom: {
+                        id: 2,
+                        title: 'Bottom',
+                    },
+                },
             },
-            vision: {
-                id: 3,
-                region: 'Vision',
-            },
-            mission: {
-                id: 4,
-                region: 'Mission',
-            },
-            solution: {
-                id: 5,
-                region: 'Solution',
-            },
-            services: {
-                id: 6,
-                region: 'Services',
-            },
-            infrastructure: {
-                id: 7,
-                region: 'Infrastructure',
-            },
-            aplication: {
-                id: 8,
-                region: 'Aplication',
-            },
-            customer: {
-                id: 9,
-                region: 'Customer',
-            },
-            footer: {
-                id: 10,
-                region: 'Footer',
-            }
-        }
+        },
     },
-    // about:{
-    //     id: 4,
-    //     page: 'About',
-    //     path: '/about',
-    //     regions:{
-    //         header: {
-    //             id: 1,
-    //             region: 'header',
-    //         },
-    //         footer: {
-    //             id: 2,
-    //             region: 'footer',
-
-    //         },
-    //     }
-    // },
-    // product:{
-    //     id: 5,
-    //     page: 'Product',
-    //     path: '/product',
-    //     regions:{
-    //         header: {
-    //             id: 1,
-    //             region: 'header',
-    //         },
-    //     }
-    // },
-
 }

@@ -11,7 +11,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { MdDashboard } from 'react-icons/md';
 import { fetchApp } from '@/redux/slices/app';
-import { pagesList } from '@/utils/pages';
+import { PagesList } from '@/utils/Pages';
 
 let validationSchema = yup.object().shape({
   namaapp: yup.string(),
@@ -90,6 +90,7 @@ export default function App({ params }) {
     formData.append("deskripsi", deskripsi);
     formData.append("googleLogin", googleLogin);
     formData.append("homepage", homepage);
+    console.log('hoo',homepage)
     if (logo) {
       formData.append("logo", logo);
     }
@@ -250,9 +251,9 @@ export default function App({ params }) {
             selectedKeys={[homepage]}
             onChange={(e) => setHomepage(e.target.value)}
           >
-            {Object.keys(pagesList).map((item) => (
-              <SelectItem key={pagesList[item].page}>
-                {pagesList[item].page}
+            {Object.keys(PagesList).map((item) => (
+              <SelectItem key={PagesList[item].title}>
+                {PagesList[item].title}
               </SelectItem>
             ))}
           </Select>

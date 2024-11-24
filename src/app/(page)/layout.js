@@ -8,7 +8,7 @@ import { auth } from "@/auth";
 import KontakKami from '@/components/client/markindo/KontakKami';
 import Footer from '@/components/client/markindo/Footer';
 import MarkindoNav from '@/components/client/markindo/MarkindoNav';
-import { pagesList } from '@/utils/pages';
+import { pagesList } from '@/utils/Pages';
 import AxiomNav from '@/components/client/axiom/AxiomNav';
 import AxiomContactUs from '@/components/client/axiom/AxiomContactUs';
 
