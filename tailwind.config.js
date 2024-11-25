@@ -11,7 +11,9 @@ module.exports = {
     extend: {},
   },
   darkMode: "class",
-  plugins: [nextui({
+  plugins: [
+    require('@tailwindcss/typography'),
+    nextui({
     themes: {
       light: {
         extend: "light", // <- inherit default values from dark theme

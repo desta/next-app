@@ -65,8 +65,7 @@ export default async function layout({ children }) {
       menu: true,
     }
   });
-
-  console.log(app)
+  
   return (
     <>
       {

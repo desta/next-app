@@ -38,7 +38,7 @@ export async function PUT(req, { params }) {
       title,
       description,
       spesifications,
-      gallery: {
+      image: {
         set: arr2,
       },
       publish: Boolean(publish),
@@ -54,7 +54,7 @@ export async function PUT(req, { params }) {
     include: {
       category: true,
       productType: true,
-      gallery: true
+      image: true
     }
   })
   return Response.json(getproduct)

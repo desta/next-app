@@ -31,7 +31,6 @@ export async function POST(req) {
   } else {
     arr = []
   }
-  console.log('arr',arr)
 
   const component = await prisma.component.create({
     data: {

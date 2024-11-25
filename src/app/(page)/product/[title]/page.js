@@ -1,7 +1,7 @@
 import React from 'react'
 import { prisma } from '@/libs/prisma'
 import parse from 'html-react-parser'
-import GalleryProduct from '@/components/client/markindo/GalleryProduct'
+import GalleryProduct from '@/components/website/product/GalleryProduct'
 
 export async function generateMetadata({ params }) {
   const slug = (await params).title.replaceAll('_', ' ')
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }) {
     },
   })
   return {
-    title: data?.title === undefined ? `Product not found | ${app.namaapp}` :  `${data.title} | ${app.namaapp}`,
+    title: data?.title === undefined ? `Product not found | ${app.namaapp}` : `${data.title} | ${app.namaapp}`,
     description: app.deskripsi,
     icons: {
       icon: app.favicon !== '' ? app.favicon : '/favicon.ico',
@@ -37,11 +37,11 @@ export default async function page({ params }) {
       title: slug
     },
     include: {
-      gallery: true,
+      image: true,
     }
   })
 
-  const images = data?.gallery.map((item) => {
+  const images = data?.image.map((item) => {
     return { original: item.image, thumbnail: item.image }
   })
 
@@ -54,12 +54,14 @@ export default async function page({ params }) {
             <h1>Product not found.</h1>
           </div>
           :
-          <div>
-            <p className='text-md md:text-4xl font-bold'>{data.title}</p>
+          <div className='prose max-w-none'>
+            <h1 className=''>{data.title}</h1>
             <div key={data.id} className='pb-5'>
-              {data.gallery.length !== 0 &&
-                <GalleryProduct images={images} />
-              }
+              <div className='xl:float-left xl:mr-3 xl:mb-3'>
+                {data.image.length !== 0 &&
+                  <GalleryProduct images={images} />
+                }
+              </div>
               <div>{parse(data.description)}</div>
             </div>
           </div>

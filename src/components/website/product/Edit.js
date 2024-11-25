@@ -70,7 +70,7 @@ export default function Edit({ params }) {
         if (res.ok) {
             toast.success('Berhasil edit product')
             dispatch(fetchProducts())
-            router.refresh()
+            onOpenChange(false)
         } else {
             toast.error('Gagal edit product')
         }
@@ -117,7 +117,7 @@ export default function Edit({ params }) {
                                     <Editor value={spesifications} onChange={setSpesifications} />
 
                                     <label className="text-primary text-small font-bold">Image</label>
-                                    <ImageSelector what={"edit"} imageData={params.gallery} />
+                                    <ImageSelector what={"edit"} imageData={params.image} />
                                     <Select
                                         items={productTypes}
                                         labelPlacement='outside'

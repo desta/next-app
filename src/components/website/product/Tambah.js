@@ -61,9 +61,7 @@ export default function Tambah() {
         formData.append("spesifications", spesifications);
         formData.append("publish", publish);
         formData.append("productType", productType);
-        await selectedImageToAdd.map((item) => {
-            formData.append('image', item.id);
-        })
+        formData.append("image", selectedImageToAdd.map((image) => image.id));
         await category.split(',').map((item) => {
             formData.append('category', item);
         });
