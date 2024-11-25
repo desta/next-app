@@ -12,8 +12,7 @@ export async function GET(req, { params }) {
 export async function PUT(req, { params }) {
   const formData = await req.formData();
   const title = formData.get("title")
-  const description = formData.get("description")
-  const spesifications = formData.get("spesifications")
+  const content = formData.get("content")
   const publish = formData.get("publish")
   const productType = formData.get("productType")
   const category = formData.getAll("category")
@@ -36,8 +35,7 @@ export async function PUT(req, { params }) {
     },
     data: {
       title,
-      description,
-      spesifications,
+      content,
       image: {
         set: arr2,
       },

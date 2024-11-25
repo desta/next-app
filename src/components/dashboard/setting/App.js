@@ -11,7 +11,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { MdDashboard } from 'react-icons/md';
 import { fetchApp } from '@/redux/slices/app';
-import { PagesList } from '@/utils/pages';
+import { PagesList } from '@/utils/PagesList';
 
 let validationSchema = yup.object().shape({
   namaapp: yup.string(),

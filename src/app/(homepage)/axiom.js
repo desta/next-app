@@ -1,13 +1,13 @@
 // Axiom.co.id
 import "./axiom.css";
-import "@/components/Editor.css"
 import NavBarItem from "@/components/client/axiom/AxiomNav";
 import { prisma } from "@/libs/prisma";
 import parse from 'html-react-parser';
 import { auth } from "@/auth";
 import HomeCounter from "@/components/dashboard/counter/HomeCounter";
 import AxiomContactUs from "@/components/client/axiom/AxiomContactUs";
-import { PagesList } from "@/utils/pages";
+import { PagesList } from "@/utils/PagesList";
+
 export async function metadata() {
   const data = await prisma.app.findUnique({
     where: {

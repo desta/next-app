@@ -54,7 +54,7 @@ export default async function page({ params }) {
             <h1>Product not found.</h1>
           </div>
           :
-          <div className='prose max-w-none'>
+          <div className='prose prose-indigo max-w-none'>
             <h1 className=''>{data.title}</h1>
             <div key={data.id} className='pb-5'>
               <div className='xl:float-left xl:mr-3 xl:mb-3'>
@@ -62,7 +62,7 @@ export default async function page({ params }) {
                   <GalleryProduct images={images} />
                 }
               </div>
-              <div>{parse(data.description)}</div>
+              <div>{parse(data.content)}</div>
             </div>
           </div>
         }

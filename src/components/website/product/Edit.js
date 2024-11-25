@@ -17,8 +17,7 @@ export default function Edit({ params }) {
     const dispatch = useDispatch()
     const router = useRouter()
     const [title, setTitle] = useState(params.title)
-    const [description, setDescription] = useState(params.description)
-    const [spesifications, setSpesifications] = useState(params.spesifications);
+    const [content, setContent] = useState(params.content)
     const [publish, setPublish] = useState(params.publish)
     const [productType, setProductType] = useState(params.productType.id)
     const [category, setCategory] = useState(params.category.map((item) => item.id))
@@ -54,8 +53,7 @@ export default function Edit({ params }) {
 
         const formData = new FormData();
         formData.append("title", title);
-        formData.append("description", description);
-        formData.append("spesifications", spesifications);
+        formData.append("content", content);
         formData.append("publish", publish);
         formData.append("productType", productType);
         formData.append("category", category);
@@ -110,11 +108,8 @@ export default function Edit({ params }) {
                                         value={title}
                                         onChange={(e) => setTitle(e.target.value)}
                                     />
-                                    <label className="text-primary text-small font-bold">Description</label>
-                                    <Editor value={description} onChange={setDescription} />
-
-                                    <label className="text-primary text-small font-bold">Spesifications</label>
-                                    <Editor value={spesifications} onChange={setSpesifications} />
+                                    <label className="text-primary text-small font-bold">Content</label>
+                                    <Editor value={content} onChange={setContent} />
 
                                     <label className="text-primary text-small font-bold">Image</label>
                                     <ImageSelector what={"edit"} imageData={params.image} />

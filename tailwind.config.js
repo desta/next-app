@@ -8,7 +8,46 @@ module.exports = {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            a: {
+              textDecoration: "none",
+            },
+            h1: {
+              fontWeight: "bold",
+              marginBottom: "0",
+            },
+            table: {
+              borderCollapse: 'collapse',
+              borderWidth: '1px',
+              borderColor: 'rgb(148 163 184)' 
+            },
+            thead: {
+              borderWidth: '1px',
+              borderColor: 'rgb(148 163 184)',
+              padding: '0.5rem',
+              fontWeight: 'bold',
+              background: '#d1d5db',
+              th:{
+                textAlign: 'center'
+              }
+            },
+            th: {
+              borderWidth: '1px',
+              borderColor: 'rgb(148 163 184)',
+              padding: '0.5rem'
+            },
+            td: {
+              borderWidth: '1px',
+              borderColor: 'rgb(148 163 184)',
+              padding: '0.5rem'
+            },            
+          },
+        },
+      },
+    },
   },
   darkMode: "class",
   plugins: [

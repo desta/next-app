@@ -10,7 +10,7 @@ import Footer from '@/components/client/markindo/Footer';
 import MarkindoNav from '@/components/client/markindo/MarkindoNav';
 import AxiomNav from '@/components/client/axiom/AxiomNav';
 import AxiomContactUs from '@/components/client/axiom/AxiomContactUs';
-import { PagesList } from '@/utils/pages';
+import { PagesList } from '@/utils/PagesList';
 
 export async function metadata() {
   const data = await prisma.app.findUnique({

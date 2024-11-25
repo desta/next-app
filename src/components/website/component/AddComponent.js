@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { fetchComponents } from '@/redux/slices/website/Components';
-import { PagesList } from '@/utils/pages';
 import { Editor } from '@/components/Editor';
 import ImageSelector from '@/components/imageSelector/ImageSelector';
 import { fetchGallery } from '@/redux/slices/gallery';
 import { fetchApp } from '@/redux/slices/app';
+import { PagesList } from '@/utils/PagesList';
 
 export default function AddComponent() {
   const dispatch = useDispatch()

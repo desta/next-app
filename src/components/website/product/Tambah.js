@@ -17,8 +17,7 @@ export default function Tambah() {
     const dispatch = useDispatch()
     const router = useRouter()
     const [title, setTitle] = useState('')
-    const [description, setDescription] = useState('')
-    const [spesifications, setSpesifications] = useState('');
+    const [content, setContent] = useState('')
     const [publish, setPublish] = useState(true)
     const [productType, setProductType] = useState('')
     const [category, setCategory] = useState([])
@@ -37,7 +36,7 @@ export default function Tambah() {
 
     const cleanup = () => {
         setTitle('')
-        setSpesifications('')
+        setContent('')
         setPublish(true)
         setCategory([])
         setProductType('')
@@ -57,8 +56,7 @@ export default function Tambah() {
         e.preventDefault()
         const formData = new FormData();
         formData.append("title", title);
-        formData.append("description", description);
-        formData.append("spesifications", spesifications);
+        formData.append("content", content);
         formData.append("publish", publish);
         formData.append("productType", productType);
         formData.append("image", selectedImageToAdd.map((image) => image.id));
@@ -111,15 +109,12 @@ export default function Tambah() {
                                         id="title"
                                         onChange={(e) => setTitle(e.target.value)}
                                     />
-                                    <label className="text-primary text-small font-bold">Description</label>
-                                    <Editor value={description} onChange={setDescription} />
-
-                                    <label className="text-primary text-small font-bold">Spesifications</label>
-                                    <Editor value={spesifications} onChange={setSpesifications} />
+                                    <label className="text-primary text-small font-bold">Content</label>
+                                    <Editor value={content} onChange={setContent} />
 
                                     <label className="text-primary text-small font-bold">Image</label>
-
                                     <ImageSelector imageData={selectedImageToAdd} />
+                                    
                                     <Select
                                         items={productType}
                                         labelPlacement='outside'

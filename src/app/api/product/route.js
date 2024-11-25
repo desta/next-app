@@ -21,8 +21,7 @@ export async function POST(req) {
   const uruts = await prisma.product.findMany()
   const formData = await req.formData();
   const title = formData.get("title")
-  const description = formData.get("description")
-  const spesifications = formData.get("spesifications")
+  const content = formData.get("content")
   const publish = formData.get("publish")
   const productType = formData.get("productType")
   const category = formData.getAll("category")
@@ -42,8 +41,7 @@ export async function POST(req) {
   const product = await prisma.product.create({
     data: {
       title,
-      description,
-      spesifications,
+      content,
       publish: Boolean(publish),
       productType: {
         connect: {

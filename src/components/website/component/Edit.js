@@ -6,10 +6,10 @@ import { toast } from 'react-hot-toast';
 import { BiEdit } from 'react-icons/bi';
 import { fetchComponents } from '@/redux/slices/website/Components';
 import { Editor } from '@/components/Editor';
-import { PagesList } from '@/utils/pages';
 import ImageSelector from '@/components/imageSelector/ImageSelector';
 import { fetchGallery } from '@/redux/slices/gallery';
 import { fetchApp } from '@/redux/slices/app';
+import { PagesList } from '@/utils/PagesList';
 
 export default function Edit({ params }) {
   const dispatch = useDispatch()

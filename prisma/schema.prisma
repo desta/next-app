@@ -302,8 +302,7 @@ model MediaApplication {
 model Product {
   id               Int                @id @default(autoincrement())
   title            String             @unique
-  description      String             @db.Text
-  spesifications   String             @db.Text
+  content      String             @db.Text
   publish          Boolean            @default(true)
   productType      ProductType        @relation(fields: [productTypeId], references: [id])
   category         ProductCategory[]
