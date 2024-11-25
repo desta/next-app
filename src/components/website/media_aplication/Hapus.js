@@ -14,11 +14,11 @@ export default function Hapus({ params }) {
   const handleSubmitForm = async (e) => {
     e.preventDefault()
     // Add to your backend here
-    const res = await fetch(`/api/product/${params.id}`, {
+    const res = await fetch(`/api/media_aplication/${params.id}`, {
       method: 'DELETE',
     })
     if (res.ok) {
-      toast.success('Berhasil hapus product')
+      toast.success('Berhasil hapus media aplication')
       dispatch(fetchProducts())
     }
   }
@@ -41,9 +41,9 @@ export default function Hapus({ params }) {
           <ModalContent>
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-col gap-1">Hapus product</ModalHeader>
+                <ModalHeader className="flex flex-col gap-1">Hapus media aplication</ModalHeader>
                 <ModalBody>
-                  <span>Yakit hapus product <span className="text-primary font-bold">{title}</span></span>
+                  <span>Yakit hapus content <span className="text-primary font-bold">{title}</span></span>
                 </ModalBody>
                 <ModalFooter>
                   <Button color="danger" variant="light" onPress={onClose}>

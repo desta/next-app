@@ -17,30 +17,17 @@ export default function Edit({ params }) {
     const dispatch = useDispatch()
     const router = useRouter()
     const [title, setTitle] = useState(params.title)
-    const [description, setDescription] = useState(params.description)
-    const [spesifications, setSpesifications] = useState(params.spesifications);
     const [publish, setPublish] = useState(params.publish)
-    const [productType, setProductType] = useState(params.productType.id)
-    const [category, setCategory] = useState(params.category.map((item) => item.id))
-
-    const productTypes = useSelector((state) => state.producttypes.data)
-    const productCategories = useSelector((state) => state.productcategories.data)
+    const [content, setContent] = useState(params.content)
     const selectedImageToAdd = useSelector((state) => state.imageSelectorRedux.selectedImageToAdd)
 
-    const handleCategory = (e) => {
-        setCategory(e.target.value);
-    };
-
+   
     const cleanup = () => {
         setTitle('')
         setPublish(true)
-        setCategory([])
-        setProductType('')
         dispatch(selectedImageToAdd([]))
     }
     const getData = () => {
-        dispatch(fetchProductTypes())
-        dispatch(fetchProductCategories())
         dispatch(fetchGallery());
     }
     useEffect(() => {
@@ -54,25 +41,22 @@ export default function Edit({ params }) {
 
         const formData = new FormData();
         formData.append("title", title);
-        formData.append("description", description);
-        formData.append("spesifications", spesifications);
+        formData.append("content", content);
         formData.append("publish", publish);
-        formData.append("productType", productType);
-        formData.append("category", category);
         await selectedImageToAdd.map((item) => {
             formData.append('image', item.id);
         })
 
-        const res = await fetch(`/api/product/${params.id}`, {
+        const res = await fetch(`/api/media_aplication/${params.id}`, {
             method: 'PUT',
             body: formData,
         })
         if (res.ok) {
-            toast.success('Berhasil edit product')
+            toast.success('Berhasil edit media aplication')
             dispatch(fetchProducts())
             router.refresh()
         } else {
-            toast.error('Gagal edit product')
+            toast.error('Gagal edit media aplication')
         }
     }
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -94,7 +78,7 @@ export default function Edit({ params }) {
                 <ModalContent>
                     {(onClose) => (
                         <form onSubmit={handleSubmitForm} className='flex flex-col gap-3'>
-                            <ModalHeader>Edit product</ModalHeader>
+                            <ModalHeader>Edit Media Aplication</ModalHeader>
                             <ModalBody>
                                 <div className='flex flex-col gap-2'>
                                     <Input
@@ -110,51 +94,12 @@ export default function Edit({ params }) {
                                         value={title}
                                         onChange={(e) => setTitle(e.target.value)}
                                     />
-                                    <label className="text-primary text-small font-bold">Description</label>
-                                    <Editor value={description} onChange={setDescription} />
-
-                                    <label className="text-primary text-small font-bold">Spesifications</label>
-                                    <Editor value={spesifications} onChange={setSpesifications} />
+                                    <label className="text-primary text-small font-bold">Content</label>
+                                    <Editor value={content} onChange={setContent} />
 
                                     <label className="text-primary text-small font-bold">Image</label>
                                     <ImageSelector what={"edit"} imageData={params.gallery} />
-                                    <Select
-                                        items={productTypes}
-                                        labelPlacement='outside'
-                                        className="font-bold max-w-xs"
-                                        color='primary'
-                                        label="Product type"
-                                        placeholder="Product type"
-                                        variant="bordered"
-                                        id="productType"
-                                        name="productType"
-                                        isRequired
-                                        selectedKeys={[productType]}
-                                        onSelectionChange={(e) => setProductType(e.currentKey)}
-                                    >
-                                        {(productTypes) => <SelectItem>{productTypes.productType}</SelectItem>}
-                                    </Select>
-                                    <Select
-                                        items={productCategories}
-                                        selectionMode="multiple"
-                                        labelPlacement='outside'
-                                        className="font-bold max-w-xs"
-                                        color='primary'
-                                        label="Category"
-                                        placeholder="Product category"
-                                        variant="bordered"
-                                        id="category"
-                                        name="category"
-                                        isRequired
-                                        selectedKeys={[...category]}
-                                        onChange={handleCategory}
-                                    >
-                                        {productCategories.filter((item) => item.productTypeId == productType).map((item) => (
-                                            <SelectItem key={item.id}>
-                                                {item.category}
-                                            </SelectItem>
-                                        ))}
-                                    </Select>
+                                  
                                     <Switch isSelected={publish} onValueChange={setPublish} size='sm' className='pt-3'>
                                         Publish product
                                     </Switch>

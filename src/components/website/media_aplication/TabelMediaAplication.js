@@ -2,12 +2,12 @@
 import React, { useEffect } from "react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Chip, User, Pagination, Tooltip, } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "@/redux/slices/product/Products";
 import { capitalize } from "@/utils/Capitalize";
 import { BiChevronDown, BiPlus, BiSearch } from "react-icons/bi";
 import Tambah from "./Tambah";
 import Edit from "./Edit";
 import Hapus from "./Hapus";
+import { fetchMediaAplications } from "@/redux/slices/media_aplication/MediaAplications";
 
 
 const INITIAL_VISIBLE_COLUMNS = ["title", "actions"];
@@ -30,10 +30,10 @@ export default function TabelMediaAplication() {
         direction: "ascending",
     });
     const [page, setPage] = React.useState(1);
-    const products = useSelector((state) => state.products.data);
+    const MediaAplications = useSelector((state) => state.MediaAplications.data);
 
     useEffect(() => {
-        dispatch(fetchProducts())
+        dispatch(fetchMediaAplications())
     }, [])
 
     const hasSearchFilter = Boolean(filterValue);
@@ -45,21 +45,21 @@ export default function TabelMediaAplication() {
     }, [visibleColumns]);
 
     const filteredItems = React.useMemo(() => {
-        let filteredproducts = [...products];
+        let filteredMediaAplications = [...MediaAplications];
 
         if (hasSearchFilter) {
-            filteredproducts = filteredproducts.filter((user) =>
+            filteredMediaAplications = filteredMediaAplications.filter((user) =>
                 user.name.toLowerCase().includes(filterValue.toLowerCase()),
             );
         }
         if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
-            filteredproducts = filteredproducts.filter((user) =>
+            filteredMediaAplications = filteredMediaAplications.filter((user) =>
                 Array.from(statusFilter).includes(user.status),
             );
         }
 
-        return filteredproducts;
-    }, [products, filterValue, statusFilter]);
+        return filteredMediaAplications;
+    }, [MediaAplications, filterValue, statusFilter]);
 
     const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -149,27 +149,6 @@ export default function TabelMediaAplication() {
                         onValueChange={onSearchChange}
                     />
                     <div className="flex gap-3">
-                        {/* <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button endContent={<BiChevronDown className="text-small" />} variant="flat">
-                  Status
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
-              >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown> */}
                         <Dropdown>
                             <DropdownTrigger className="hidden sm:flex">
                                 <Button endContent={<BiChevronDown className="text-small" />} variant="flat">
@@ -195,7 +174,7 @@ export default function TabelMediaAplication() {
                     </div>
                 </div>
                 <div className="flex justify-between items-center">
-                    <span className="text-default-400 text-small">Total {products.length} products</span>
+                    <span className="text-default-400 text-small">Total {MediaAplications.length} MediaAplications</span>
                     <label className="flex items-center text-default-400 text-small">
                         Rows per page:
                         <select
@@ -215,7 +194,7 @@ export default function TabelMediaAplication() {
         statusFilter,
         visibleColumns,
         onRowsPerPageChange,
-        products.length,
+        MediaAplications.length,
         onSearchChange,
         hasSearchFilter,
     ]);
@@ -277,7 +256,7 @@ export default function TabelMediaAplication() {
                     </TableColumn>
                 )}
             </TableHeader>
-            <TableBody emptyContent={"No products found"} items={sortedItems}>
+            <TableBody emptyContent={"No MediaAplications found"} items={sortedItems}>
                 {(item) => (
                     <TableRow key={item.id}>
                         {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

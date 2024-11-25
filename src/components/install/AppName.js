@@ -1,4 +1,4 @@
-import { PagesList, pagesList } from "@/utils/Pages";
+import { PagesList, pagesList } from "@/utils/pages";
 import { Button, Divider, Input, Select, SelectItem } from "@nextui-org/react";
 import { useState } from "react";
 import { MdDashboard } from "react-icons/md";

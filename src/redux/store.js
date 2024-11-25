@@ -17,7 +17,6 @@ import Quotations from './slices/quotation/Quotation'
 import Quotation from './slices/quotation/QuotationId'
 import app from './slices/app'
 import Components from './slices/website/Components'
-import Regions from './slices/website/Regions'
 import Article from './slices/article/Article'
 import ArticleCategory from './slices/article/ArticleCategory'
 import Products from './slices/product/Products'
@@ -28,9 +27,8 @@ import gallery from './slices/gallery'
 import notes from './slices/notes'
 import imageSelectorRedux from './slices/imageSelectorRedux'
 import SubMenu from './slices/SubMenu'
-import Pages from './slices/pages/Pages'
-import PagesCategory from './slices/pages/PagesCategory'
 import Agenda from './slices/agendas'
+import MediaAplications from './slices/media_aplication/MediaAplications'
 
 
 export const store = configureStore({
@@ -52,7 +50,6 @@ export const store = configureStore({
     quotation: Quotation,
     app: app,
     Components,
-    regions: Regions,
     article: Article,
     articlecategory: ArticleCategory,
     products: Products,
@@ -63,8 +60,7 @@ export const store = configureStore({
     notes: notes,
     imageSelectorRedux,
     SubMenu,
-    Pages,
-    PagesCategory,
     Agenda,
+    MediaAplications,
   },
 })

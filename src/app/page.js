@@ -4,7 +4,7 @@ import { prisma } from '@/libs/prisma'
 import { redirect } from 'next/navigation'
 import markindo from './(homepage)/markindo'
 import axiom from './(homepage)/axiom'
-import { PagesList } from '@/utils/Pages'
+import { PagesList } from '@/utils/pages'
 
 export async function metadata() {
   const data = await prisma.app.findUnique({

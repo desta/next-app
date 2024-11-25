@@ -4,10 +4,8 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { fetchComponents } from '@/redux/slices/website/Components';
-import Image from 'next/image';
-import { PagesList } from '@/utils/Pages';
+import { PagesList } from '@/utils/pages';
 import { Editor } from '@/components/Editor';
-import { fetchPages } from '@/redux/slices/pages/Pages';
 import ImageSelector from '@/components/imageSelector/ImageSelector';
 import { fetchGallery } from '@/redux/slices/gallery';
 import { fetchApp } from '@/redux/slices/app';

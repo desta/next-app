@@ -1,4 +1,3 @@
-import { fetchPages } from '@/redux/slices/pages/Pages';
 import React from 'react'
 import parse from 'html-react-parser';
 import { prisma } from '@/libs/prisma'

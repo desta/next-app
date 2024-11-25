@@ -8,9 +8,9 @@ import { auth } from "@/auth";
 import KontakKami from '@/components/client/markindo/KontakKami';
 import Footer from '@/components/client/markindo/Footer';
 import MarkindoNav from '@/components/client/markindo/MarkindoNav';
-import { pagesList } from '@/utils/Pages';
 import AxiomNav from '@/components/client/axiom/AxiomNav';
 import AxiomContactUs from '@/components/client/axiom/AxiomContactUs';
+import { PagesList } from '@/utils/pages';
 
 export async function metadata() {
   const data = await prisma.app.findUnique({
@@ -70,7 +70,7 @@ export default async function layout({ children }) {
   return (
     <>
       {
-        app.homepage === pagesList.markindo.page ?
+        app.homepage === PagesList.markindo.title ?
           <div className='flex flex-col justify-between min-h-screen'>
             <div>
               <MarkindoNav params={app} session={session} menu={menu} submenu={submenu} />
@@ -86,7 +86,7 @@ export default async function layout({ children }) {
             </div>
           </div>
           :
-          app.homepage === pagesList.axiom.page ?
+          app.homepage === PagesList.axiom.title ?
             <div className='flex flex-col justify-between min-h-screen' >
               <div>
                 <AxiomNav params={app} session={session} menu={menu} submenu={submenu} />

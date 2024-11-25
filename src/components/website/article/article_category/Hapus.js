@@ -4,7 +4,6 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDi
 import React from 'react'
 import { toast } from 'react-hot-toast';
 import { BiTrash } from 'react-icons/bi';
-import { fetchRegions } from "@/redux/slices/website/Regions";
 import { fetchArticleCategory } from "@/redux/slices/article/ArticleCategory";
 
 export default function Hapus({ params }) {

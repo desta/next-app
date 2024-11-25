@@ -6,8 +6,7 @@ import { toast } from 'react-hot-toast';
 import { BiEdit } from 'react-icons/bi';
 import { fetchComponents } from '@/redux/slices/website/Components';
 import { Editor } from '@/components/Editor';
-import { PagesList } from '@/utils/Pages';
-import { fetchPages } from '@/redux/slices/pages/Pages';
+import { PagesList } from '@/utils/pages';
 import ImageSelector from '@/components/imageSelector/ImageSelector';
 import { fetchGallery } from '@/redux/slices/gallery';
 import { fetchApp } from '@/redux/slices/app';
@@ -30,7 +29,6 @@ export default function Edit({ params }) {
 
   useEffect(() => {
     dispatch(fetchApp())
-    dispatch(fetchPages())
     dispatch(fetchGallery())
     const res = Object.keys(PagesList[a].pages).filter((value) => {
       return PagesList[a].pages[value].title === page

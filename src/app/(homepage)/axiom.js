@@ -5,9 +5,9 @@ import NavBarItem from "@/components/client/axiom/AxiomNav";
 import { prisma } from "@/libs/prisma";
 import parse from 'html-react-parser';
 import { auth } from "@/auth";
-import { PagesList } from "@/utils/Pages";
 import HomeCounter from "@/components/dashboard/counter/HomeCounter";
 import AxiomContactUs from "@/components/client/axiom/AxiomContactUs";
+import { PagesList } from "@/utils/pages";
 export async function metadata() {
   const data = await prisma.app.findUnique({
     where: {

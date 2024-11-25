@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-export const fetchPagesCategory = createAsyncThunk("fetchPagesCategory", async () => {
-    const response = await fetch(`/api/pages_category`);
+export const fetchMediaAplications = createAsyncThunk("fetchMediaAplications", async () => {
+    const response = await fetch(`/api/media_aplication`);
     return response.json();
 })
-const pagesCategory = createSlice({
-    name: 'pagescategory',
+const mediaAplicationSlice = createSlice({
+    name: 'MediaAplications',
     initialState: {
         isLoading: false,
         data: [],
@@ -24,18 +24,18 @@ const pagesCategory = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchPagesCategory.pending, (state) => {
+        builder.addCase(fetchMediaAplications.pending, (state) => {
             state.isLoading = true;
         })
-        builder.addCase(fetchPagesCategory.fulfilled, (state, action) => {
+        builder.addCase(fetchMediaAplications.fulfilled, (state, action) => {
             state.isLoading = false;
             state.data = action.payload;
         })
-        builder.addCase(fetchPagesCategory.rejected, (state) => {
+        builder.addCase(fetchMediaAplications.rejected, (state) => {
             state.isLoading = false;
             state.error = true;
         })
     }
 })
-export const { tambah, hapus, edit } = pagesCategory.actions
-export default pagesCategory.reducer;
+export const { tambah, hapus, edit } = mediaAplicationSlice.actions
+export default mediaAplicationSlice.reducer;

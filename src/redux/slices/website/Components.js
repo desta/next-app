@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 export const fetchComponents = createAsyncThunk("fetchComponents", async () => {
-    const response = await fetch(`/api/website/component`);
+    const response = await fetch(`/api/component`);
     return response.json();
 })
 const componentsSlice = createSlice({
