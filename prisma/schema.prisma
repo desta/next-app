@@ -48,9 +48,8 @@ model User {
   Invoice            Invoice[]
   Product            Product[]
   Note               Note[]
-  Application        Application[]
-  Pages              Pages[]
   Agenda             Agenda[]
+  MediaApplication   MediaApplication[]
 }
 
 model App {
@@ -230,7 +229,6 @@ model Component {
   urutan  Int
   region  String
   page    String
-  // Pages   Pages[]
 }
 
 model Region {
@@ -282,51 +280,41 @@ model CommentReply {
   userId    String?
 }
 
-model Application {
-  id            Int             @id @default(autoincrement())
-  title         String          @unique
-  content       String          @db.Text
-  publish       Boolean         @default(true)
-  gallery       Gallery[]
-  createdBy     User            @relation(fields: [userId], references: [id])
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @default(now()) @updatedAt
-  ProductShadow ProductShadow[]
-  userId        String
-}
-
 model Urutan {
   id     Int    @id @default(autoincrement())
   urutan Int
   nama   String @unique
 }
 
-model Product {
-  id             Int               @id @default(autoincrement())
-  title          String            @unique
-  description    String            @db.Text
-  spesifications String            @db.Text
-  publish        Boolean           @default(true)
-  productType    ProductType       @relation(fields: [productTypeId], references: [id])
-  category       ProductCategory[]
-  gallery        Gallery[]
-  createdBy      User              @relation(fields: [userId], references: [id])
-  createdAt      DateTime          @default(now())
-  updatedAt      DateTime          @default(now()) @updatedAt
-  userId         String
-  productTypeId  Int
-  ProductShadow  ProductShadow?
-  urutan         Int
+model MediaApplication {
+  id             Int       @id @default(autoincrement())
+  title          String    @unique
+  content        String    @db.Text
+  image          Gallery[]
+  suggestProduct Product[]
+  publish        Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @default(now()) @updatedAt
+  createdBy      User?     @relation(fields: [userId], references: [id])
+  userId         String?
 }
 
-model ProductShadow {
-  id          Int           @id @default(autoincrement())
-  urutan      Int
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @default(now()) @updatedAt
-  Product     Product       @relation(fields: [productId], references: [id])
-  productId   Int           @unique
-  Application Application[]
+model Product {
+  id               Int                @id @default(autoincrement())
+  title            String             @unique
+  description      String             @db.Text
+  spesifications   String             @db.Text
+  publish          Boolean            @default(true)
+  productType      ProductType        @relation(fields: [productTypeId], references: [id])
+  category         ProductCategory[]
+  gallery          Gallery[]
+  createdBy        User               @relation(fields: [userId], references: [id])
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now()) @updatedAt
+  userId           String
+  productTypeId    Int
+  urutan           Int
+  MediaApplication MediaApplication[]
 }
 
 model ProductType {
@@ -345,20 +333,19 @@ model ProductCategory {
 }
 
 model Gallery {
-  id            Int           @id @default(autoincrement())
-  image         String        @default("") @db.Text
-  description   String        @default("no image description") @db.Text
-  categoryAsset String?
-  name          String?
-  alt           String        @default("image of something") @db.Text
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @default(now())
-  deletedAt     DateTime      @default(now())
-  Product       Product[]
-  article       Article[]
-  Application   Application[]
-  Pages         Pages[]
-  Component     Component[]
+  id               Int                @id @default(autoincrement())
+  image            String             @default("") @db.Text
+  description      String             @default("no image description") @db.Text
+  categoryAsset    String?
+  name             String?
+  alt              String             @default("image of something") @db.Text
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now())
+  deletedAt        DateTime           @default(now())
+  Product          Product[]
+  article          Article[]
+  Component        Component[]
+  MediaApplication MediaApplication[]
 }
 
 model Note {
@@ -408,29 +395,6 @@ model Tahun {
   id          Int           @id @default(autoincrement())
   tahun       Int           @unique
   HomeCounter HomeCounter[]
-}
-
-model Pages {
-  id        Int             @id @default(autoincrement())
-  title     String          @unique
-  content   String          @db.Text
-  publish   Boolean         @default(true)
-  layout    String
-  category  PagesCategory[]
-  gallery   Gallery[]
-  createdBy User            @relation(fields: [userId], references: [id])
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @default(now()) @updatedAt
-  urutan    Int
-  userId    String
-  // component Component[]
-  path      String
-}
-
-model PagesCategory {
-  id       Int     @id @default(autoincrement())
-  category String
-  Pages    Pages[]
 }
 
 model Agenda {

@@ -14,7 +14,7 @@ export default function Hapus({ params }) {
   const handleSubmitForm = async (e) => {
     e.preventDefault()
     // Add to your backend here
-    const res = await fetch(`/api/website/component/${params.id}`, {
+    const res = await fetch(`/api/component/${params.id}`, {
       method: 'DELETE',
     })
     if (res.ok) {

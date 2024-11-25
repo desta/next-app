@@ -43,7 +43,7 @@ export default function AddComponent() {
     formData.append("region", region);
     formData.append("page", page);
 
-    const res = await fetch('/api/website/component', {
+    const res = await fetch('/api/component', {
       method: 'POST',
       body: formData
     })

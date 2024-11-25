@@ -48,7 +48,7 @@ export default function Edit({ params }) {
     formData.append("region", region);
     formData.append("page", page);
     formData.append("urutan", urutan);
-    const res = await fetch(`/api/website/component/${params.id}`, {
+    const res = await fetch(`/api/component/${params.id}`, {
       method: 'PUT',
       body: formData
     })
