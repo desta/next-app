@@ -20,7 +20,7 @@ export async function POST(req) {
   const content = formData.get("content")
   const publish = formData.get("publish")
   const image = formData.getAll("image")
-  const suggesProduct = formData.getAll("suggesProduct")
+  const suggestProduct = formData.getAll("suggestProduct")
 
   let arr;
   let connect = image.map(item => item)
@@ -34,10 +34,10 @@ export async function POST(req) {
   }
 
   let arr2;
-  let connect2 = suggesProduct.map(item => item)
+  let connect2 = suggestProduct.map(item => item)
 
   if (connect2 != '') {   
-    arr2 = suggesProduct[0].split(',').map((item) => {
+    arr2 = suggestProduct[0].split(',').map((item) => {
       return { id: parseInt(item) }
     });
   } else {

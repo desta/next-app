@@ -19,7 +19,7 @@ export default function Tambah() {
     const [title, setTitle] = useState('')
     const [publish, setPublish] = useState(true)
     const [content, setContent] = useState('')
-    const [suggesProduct, setSuggesProduct] = useState([])
+    const [suggestProduct, setSuggestProduct] = useState([])
     const selectedImageToAdd = useSelector((state) => state.imageSelectorRedux.selectedImageToAdd)
     const selectedProduct = useSelector((state) => state.products.selectedProduct);
 
@@ -48,7 +48,7 @@ export default function Tambah() {
         formData.append("publish", publish);
         formData.append("content", content);
         formData.append("image", selectedImageToAdd.map((image) => image.id));
-        formData.append("suggesProduct", selectedProduct.map((product) => product.id));
+        formData.append("suggestProduct", selectedProduct.map((product) => product.id));
 
         const res = await fetch('/api/media_aplication', {
             method: 'POST',
