@@ -20,6 +20,7 @@ export async function POST(req) {
   const content = formData.get("content")
   const publish = formData.get("publish")
   const image = formData.getAll("image")
+  const suggesProduct = formData.getAll("suggesProduct")
 
   let arr;
   let connect = image.map(item => item)
@@ -30,6 +31,17 @@ export async function POST(req) {
     });
   } else {
     arr = []
+  }
+
+  let arr2;
+  let connect2 = suggesProduct.map(item => item)
+
+  if (connect2 != '') {   
+    arr2 = suggesProduct[0].split(',').map((item) => {
+      return { id: parseInt(item) }
+    });
+  } else {
+    arr2 = []
   }
 
   const media = await prisma.mediaApplication.create({
@@ -43,6 +55,7 @@ export async function POST(req) {
         }
       },
       image: { connect: arr },
+      suggestProduct: { connect: arr2 },
     },
   })
   return Response.json(media)

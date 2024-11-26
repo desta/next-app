@@ -10,7 +10,8 @@ import { setSelectedImageRedux } from '@/redux/slices/imageSelectorRedux';
 import { getResponseData } from '@/utils/getResponseData';
 import { Editor } from '@/components/Editor';
 import SuggestProduct from '../product/SuggestProduct';
-import { setSelectedProduct } from '@/redux/slices/product/Products';
+import { fetchProducts, setSelectedProduct } from '@/redux/slices/product/Products';
+import { fetchMediaAplication } from '@/redux/slices/media_aplication/MediaAplication';
 
 export default function Tambah() {
     const dispatch = useDispatch()
@@ -18,21 +19,22 @@ export default function Tambah() {
     const [title, setTitle] = useState('')
     const [publish, setPublish] = useState(true)
     const [content, setContent] = useState('')
-
+    const [suggesProduct, setSuggesProduct] = useState([])
     const selectedImageToAdd = useSelector((state) => state.imageSelectorRedux.selectedImageToAdd)
     const selectedProduct = useSelector((state) => state.products.selectedProduct);
-    
-    console.log('select',selectedProduct)
-    console.log('image',selectedImageToAdd)
+
+    console.log('select', selectedProduct)
+    console.log('image', selectedImageToAdd)
 
     const cleanup = () => {
         setTitle('')
         setPublish(true)
         dispatch(setSelectedImageRedux([]))
-        dispatch(setSelectedProduct(null))
+        dispatch(setSelectedProduct([]))
     }
     const getData = () => {
         dispatch(fetchGallery());
+        dispatch(fetchProducts())
     }
     useEffect(() => {
         cleanup();
@@ -45,10 +47,8 @@ export default function Tambah() {
         formData.append("title", title);
         formData.append("publish", publish);
         formData.append("content", content);
-
-        await selectedImageToAdd.map((item) => {
-            formData.append('image', item.id);
-        })
+        formData.append("image", selectedImageToAdd.map((image) => image.id));
+        formData.append("suggesProduct", selectedProduct.map((product) => product.id));
 
         const res = await fetch('/api/media_aplication', {
             method: 'POST',
@@ -58,6 +58,7 @@ export default function Tambah() {
         if (res.ok) {
             toast.success('Berhasil menambahkan media aplication')
             dispatch(setSelectedImageRedux([]))
+            dispatch(setSelectedProduct([]))
             dispatch(fetchMediaAplication())
             cleanup();
             closeFunc();
@@ -65,6 +66,7 @@ export default function Tambah() {
         } else {
             const errorMsg = await getResponseData(res);
             dispatch(setSelectedImageRedux([]))
+            dispatch(setSelectedProduct([]))
             closeFunc();
             toast.error(errorMsg)
         }
@@ -77,7 +79,8 @@ export default function Tambah() {
             <Modal isOpen={isOpen} onOpenChange={onOpenChange} size='4xl' placement='center' scrollBehavior='outside'>
                 <ModalContent>
                     {(onClose) => (
-                        <form onSubmit={(e) => {handleSubmitForm(e, onClose)
+                        <form onSubmit={(e) => {
+                            handleSubmitForm(e, onClose)
                         }} className='flex flex-col gap-3'>
                             <ModalHeader className="flex flex-col gap-1">Add new media aplication</ModalHeader>
                             <ModalBody>
