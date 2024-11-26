@@ -27,10 +27,11 @@ export async function POST(req) {
       menu: {
         create: [
           { title: 'Dashboard', path: '/dashboard', lokasi: 'Sidebar', icon: '<i class="bi bi-columns-gap"></i>', urutan: 1 },
-          { title: 'Gallery', path: '/dashboard/gallery', lokasi: 'Sidebar', icon: '<i class="bi bi-card-image"></i>', urutan: 2 },
-          { title: 'Article', path: '/dashboard/article', lokasi: 'Sidebar', icon: '<i class="bi bi-blockquote-left"></i>', urutan: 3 },
-          { title: 'Product', path: '/dashboard/product', lokasi: 'Sidebar', icon: '<i class="bi bi-dribbble"></i>', urutan: 4 },
-          { title: 'Media aplication', path: '/dashboard/media_aplication', lokasi: 'Sidebar', icon: '<i class="bi bi-app"></i>', urutan: 5 },
+          { title: 'Customer chat', path: '/dashboard/customer_chat', lokasi: 'Sidebar', icon: '<i class="bi bi-chat-dots"></i>', urutan: 2 },
+          { title: 'Gallery', path: '/dashboard/gallery', lokasi: 'Sidebar', icon: '<i class="bi bi-card-image"></i>', urutan: 3 },
+          { title: 'Article', path: '/dashboard/article', lokasi: 'Sidebar', icon: '<i class="bi bi-blockquote-left"></i>', urutan: 4 },
+          { title: 'Product', path: '/dashboard/product', lokasi: 'Sidebar', icon: '<i class="bi bi-dribbble"></i>', urutan: 5 },
+          { title: 'Media aplication', path: '/dashboard/media_aplication', lokasi: 'Sidebar', icon: '<i class="bi bi-app"></i>', urutan: 6 },
         ],
       },
       counter: {
