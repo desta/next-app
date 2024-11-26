@@ -10,7 +10,7 @@ import { setSelectedImageRedux } from '@/redux/slices/imageSelectorRedux';
 import { getResponseData } from '@/utils/getResponseData';
 import { Editor } from '@/components/Editor';
 import SuggestProduct from '../product/SuggestProduct';
-import { fetchMediaAplication, setSelectedProduct } from '@/redux/slices/media_aplication/MediaAplication';
+import { setSelectedProduct } from '@/redux/slices/product/Products';
 
 export default function Tambah() {
     const dispatch = useDispatch()
@@ -22,6 +22,9 @@ export default function Tambah() {
     const selectedImageToAdd = useSelector((state) => state.imageSelectorRedux.selectedImageToAdd)
     const selectedProduct = useSelector((state) => state.products.selectedProduct);
     
+    console.log('select',selectedProduct)
+    console.log('image',selectedImageToAdd)
+
     const cleanup = () => {
         setTitle('')
         setPublish(true)

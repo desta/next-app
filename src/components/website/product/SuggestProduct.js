@@ -1,6 +1,5 @@
 'use client'
-import { addCurrentSelectionProduct, removeCurrentSelectionProduct, removeSelectedProduct, setCurrentSelectionProduct, setSelectedProduct } from "@/redux/slices/media_aplication/MediaAplication";
-import { fetchProducts } from "@/redux/slices/product/Products";
+import { addCurrentSelectionProduct, fetchProducts, removeCurrentSelectionProduct, removeSelectedProduct, setCurrentSelectionProduct, setSelectedProduct } from "@/redux/slices/product/Products";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Pagination, getKeyValue } from "@nextui-org/react";
 import React, { useEffect } from "react";
 import { BiSearch, BiTrash } from "react-icons/bi";
@@ -26,6 +25,8 @@ export default function SuggestProduct({ what, dataProduct }) {
     const products = useSelector((state) => state.products.data);
     const selectedProduct = useSelector((state) => state.products.selectedProduct);
     const currentSelection = useSelector((state) => state.products.currentSelection);
+
+    console.log('select', selectedProduct)
 
     const getData = () => {
         dispatch(fetchProducts());
@@ -214,22 +215,24 @@ export default function SuggestProduct({ what, dataProduct }) {
     return (
         <>
             <div className='p-2 rounded-medium border-medium border-default-200'>
-                {/* <Table aria-label="Selected table">
-                    <TableHeader columns={columnsSelected}>
-                        {(column) => (
-                            <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
-                                {column.name}
-                            </TableColumn>
-                        )}
-                    </TableHeader>
-                    <TableBody items={selectedProduct}>
-                        {(item) => (
-                            <TableRow key={item.id}>
-                                {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table> */}
+                {selectedProduct.length !== 0 &&
+                    <Table aria-label="Selected table" removeWrapper>
+                        <TableHeader columns={columnsSelected} >
+                            {(column) => (
+                                <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
+                                    {column.name}
+                                </TableColumn>
+                            )}
+                        </TableHeader>
+                        <TableBody items={selectedProduct}>
+                            {(item) => (
+                                <TableRow key={item.id}>
+                                    {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                }
                 <Button onPress={onOpen} color="secondary" size="sm">Add Suggest product</Button>
 
             </div>
