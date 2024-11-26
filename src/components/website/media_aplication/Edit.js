@@ -3,15 +3,13 @@ import { Modal, ModalContent, ModalHeader, ModalBody, Button, useDisclosure, Sel
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
-import { fetchProducts } from '@/redux/slices/product/Products';
 import { useRouter } from 'next/navigation';
-import { fetchProductTypes } from '@/redux/slices/product/ProductTypes';
-import { fetchProductCategories } from '@/redux/slices/product/ProductCategories';
 import { BiEdit, BiTrash } from 'react-icons/bi';
 import { fetchGallery } from '@/redux/slices/gallery';
 import ImageSelector from '@/components/imageSelector/ImageSelector';
 import { hapusSelectedImage } from '@/redux/slices/imageSelectorRedux';
 import { Editor } from '@/components/Editor';
+import { fetchMediaAplication } from '@/redux/slices/media_aplication/MediaAplication';
 
 export default function Edit({ params }) {
     const dispatch = useDispatch()
@@ -53,7 +51,7 @@ export default function Edit({ params }) {
         })
         if (res.ok) {
             toast.success('Berhasil edit media aplication')
-            dispatch(fetchProducts())
+            dispatch(fetchMediaAplication())
             router.refresh()
         } else {
             toast.error('Gagal edit media aplication')
@@ -98,7 +96,7 @@ export default function Edit({ params }) {
                                     <Editor value={content} onChange={setContent} />
 
                                     <label className="text-primary text-small font-bold">Image</label>
-                                    <ImageSelector what={"edit"} imageData={params.gallery} />
+                                    <ImageSelector what={"edit"} imageData={params.image} />
                                   
                                     <Switch isSelected={publish} onValueChange={setPublish} size='sm' className='pt-3'>
                                         Publish product

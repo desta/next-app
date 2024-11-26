@@ -1,14 +1,19 @@
 'use client'
+import { addCurrentSelectionProduct, removeCurrentSelectionProduct, removeSelectedProduct, setCurrentSelectionProduct, setSelectedProduct } from "@/redux/slices/media_aplication/MediaAplication";
 import { fetchProducts } from "@/redux/slices/product/Products";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Pagination } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Pagination, getKeyValue } from "@nextui-org/react";
 import React, { useEffect } from "react";
-import { BiSearch } from "react-icons/bi";
+import { BiSearch, BiTrash } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 
 const columns = [
     { name: "Title", uid: "title", sortable: true },
 ];
-export default function SuggestProduct() {
+const columnsSelected = [
+    { name: "Title", uid: "title" },
+    { name: "Action", uid: "actions" },
+];
+export default function SuggestProduct({ what, dataProduct }) {
     const dispatch = useDispatch()
     const [filterValue, setFilterValue] = React.useState("");
     const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
@@ -19,10 +24,42 @@ export default function SuggestProduct() {
     });
     const [page, setPage] = React.useState(1);
     const products = useSelector((state) => state.products.data);
+    const selectedProduct = useSelector((state) => state.products.selectedProduct);
+    const currentSelection = useSelector((state) => state.products.currentSelection);
 
+    const getData = () => {
+        dispatch(fetchProducts());
+    }
+
+    const handleSelect = (product) => {
+        if (!currentSelection.includes(product)) {
+            dispatch(addCurrentSelectionProduct(product))
+        } else if (currentSelection.includes(product)) {
+            dispatch(removeCurrentSelectionProduct(product.id))
+        }
+    }
+
+    const removeSelected = (id) => {
+        dispatch(removeSelectedProduct(id))
+    }
+
+    const addImageFunc = (runFunc) => {
+        dispatch(setSelectedProduct(currentSelection));
+        dispatch(setCurrentSelectionProduct([]));
+        runFunc()
+    }
+    const getStates = () => {
+        if (what === 'edit') {
+            dispatch(setSelectedProduct(dataProduct))
+        } else {
+            dispatch(setSelectedProduct([]))
+        }
+    }
     useEffect(() => {
-        dispatch(fetchProducts())
+        getData();
+        getStates();
     }, [])
+
     const hasSearchFilter = Boolean(filterValue);
 
     const filteredItems = React.useMemo(() => {
@@ -60,6 +97,16 @@ export default function SuggestProduct() {
         const cellValue = user[columnKey];
 
         switch (columnKey) {
+            case "actions":
+                return (
+                    <div className="relative flex items-center">
+                        <Tooltip color="danger" content="Delete">
+                            <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                                <BiTrash />
+                            </span>
+                        </Tooltip>
+                    </div>
+                );
             default:
                 return cellValue;
         }
@@ -166,8 +213,28 @@ export default function SuggestProduct() {
 
     return (
         <>
-            <Button onPress={onOpen} color="secondary">Add Suggest product</Button>
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size='xl' placement='center' scrollBehavior='outside' isDismissable={false}>
+            <div className='p-2 rounded-medium border-medium border-default-200'>
+                {/* <Table aria-label="Selected table">
+                    <TableHeader columns={columnsSelected}>
+                        {(column) => (
+                            <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
+                                {column.name}
+                            </TableColumn>
+                        )}
+                    </TableHeader>
+                    <TableBody items={selectedProduct}>
+                        {(item) => (
+                            <TableRow key={item.id}>
+                                {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table> */}
+                <Button onPress={onOpen} color="secondary" size="sm">Add Suggest product</Button>
+
+            </div>
+
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size='4xl' placement='center' scrollBehavior='outside' isDismissable={false}>
                 <ModalContent>
                     {(onClose) => (
                         <>
@@ -198,7 +265,7 @@ export default function SuggestProduct() {
                                     <TableBody emptyContent={"No products found"} items={sortedItems}>
                                         {(item) => (
                                             <TableRow key={item.id}>
-                                                {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                                                {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
                                             </TableRow>
                                         )}
                                     </TableBody>

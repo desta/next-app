@@ -10,6 +10,7 @@ import { setSelectedImageRedux } from '@/redux/slices/imageSelectorRedux';
 import { getResponseData } from '@/utils/getResponseData';
 import { Editor } from '@/components/Editor';
 import SuggestProduct from '../product/SuggestProduct';
+import { fetchMediaAplication, setSelectedProduct } from '@/redux/slices/media_aplication/MediaAplication';
 
 export default function Tambah() {
     const dispatch = useDispatch()
@@ -19,11 +20,13 @@ export default function Tambah() {
     const [content, setContent] = useState('')
 
     const selectedImageToAdd = useSelector((state) => state.imageSelectorRedux.selectedImageToAdd)
-
+    const selectedProduct = useSelector((state) => state.products.selectedProduct);
+    
     const cleanup = () => {
         setTitle('')
         setPublish(true)
         dispatch(setSelectedImageRedux([]))
+        dispatch(setSelectedProduct(null))
     }
     const getData = () => {
         dispatch(fetchGallery());
@@ -52,6 +55,7 @@ export default function Tambah() {
         if (res.ok) {
             toast.success('Berhasil menambahkan media aplication')
             dispatch(setSelectedImageRedux([]))
+            dispatch(fetchMediaAplication())
             cleanup();
             closeFunc();
             router.refresh()
@@ -70,8 +74,7 @@ export default function Tambah() {
             <Modal isOpen={isOpen} onOpenChange={onOpenChange} size='4xl' placement='center' scrollBehavior='outside'>
                 <ModalContent>
                     {(onClose) => (
-                        <form onSubmit={(e) => {
-                            handleSubmitForm(e, onClose)
+                        <form onSubmit={(e) => {handleSubmitForm(e, onClose)
                         }} className='flex flex-col gap-3'>
                             <ModalHeader className="flex flex-col gap-1">Add new media aplication</ModalHeader>
                             <ModalBody>
@@ -95,7 +98,7 @@ export default function Tambah() {
 
                                     <ImageSelector imageData={selectedImageToAdd} />
 
-                                    <SuggestProduct />
+                                    <SuggestProduct dataProduct={selectedProduct} />
 
                                     <Switch isSelected={publish} onValueChange={setPublish} size='sm' className='pt-3'>
                                         Publish product
@@ -105,7 +108,7 @@ export default function Tambah() {
                             </ModalBody>
                             <ModalFooter>
                                 <Button color="danger" variant="light" onPress={() => {
-                                    dispatch(setSelectedImageRedux([]))
+                                    dispatch(setSelectedProduct([]))
                                     onClose()
                                 }}>
                                     Keluar

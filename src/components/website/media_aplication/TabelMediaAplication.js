@@ -7,7 +7,7 @@ import { BiChevronDown, BiPlus, BiSearch } from "react-icons/bi";
 import Tambah from "./Tambah";
 import Edit from "./Edit";
 import Hapus from "./Hapus";
-import { fetchMediaAplications } from "@/redux/slices/media_aplication/MediaAplications";
+import { fetchMediaAplication } from "@/redux/slices/media_aplication/MediaAplication";
 
 
 const INITIAL_VISIBLE_COLUMNS = ["title", "actions"];
@@ -21,7 +21,6 @@ const columns = [
 export default function TabelMediaAplication() {
     const dispatch = useDispatch()
     const [filterValue, setFilterValue] = React.useState("");
-    // const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
     const [visibleColumns, setVisibleColumns] = React.useState(new Set(INITIAL_VISIBLE_COLUMNS));
     const [statusFilter, setStatusFilter] = React.useState("all");
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -30,10 +29,10 @@ export default function TabelMediaAplication() {
         direction: "ascending",
     });
     const [page, setPage] = React.useState(1);
-    const MediaAplications = useSelector((state) => state.MediaAplications.data);
+    const MediaAplication = useSelector((state) => state.MediaAplication.data);
 
     useEffect(() => {
-        dispatch(fetchMediaAplications())
+        dispatch(fetchMediaAplication())
     }, [])
 
     const hasSearchFilter = Boolean(filterValue);
@@ -45,21 +44,21 @@ export default function TabelMediaAplication() {
     }, [visibleColumns]);
 
     const filteredItems = React.useMemo(() => {
-        let filteredMediaAplications = [...MediaAplications];
+        let filteredMediaAplication = [...MediaAplication];
 
         if (hasSearchFilter) {
-            filteredMediaAplications = filteredMediaAplications.filter((user) =>
+            filteredMediaAplication = filteredMediaAplication.filter((user) =>
                 user.name.toLowerCase().includes(filterValue.toLowerCase()),
             );
         }
         if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
-            filteredMediaAplications = filteredMediaAplications.filter((user) =>
+            filteredMediaAplication = filteredMediaAplication.filter((user) =>
                 Array.from(statusFilter).includes(user.status),
             );
         }
 
-        return filteredMediaAplications;
-    }, [MediaAplications, filterValue, statusFilter]);
+        return filteredMediaAplication;
+    }, [MediaAplication, filterValue, statusFilter]);
 
     const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -80,8 +79,8 @@ export default function TabelMediaAplication() {
         });
     }, [sortDescriptor, items]);
 
-    const renderCell = React.useCallback((product, columnKey) => {
-        const cellValue = product[columnKey];
+    const renderCell = React.useCallback((media, columnKey) => {
+        const cellValue = media[columnKey];
 
         switch (columnKey) {
             case "actions":
@@ -89,12 +88,12 @@ export default function TabelMediaAplication() {
                     <div className="relative flex justify-center items-center">
                         <Tooltip content="Edit">
                             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                                <Edit params={product} />
+                                <Edit params={media} />
                             </span>
                         </Tooltip>
                         <Tooltip color="danger" content="Delete">
                             <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                                <Hapus params={product} />
+                                <Hapus params={media} />
                             </span>
                         </Tooltip>
                     </div>
@@ -174,7 +173,7 @@ export default function TabelMediaAplication() {
                     </div>
                 </div>
                 <div className="flex justify-between items-center">
-                    <span className="text-default-400 text-small">Total {MediaAplications.length} MediaAplications</span>
+                    <span className="text-default-400 text-small">Total {MediaAplication.length} content</span>
                     <label className="flex items-center text-default-400 text-small">
                         Rows per page:
                         <select
@@ -194,7 +193,7 @@ export default function TabelMediaAplication() {
         statusFilter,
         visibleColumns,
         onRowsPerPageChange,
-        MediaAplications.length,
+        MediaAplication.length,
         onSearchChange,
         hasSearchFilter,
     ]);
@@ -202,11 +201,6 @@ export default function TabelMediaAplication() {
     const bottomContent = React.useMemo(() => {
         return (
             <div className="py-2 px-2 flex justify-between items-center">
-                {/* <span className="w-[30%] text-small text-default-400">
-                    {selectedKeys === "all"
-                        ? "All items selected"
-                        : `${selectedKeys.size} of ${filteredItems.length} selected`}
-                </span> */}
                 <Pagination
                     isCompact
                     showControls
@@ -237,12 +231,9 @@ export default function TabelMediaAplication() {
             classNames={{
                 wrapper: "max-h-[382px]",
             }}
-            // selectedKeys={selectedKeys}
-            // selectionMode="multiple"
             sortDescriptor={sortDescriptor}
             topContent={topContent}
             topContentPlacement="outside"
-            // onSelectionChange={setSelectedKeys}
             onSortChange={setSortDescriptor}
         >
             <TableHeader columns={headerColumns}>
@@ -256,7 +247,7 @@ export default function TabelMediaAplication() {
                     </TableColumn>
                 )}
             </TableHeader>
-            <TableBody emptyContent={"No MediaAplications found"} items={sortedItems}>
+            <TableBody emptyContent={"No data found."} items={sortedItems}>
                 {(item) => (
                     <TableRow key={item.id}>
                         {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

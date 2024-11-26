@@ -11,28 +11,18 @@ function ImageSelector({ what, imageData }) {
     const gallery = useSelector((state) => state.gallery.data);
     const selectedImageToAdd = useSelector((state) => state.imageSelectorRedux.selectedImageToAdd)
     const currentSelection = useSelector((state) => state.imageSelectorRedux.currentSelection)
-    // const [currentSelection, setCurrentSelection] = React.useState(imageData);
 
     const handleImageClick = (img) => {
         if (!currentSelection.includes(img)) {
             dispatch(addCurrentSelection(img))
-            // dispatch(addSelectedImage(img))
         } else if (currentSelection.includes(img)) {
             dispatch(hapusCurrentSelection(img.id))
-            // dispatch(hapusSelectedImage(img.id))
         }
 
     }
     const removeSelectedImage = (id) => {
         dispatch(hapusSelectedImage(id))
     }
-    // const unselectAll = () => {
-    //     dispatch(setSelectedImageRedux([]))
-    // }
-    // const selectAll = () => {
-    //     dispatch(setSelectedImageRedux([]));
-    //     dispatch(setSelectedImageRedux(gallery))
-    // }
     const getData = () => {
         dispatch(fetchGallery());
     }
@@ -49,9 +39,7 @@ function ImageSelector({ what, imageData }) {
         }
     }
     useEffect(() => {
-        // if (gallery.length === 0) {
-            getData();
-        // }
+        getData();
         getStates();
     }, [])
 

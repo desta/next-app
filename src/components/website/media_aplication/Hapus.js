@@ -4,7 +4,7 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDi
 import React from 'react'
 import { toast } from 'react-hot-toast';
 import { BiTrash } from 'react-icons/bi';
-import { fetchProducts } from "@/redux/slices/product/Products";
+import { fetchMediaAplication } from "@/redux/slices/media_aplication/MediaAplication";
 
 export default function Hapus({ params }) {
   const dispatch = useDispatch()
@@ -19,7 +19,8 @@ export default function Hapus({ params }) {
     })
     if (res.ok) {
       toast.success('Berhasil hapus media aplication')
-      dispatch(fetchProducts())
+      dispatch(fetchMediaAplication())
+      onOpenChange(false)
     }
   }
   return (

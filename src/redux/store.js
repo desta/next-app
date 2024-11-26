@@ -28,7 +28,7 @@ import notes from './slices/notes'
 import imageSelectorRedux from './slices/imageSelectorRedux'
 import SubMenu from './slices/SubMenu'
 import Agenda from './slices/agendas'
-import MediaAplications from './slices/media_aplication/MediaAplications'
+import MediaAplication from './slices/media_aplication/MediaAplication'
 
 
 export const store = configureStore({
@@ -61,6 +61,6 @@ export const store = configureStore({
     imageSelectorRedux,
     SubMenu,
     Agenda,
-    MediaAplications,
+    MediaAplication,
   },
 })
