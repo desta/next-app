@@ -161,13 +161,23 @@ model ticketReply {
 }
 
 model Customers {
-  id         Int         @id @default(autoincrement())
-  perusahaan String      @default("")
-  pic        String
-  alamat     String      @default("") @db.Text
-  nohp       String      @default("")
-  email      String      @default("")
-  Quotation  Quotation[]
+  id            Int             @id @default(autoincrement())
+  perusahaan    String          @default("")
+  pic           String          @default("")
+  alamat        String          @default("") @db.Text
+  nohp          String          @unique
+  email         String          @default("")
+  Quotation     Quotation[]
+  CustomersChat CustomersChat[]
+}
+
+model CustomersChat {
+  id         Int       @id @default(autoincrement())
+  message    String    @db.Text
+  createdAt  DateTime  @default(now())
+  sender     String
+  customer   Customers @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId Int
 }
 
 model Quotation {
@@ -302,7 +312,7 @@ model MediaApplication {
 model Product {
   id               Int                @id @default(autoincrement())
   title            String             @unique
-  content      String             @db.Text
+  content          String             @db.Text
   publish          Boolean            @default(true)
   productType      ProductType        @relation(fields: [productTypeId], references: [id])
   category         ProductCategory[]

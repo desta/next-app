@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function page() {
     return (
-        <div className='prose'>
+        <div className='prose prose-indigo max-w-none '>
             <SidebarChat />
         </div>
     )

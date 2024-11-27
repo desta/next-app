@@ -29,7 +29,7 @@ import imageSelectorRedux from './slices/imageSelectorRedux'
 import SubMenu from './slices/SubMenu'
 import Agenda from './slices/agendas'
 import MediaAplication from './slices/media_aplication/MediaAplication'
-
+import customerChat from './slices/customer/CustomerChat'
 
 export const store = configureStore({
   reducer: {
@@ -62,5 +62,6 @@ export const store = configureStore({
     SubMenu,
     Agenda,
     MediaAplication,
+    customerChat,
   },
 })

@@ -47,7 +47,7 @@ export default function TambahCustomer() {
         <ModalContent>
           {(onClose) => (
             <form onSubmit={handleSubmitForm}>
-              <ModalBody>
+              <ModalBody className="block">
 
                 <p className="text-2xl font-bold">Register <span className="text-primary">customer</span></p>
                 <p className="text-xs pb-5">Isi form dibawah ini untuk membuat customer.</p>

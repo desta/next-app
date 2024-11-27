@@ -44,7 +44,7 @@ export default async function page() {
           :
           <div>
             {data.map((item) =>
-              <div key={item.id} className='prose prose-indigo'>
+              <div key={item.id} className='prose prose-indigo max-w-none'>
                 {item.image.length !== 0 && <Image src={item.image[0].image} alt={item.title} width={200} height={300} className='float-left h-80 w-52 rounded-md mr-3 mb-3' />}                
                   <Link href={`/product/${item.title.toLowerCase().replaceAll(' ', '_')}`}><h1 className='text-primary hover:underline'>{item.title}</h1></Link>
                   <div className='line-clamp-[10]'>{parse(item.content)}</div>

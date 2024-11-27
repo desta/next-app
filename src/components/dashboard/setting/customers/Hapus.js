@@ -1,22 +1,22 @@
 "use client"
 import React from "react";
-import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Tooltip} from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Tooltip } from "@nextui-org/react";
 import { BiTrash } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import { toast } from 'react-hot-toast';
 import { fetchUser, hapus } from "@/redux/slices/user";
 
-export default function Hapus({params}) {
-  const dispatch = useDispatch()  
+export default function Hapus({ params }) {
+  const dispatch = useDispatch()
   const handleDelete = async () => {
-    const res = await fetch(`/api/user/${params.id}`, {
+    const res = await fetch(`/api/customers/${params.id}`, {
       method: 'DELETE',
     })
     dispatch(fetchUser())
-    toast.success('User berhasil dihapus')
+    toast.success('Customer berhasil dihapus')
     onOpenChange(close)
   }
-  const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <>
       <Tooltip color="danger" content="Hapus">
@@ -30,7 +30,7 @@ export default function Hapus({params}) {
             className="rounded-full"
             onPress={onOpen}
           >
-          <BiTrash className="h-4 w-4" />
+            <BiTrash className="h-4 w-4" />
           </Button>
         </span>
       </Tooltip>
@@ -40,14 +40,14 @@ export default function Hapus({params}) {
             <>
               <ModalHeader className="flex flex-col gap-1"></ModalHeader>
               <ModalBody className="font-bold">
-                Yakin menghapus user {params.username}?
+                Yakin menghapus customer {params.pic}?
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Keluar
                 </Button>
                 <Button onClick={handleDelete} color="danger">
-                Hapus
+                  Hapus
                 </Button>
               </ModalFooter>
             </>

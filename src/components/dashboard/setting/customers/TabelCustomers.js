@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useSession } from "next-auth/react";
 import TambahCustomer from "./TambahCustomer";
 import { fetchCustomers } from "@/redux/slices/customer/customers";
+import Edit from "./Edit";
+import Hapus from "./Hapus";
 
 
 const INITIAL_VISIBLE_COLUMNS = ["perusahaan", "pic", "nohp", "actions"];
@@ -85,8 +87,9 @@ export default function TabelCustomers() {
     switch (columnKey) {
       case "actions":
         return (
-          <div className="relative flex justify-center items-center gap-2">
-            edit hapus
+          <div className="relative flex justify-center items-center">
+            <Edit params={user} />
+            <Hapus params={user} />
           </div>
         );
       default:

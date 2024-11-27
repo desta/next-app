@@ -1,7 +1,7 @@
 import { prisma } from "@/libs/prisma"
 
 export async function GET (req, { params }) {
-  const customers = await prisma.customers.findUnique({
+  const customers = await prisma.customersChat.findUnique({
     where: {
       id: Number((await params).id)
     }
@@ -22,7 +22,7 @@ export async function PUT (req, { params }) {
 
 export async function DELETE (req, {params}) {
   try {   
-    const removeCustomers = await prisma.customers.delete({
+    const removeCustomers = await prisma.customersChat.delete({
       where: {
         id: Number((await params).id)
       }
