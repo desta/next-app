@@ -25,16 +25,23 @@ export default function SidebarChat() {
     }, [])
 
     const filter = dataChat.filter((book, index, array) => {
-        const bookIndex = array.findIndex((b) => book.customerId === b.customerId);
-        return index === bookIndex;
+        const chatIndex = array.findIndex((b) => book.customerId === b.customerId);
+        return index === chatIndex;
     })
-    const handleSelect = (data) => {
+
+    const handleContact = (data) => {
         setCustomer(listCustomer.filter(item => item.id === data.id))
+        setChat(dataChat.filter(item => item.customerId === data.id))
+        setMessage('')
+    }
+
+    const handleHistory = (data) => {
+        setCustomer(listCustomer.filter(item => item.id === data.customerId))
         setChat(dataChat.filter(item => item.customerId === data.customerId))
         setMessage('')
     }
-    
-    console.log('filter', chat)
+
+    console.log('filter', filter)
 
     const onSelectionChange = () => {
         setCustomer([])
@@ -58,7 +65,6 @@ export default function SidebarChat() {
             toast.success('Berhasil mengirim chat')
             setMessage('')
             dispatch(fetchCustomerChat())
-            handleSelect(customer[0])
         } else {
             toast.error('Gagal mengirim chat')
         }
@@ -77,15 +83,17 @@ export default function SidebarChat() {
                                 {filter.length === 0 ? <span className='text-center text-gray-400 italic block'>Tidak ada history.</span>
                                     :
                                     filter.map((data, index) =>
-                                        <div onClick={() => handleSelect(data)} className='flex flex-col gap-2' key={index}>
-                                            <div className={`${data.customer.nohp === customer[0]?.nohp ? 'bg-primary-100' : ''} flex flex-row gap-4 items-center p-2 hover:bg-primary-100 hover:text-black cursor-pointer`}>
-                                                <Avatar isBordered radius="sm" src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
-                                                <div className='flex flex-col'>
-                                                    <div className='font-bold'>{data.customer.pic === '' ? data.customer.nohp : data.customer.pic}</div>
-                                                    <div className='text-gray-500 text-sm'>{data.message}</div>
+                                        <a href='#end' key={index}>
+                                            <div onClick={() => handleHistory(data)} className='flex flex-col gap-2' >
+                                                <div className={`${data.customer.nohp === customer[0]?.nohp ? 'bg-primary-100' : ''} flex flex-row gap-4 items-center p-2 hover:bg-primary-100 hover:text-black cursor-pointer`}>
+                                                    <Avatar isBordered radius="sm" src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
+                                                    <div className='flex flex-col'>
+                                                        <div className='font-bold'>{data.customer.pic === '' ? data.customer.nohp : data.customer.pic}</div>
+                                                        <div className='text-gray-500 text-sm'>{dataChat.filter(item => item.customerId === data.customerId).slice(-1)[0]?.message}</div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </a>
                                     )
                                 }
                             </Tab>
@@ -93,7 +101,8 @@ export default function SidebarChat() {
                                 {listCustomer.length === 0 ? <span className='text-center text-gray-400 italic block'>Tidak ada contact.</span>
                                     :
                                     listCustomer.map(data =>
-                                        <div onClick={() => handleSelect(data)} className='flex flex-col gap-2' key={data.id}>
+                                        <a href='#end' key={data.id}>
+                                        <div onClick={() => handleContact(data)} className='flex flex-col gap-2' >
                                             <div className={`${data.nohp === customer[0]?.nohp ? 'bg-primary-100' : ''} flex flex-row gap-4 items-center p-2 hover:bg-primary-100 hover:text-black cursor-pointer`}>
                                                 <Avatar isBordered radius="sm" src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
                                                 <div className='flex flex-col'>
@@ -102,6 +111,7 @@ export default function SidebarChat() {
                                                 </div>
                                             </div>
                                         </div>
+                                        </a>
                                     )}
                             </Tab>
                         </Tabs>
@@ -109,8 +119,8 @@ export default function SidebarChat() {
                     </div>
                 </div>
                 <div className='flex-1'>
-                    {/* {customer.length === 0 ? 'biji'
-                        : */}
+                    {customer.length === 0 ? null
+                        :
                         <>
                             <div className='bg-white h-14 flex items-center justify-center p-2 font-bold text-lg'>
                                 {customer[0]?.pic === '' ? customer[0]?.nohp : customer[0]?.pic}
@@ -132,13 +142,14 @@ export default function SidebarChat() {
                                         </div>
                                     </div>
                                 )}
+                                <div id='end'></div>
                             </div>
                             <form onSubmit={handleNewChat} className='flex gap-2 items-center bg-white p-2'>
                                 <Textarea placeholder='Type here...' color='primary' radius='none' onChange={(e) => setMessage(e.target.value)} value={message} />
                                 <Button type='submit' radius='none' className='bg-secondary text-secondary-foreground h-[75px] w-20 flex justify-center items-center text-xl hover:bg-primary-300 hover:text-primary'><BiSend /></Button>
                             </form>
                         </>
-                    {/* } */}
+                    }
                 </div>
             </div>
         </>

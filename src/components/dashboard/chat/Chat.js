@@ -39,7 +39,19 @@ export default function Chat() {
                                     <div className="text-2xl hover:cursor-pointer hover:text-primary-300" onClick={() => setShowMessage(!showMessage)}><FaLongArrowAltLeft /></div>
                                     <p className="w-full text-center font-bold text-primary">Biji</p>
                                 </div>
-                                <div className="h-[50%]">pesan</div>
+                                <div className="h-[50%] overflow-y-auto">
+                                    <div className="p-2 bg-primary-200 my-1 rounded-sm">Ini adalah pesan</div>
+                                    <div className="p-2 bg-primary-200 my-1 rounded-sm">Ini adalah pesan</div>
+                                    <div className="p-2 bg-primary-200 my-1 rounded-sm">Ini adalah pesan</div>
+                                    <div className="p-2 bg-primary-200 my-1 rounded-sm">Ini adalah pesan</div>
+                                    <div className="p-2 bg-primary-200 my-1 rounded-sm">Ini adalah pesan</div>
+                                    <div className="p-2 bg-primary-200 my-1 rounded-sm">Ini adalah pesan</div>
+                                    <div className="p-2 bg-primary-200 my-1 rounded-sm">Ini adalah pesan</div>
+                                    <div className="p-2 bg-primary-200 my-1 rounded-sm">Ini adalah pesan</div>
+                                    <div className="p-2 bg-primary-200 my-1 rounded-sm">Ini adalah pesan</div>
+                                    <div className="p-2 bg-primary-200 my-1 rounded-sm">Ini adalah pesan</div>
+
+                                </div>
                             </div>
                             <div className="flex gap-2 w-full">
                                 <Textarea placeholder='Type here...' color='primary' radius='none' />
