@@ -34,6 +34,11 @@ export default function TambahCustomer() {
     if (res.ok) {
       toast.success("Registrasi customer berhasil");
       dispatch(fetchCustomers())
+      setPerusahaan("");
+      setPic("");
+      setAlamat("");
+      setNohp("");
+      setEmail("");
       onOpenChange(close);
     } else {
       toast.error("Registrasi gagal");
@@ -64,6 +69,7 @@ export default function TambahCustomer() {
                     variant="bordered"
                     name="perusahaan"
                     id="perusahaan"
+                    value={perusahaan}
                     onValueChange={setPerusahaan}
                   />
                   <Input
@@ -78,6 +84,7 @@ export default function TambahCustomer() {
                     variant="bordered"
                     name="pic"
                     id="pic"
+                    value={pic}
                     onValueChange={setPic}
                   />
                   <Textarea
@@ -92,6 +99,7 @@ export default function TambahCustomer() {
                     variant="bordered"
                     name="alamat"
                     id="alamat"
+                    value={alamat}
                     onValueChange={setAlamat}
                   />
                   <Input
@@ -106,6 +114,7 @@ export default function TambahCustomer() {
                     variant="bordered"
                     name="nohp"
                     id="nohp"
+                    value={nohp}
                     onValueChange={setNohp}
                   />
                   <Input
@@ -120,6 +129,7 @@ export default function TambahCustomer() {
                     variant="bordered"
                     name="email"
                     id="email"
+                    value={email}
                     onValueChange={setEmail}
                   />
                 </div>

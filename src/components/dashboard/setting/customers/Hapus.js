@@ -4,17 +4,21 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDi
 import { BiTrash } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import { toast } from 'react-hot-toast';
-import { fetchUser, hapus } from "@/redux/slices/user";
+import { fetchCustomers } from "@/redux/slices/customer/customers";
 
 export default function Hapus({ params }) {
   const dispatch = useDispatch()
   const handleDelete = async () => {
-    const res = await fetch(`/api/customers/${params.id}`, {
+    const res = await fetch(`/api/customer/${params.id}`, {
       method: 'DELETE',
     })
-    dispatch(fetchUser())
-    toast.success('Customer berhasil dihapus')
-    onOpenChange(close)
+    if (res.ok) {
+      dispatch(fetchCustomers())
+      toast.success('Customer berhasil dihapus')
+      onOpenChange(close)
+    } else {
+      toast.error('Customer gagal dihapus')
+    }
   }
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
@@ -38,9 +42,9 @@ export default function Hapus({ params }) {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1"></ModalHeader>
-              <ModalBody className="font-bold">
-                Yakin menghapus customer {params.pic}?
+              <ModalHeader className="flex flex-col gap-1">Hapus customer</ModalHeader>
+              <ModalBody>
+                <p>Yakin menghapus customer <span className="font-bold">{params.pic}?</span></p>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
