@@ -54,8 +54,8 @@ export default function layout({ children }) {
             </ul>
           </div>
         </div>
-        <Chat />
       </div>
+      <Chat />
     </>
   )
 }

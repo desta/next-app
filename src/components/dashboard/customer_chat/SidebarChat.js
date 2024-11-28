@@ -28,12 +28,13 @@ export default function SidebarChat() {
         const bookIndex = array.findIndex((b) => book.customerId === b.customerId);
         return index === bookIndex;
     })
-    console.log('filter', customer)
     const handleSelect = (data) => {
         setCustomer(listCustomer.filter(item => item.id === data.id))
-        setChat(dataChat.filter(item => item.customerId === data.id))
+        setChat(dataChat.filter(item => item.customerId === data.customerId))
         setMessage('')
     }
+    
+    console.log('filter', chat)
 
     const onSelectionChange = () => {
         setCustomer([])
@@ -108,14 +109,14 @@ export default function SidebarChat() {
                     </div>
                 </div>
                 <div className='flex-1'>
-                    {customer.length === 0 ? 'biji'
-                        :
+                    {/* {customer.length === 0 ? 'biji'
+                        : */}
                         <>
                             <div className='bg-white h-14 flex items-center justify-center p-2 font-bold text-lg'>
-                                {customer[0]?.pic === '' ? customer[0].nohp : customer[0]?.pic}
+                                {customer[0]?.pic === '' ? customer[0]?.nohp : customer[0]?.pic}
                             </div>
                             <div className='h-[calc(100vh-341px)] overflow-y-auto pr-2 flex flex-col'>
-                                {chat.map((x, index) => x.sender === customer[0].nohp ?
+                                {chat.map((x, index) => x.sender === customer[0]?.nohp ?
                                     <div className='flex mt-1 mb-1 w-fit' key={index}>
                                         <div className='w-12'>
                                             <Avatar radius="sm" src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
@@ -137,7 +138,7 @@ export default function SidebarChat() {
                                 <Button type='submit' radius='none' className='bg-secondary text-secondary-foreground h-[75px] w-20 flex justify-center items-center text-xl hover:bg-primary-300 hover:text-primary'><BiSend /></Button>
                             </form>
                         </>
-                    }
+                    {/* } */}
                 </div>
             </div>
         </>
