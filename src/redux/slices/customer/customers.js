@@ -11,7 +11,7 @@ const customersSlice = createSlice({
         error: false
     },
     reducers: {
-        tambah: function(state, action) {
+        addCustomer: function(state, action) {
             state.data.push(action.payload)
             state.data.sort((a, b) => a.id - b.id)
         },
@@ -37,5 +37,5 @@ const customersSlice = createSlice({
         })
     }
 })
-export const { tambah, hapus, edit } = customersSlice.actions
+export const { addCustomer, hapus, edit } = customersSlice.actions
 export default customersSlice.reducer;

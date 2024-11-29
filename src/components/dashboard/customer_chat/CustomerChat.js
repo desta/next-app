@@ -1,7 +1,7 @@
 'use client'
-import { fetchCustomerChat, tambah } from '@/redux/slices/customer/CustomerChat'
+import { fetchCustomerChat } from '@/redux/slices/customer/CustomerChat'
 import { fetchCustomers } from '@/redux/slices/customer/customers'
-import { Avatar, Button, Input, Textarea, Tabs, Tab, Card, CardBody } from '@nextui-org/react'
+import { Avatar, Button, Input, Textarea, Tabs, Tab, } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 import toast from 'react-hot-toast'
@@ -9,7 +9,7 @@ import { BiSend } from 'react-icons/bi'
 import { useDispatch, useSelector } from 'react-redux'
 import _ from 'lodash'
 
-export default function SidebarChat() {
+export default function CustomerChat() {
     const dispatch = useDispatch()
     const router = useRouter()
     const [chat, setChat] = React.useState([])
@@ -29,6 +29,8 @@ export default function SidebarChat() {
         return index === chatIndex;
     })
 
+    console.log('fff', filter)
+
     const handleContact = (data) => {
         setCustomer(listCustomer.filter(item => item.id === data.id))
         setChat(dataChat.filter(item => item.customerId === data.id))
@@ -41,8 +43,6 @@ export default function SidebarChat() {
         setMessage('')
     }
 
-    console.log('filter', filter)
-
     const onSelectionChange = () => {
         setCustomer([])
         setChat([])
@@ -51,6 +51,7 @@ export default function SidebarChat() {
 
     const handleNewChat = async (e) => {
         e.preventDefault();
+        setChat(dataLama => [...dataLama, { message, customerId: customer[0].id }])
         const res = await fetch('/api/customer_chat', {
             method: 'POST',
             headers: {
@@ -70,6 +71,8 @@ export default function SidebarChat() {
         }
     }
 
+    useEffect
+
     return (
         <>
             <div className='flex gap-4'>
@@ -83,12 +86,12 @@ export default function SidebarChat() {
                                 {filter.length === 0 ? <span className='text-center text-gray-400 italic block'>Tidak ada history.</span>
                                     :
                                     filter.map((data, index) =>
-                                        <a href='#end' key={index}>
+                                        <a href='#chat' key={index}>
                                             <div onClick={() => handleHistory(data)} className='flex flex-col gap-2' >
-                                                <div className={`${data.customer.nohp === customer[0]?.nohp ? 'bg-primary-100' : ''} flex flex-row gap-4 items-center p-2 hover:bg-primary-100 hover:text-black cursor-pointer`}>
+                                                <div className={`${data.customer?.nohp === customer[0]?.nohp ? 'bg-primary-100' : ''} flex flex-row gap-4 items-center p-2 hover:bg-primary-100 hover:text-black cursor-pointer`}>
                                                     <Avatar isBordered radius="sm" src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
                                                     <div className='flex flex-col'>
-                                                        <div className='font-bold'>{data.customer.pic === '' ? data.customer.nohp : data.customer.pic}</div>
+                                                        <div className='font-bold'>{data.customer?.pic === '' ? data.sender : data.customer?.pic}</div>
                                                         <div className='text-gray-500 text-sm'>{dataChat.filter(item => item.customerId === data.customerId).slice(-1)[0]?.message}</div>
                                                     </div>
                                                 </div>
@@ -101,16 +104,16 @@ export default function SidebarChat() {
                                 {listCustomer.length === 0 ? <span className='text-center text-gray-400 italic block'>Tidak ada contact.</span>
                                     :
                                     listCustomer.map(data =>
-                                        <a href='#end' key={data.id}>
-                                        <div onClick={() => handleContact(data)} className='flex flex-col gap-2' >
-                                            <div className={`${data.nohp === customer[0]?.nohp ? 'bg-primary-100' : ''} flex flex-row gap-4 items-center p-2 hover:bg-primary-100 hover:text-black cursor-pointer`}>
-                                                <Avatar isBordered radius="sm" src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
-                                                <div className='flex flex-col'>
-                                                    <div className='font-bold'>{data.pic === '' ? data.nohp : data.pic}</div>
-                                                    <div className='text-gray-500 text-sm'>{data.perusahaan}</div>
+                                        <a href='#chat' key={data.id}>
+                                            <div onClick={() => handleContact(data)} className='flex flex-col gap-2' >
+                                                <div className={`${data.nohp === customer[0]?.nohp ? 'bg-primary-100' : ''} flex flex-row gap-4 items-center p-2 hover:bg-primary-100 hover:text-black cursor-pointer`}>
+                                                    <Avatar isBordered radius="sm" src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
+                                                    <div className='flex flex-col'>
+                                                        <div className='font-bold'>{data.pic === '' ? data.nohp : data.pic}</div>
+                                                        <div className='text-gray-500 text-sm'>{data.perusahaan}</div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
                                         </a>
                                     )}
                             </Tab>
@@ -142,7 +145,7 @@ export default function SidebarChat() {
                                         </div>
                                     </div>
                                 )}
-                                <div id='end'></div>
+                                <div id='chat'></div>
                             </div>
                             <form onSubmit={handleNewChat} className='flex gap-2 items-center bg-white p-2'>
                                 <Textarea placeholder='Type here...' color='primary' radius='none' onChange={(e) => setMessage(e.target.value)} value={message} />

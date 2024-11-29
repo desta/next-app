@@ -11,7 +11,7 @@ const customerChatSlice = createSlice({
         error: false
     },
     reducers: {
-        tambah: function(state, action) {
+        addMessage: function(state, action) {
             state.data.push(action.payload)
             state.data.sort((a, b) => a.id - b.id)
         },
@@ -37,5 +37,5 @@ const customerChatSlice = createSlice({
         })
     }
 })
-export const { tambah, hapus, edit } = customerChatSlice.actions
+export const { addMessage, hapus, edit } = customerChatSlice.actions
 export default customerChatSlice.reducer;

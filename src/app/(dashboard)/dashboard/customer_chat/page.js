@@ -1,4 +1,5 @@
-import SidebarChat from '@/components/dashboard/customer_chat/SidebarChat';
+
+import CustomerChat from '@/components/dashboard/customer_chat/CustomerChat';
 import React from 'react'
 
 export const metadata = {
@@ -8,7 +9,7 @@ export const metadata = {
 export default function page() {
     return (
         <div className='prose prose-indigo max-w-none '>
-            <SidebarChat />
+            <CustomerChat />
         </div>
     )
 }

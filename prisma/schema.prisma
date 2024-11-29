@@ -172,12 +172,20 @@ model Customers {
 }
 
 model CustomersChat {
-  id         Int       @id @default(autoincrement())
-  message    String    @db.Text
-  createdAt  DateTime  @default(now())
-  sender     String
-  customer   Customers @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  customerId Int
+  id                    Int       @id @default(autoincrement())
+  object                String    @default("")
+  messagingProduct      String    @default("")
+  conversationId        String    @default("")
+  displayReceiverNumber String    @default("")
+  receiverNumberId      String    @default("")
+  senderName            String    @default("")
+  messageId             String    @default("")
+  messageTimestamp      String    @default("")
+  messageBody           String    @default("") @db.Text
+  imageMimeType         String    @default("")
+  createdAt             DateTime  @default(now())
+  customer              Customers @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId            Int
 }
 
 model Quotation {
