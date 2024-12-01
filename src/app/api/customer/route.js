@@ -7,6 +7,9 @@ export async function GET () {
         perusahaan: 'asc',
       },
     ],
+    include:{
+      CustomersChat: true
+    }
   })
   return Response.json(customers)
 }

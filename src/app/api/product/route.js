@@ -30,7 +30,7 @@ export async function POST(req) {
   let arr;
   let connect = image.map(item => item)
 
-  if (connect != '') {   
+  if (connect !== '') {   
     arr = image[0].split(',').map((item) => {
       return { id: parseInt(item) }
     });

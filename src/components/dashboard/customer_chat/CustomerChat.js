@@ -7,13 +7,14 @@ import React, { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { BiSend } from 'react-icons/bi'
 import { useDispatch, useSelector } from 'react-redux'
-import _ from 'lodash'
+import MenuChat from './MenuChat'
 
 export default function CustomerChat() {
     const dispatch = useDispatch()
     const router = useRouter()
     const [chat, setChat] = React.useState([])
-    const [message, setMessage] = React.useState('')
+    const [displayReceiverNumber, setDisplayReceiverNumber] = React.useState('')
+    const [messageBody, setMessageBody] = React.useState('')
     const [customer, setCustomer] = React.useState([])
 
     const listCustomer = useSelector(state => state.customers.data)
@@ -25,53 +26,59 @@ export default function CustomerChat() {
     }, [])
 
     const filter = dataChat.filter((book, index, array) => {
-        const chatIndex = array.findIndex((b) => book.customerId === b.customerId);
+        const chatIndex = array.findIndex((b) => book.displayReceiverNumber === b.displayReceiverNumber);
         return index === chatIndex;
     })
 
-    console.log('fff', filter)
-
-    const handleContact = (data) => {
-        setCustomer(listCustomer.filter(item => item.id === data.id))
-        setChat(dataChat.filter(item => item.customerId === data.id))
-        setMessage('')
+    const handleHistory = (data) => {
+        setCustomer(listCustomer.filter(item => item.nohp === data.displayReceiverNumber))
+        setChat(dataChat.filter(item => item.displayReceiverNumber === data.displayReceiverNumber))
+        setDisplayReceiverNumber(data.displayReceiverNumber)
+        setMessageBody('')
     }
 
-    const handleHistory = (data) => {
-        setCustomer(listCustomer.filter(item => item.id === data.customerId))
-        setChat(dataChat.filter(item => item.customerId === data.customerId))
-        setMessage('')
+    const handleContact = (data) => {
+        console.log('data', data)
+        setCustomer(listCustomer.filter(item => item.id === data.id))
+        setChat(dataChat.filter(item => item.displayReceiverNumber === data.nohp))
+        setDisplayReceiverNumber(data.nohp)
+        setMessageBody('')
     }
 
     const onSelectionChange = () => {
         setCustomer([])
         setChat([])
-        setMessage('')
+        setMessageBody('')
     }
 
     const handleNewChat = async (e) => {
-        e.preventDefault();
-        setChat(dataLama => [...dataLama, { message, customerId: customer[0].id }])
-        const res = await fetch('/api/customer_chat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                message,
-                customer: customer[0].id,
-            }),
-        })
-        if (res.ok) {
-            toast.success('Berhasil mengirim chat')
-            setMessage('')
-            dispatch(fetchCustomerChat())
+        e.preventDefault()
+        if (messageBody === '') {
+            toast.error('Please enter a message')
         } else {
-            toast.error('Gagal mengirim chat')
+            setChat(dataLama => [...dataLama, { messageBody, customerId: customer[0].id }])
+            const res = await fetch('/api/customer_chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    displayReceiverNumber,
+                    messageBody,
+                    customer: customer[0].id,
+                }),
+            })
+            if (res.ok) {
+                toast.success('Berhasil mengirim chat')
+                setMessageBody('')
+                dispatch(fetchCustomerChat())
+                router.push('#chat')
+            } else {
+                toast.error('Gagal mengirim chat')
+            }
         }
     }
 
-    useEffect
 
     return (
         <>
@@ -88,11 +95,12 @@ export default function CustomerChat() {
                                     filter.map((data, index) =>
                                         <a href='#chat' key={index}>
                                             <div onClick={() => handleHistory(data)} className='flex flex-col gap-2' >
-                                                <div className={`${data.customer?.nohp === customer[0]?.nohp ? 'bg-primary-100' : ''} flex flex-row gap-4 items-center p-2 hover:bg-primary-100 hover:text-black cursor-pointer`}>
+                                                <div className={`${data.displayReceiverNumber === customer[0]?.nohp ? 'bg-primary-100' : ''} flex flex-row gap-4 items-center p-2 hover:bg-primary-100 hover:text-black cursor-pointer`}>
                                                     <Avatar isBordered radius="sm" src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
                                                     <div className='flex flex-col'>
-                                                        <div className='font-bold'>{data.customer?.pic === '' ? data.sender : data.customer?.pic}</div>
-                                                        <div className='text-gray-500 text-sm'>{dataChat.filter(item => item.customerId === data.customerId).slice(-1)[0]?.message}</div>
+                                                        {/* <div className='font-bold'>{data.customer?.pic === '' ? data.customer?.pic : data.displayReceiverNumber}</div> */}
+                                                        <div className='font-bold'>{dataChat.filter(item => item.customer?.nohp === data.displayReceiverNumber).slice(-1)[0]?.customer?.pic ? dataChat.filter(item => item.displayReceiverNumber === data.displayReceiverNumber).slice(-1)[0]?.customer?.pic : data.displayReceiverNumber}</div>
+                                                        <div className='text-gray-500 text-sm'>{dataChat.filter(item => item.displayReceiverNumber === data.displayReceiverNumber).slice(-1)[0]?.messageBody}</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -126,31 +134,34 @@ export default function CustomerChat() {
                         :
                         <>
                             <div className='bg-white h-14 flex items-center justify-center p-2 font-bold text-lg'>
-                                {customer[0]?.pic === '' ? customer[0]?.nohp : customer[0]?.pic}
+                                <div className='w-full text-center'>
+                                    {customer[0]?.pic === '' ? customer[0]?.nohp : customer[0]?.pic}
+                                </div>
+                                <MenuChat />
                             </div>
-                            <div className='h-[calc(100vh-341px)] overflow-y-auto pr-2 flex flex-col'>
-                                {chat.map((x, index) => x.sender === customer[0]?.nohp ?
-                                    <div className='flex mt-1 mb-1 w-fit' key={index}>
-                                        <div className='w-12'>
-                                            <Avatar radius="sm" src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
+                            <div className='flex flex-col h-[calc(100vh-250px)] gap-2 overflow-y-auto'>
+                                <div className="flex flex-col gap-1 overflow-y-auto flex-grow pr-1">
+                                    {chat.map((x, index) => x.userId === null ?
+                                        <div className='flex mt-1 mb-1 max-w-[70%]' key={index}>
+                                            <div className='w-12'>
+                                                <Avatar radius="sm" src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
+                                            </div>
+                                            <div className='p-2 rounded-lg leading-tight bg-secondary text-secondary-foreground'>
+                                                {x.messageBody}
+                                            </div>
                                         </div>
-                                        <div className='bg-white p-2 rounded-lg leading-tight'>
-                                            {x.message}
+                                        :
+                                        <div key={index} className='bg-white p-2 rounded-lg mt-1 mb-1 leading-tight max-w-[70%] self-end'>
+                                            {x.messageBody}
                                         </div>
-                                    </div>
-                                    :
-                                    <div className='block' key={index}>
-                                        <div className='p-2 rounded-lg mt-1 mb-1 bg-secondary text-secondary-foreground w-fit leading-tight float-right'>
-                                            {x.message}
-                                        </div>
-                                    </div>
-                                )}
-                                <div id='chat'></div>
+                                    )}
+                                    <div id='chat'></div>
+                                </div>
+                                <form onSubmit={handleNewChat} className='flex gap-2 bg-white p-2'>
+                                    <Textarea onKeyDown={(e) => { if (e.key === "Enter") handleNewChat(e) }} minRows={1} placeholder='Type here...' color='primary' radius='none' onChange={(e) => setMessageBody(e.target.value)} value={messageBody} />
+                                    <Button type='submit' radius='none' isIconOnly className='bg-secondary text-secondary-foreground flex justify-center items-center text-xl hover:bg-black hover:text-primary'><BiSend /></Button>
+                                </form>
                             </div>
-                            <form onSubmit={handleNewChat} className='flex gap-2 items-center bg-white p-2'>
-                                <Textarea placeholder='Type here...' color='primary' radius='none' onChange={(e) => setMessage(e.target.value)} value={message} />
-                                <Button type='submit' radius='none' className='bg-secondary text-secondary-foreground h-[75px] w-20 flex justify-center items-center text-xl hover:bg-primary-300 hover:text-primary'><BiSend /></Button>
-                            </form>
                         </>
                     }
                 </div>
