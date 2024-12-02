@@ -8,6 +8,7 @@ import toast from 'react-hot-toast'
 import { BiSend } from 'react-icons/bi'
 import { useDispatch, useSelector } from 'react-redux'
 import MenuChat from './MenuChat'
+import { formatJam, formatTanggalShort } from '@/components/Utils'
 
 export default function CustomerChat() {
     const dispatch = useDispatch()
@@ -16,9 +17,12 @@ export default function CustomerChat() {
     const [displayReceiverNumber, setDisplayReceiverNumber] = React.useState('')
     const [messageBody, setMessageBody] = React.useState('')
     const [customer, setCustomer] = React.useState([])
+    const [createdAt, setCreatedAt] = React.useState(new Date())
 
     const listCustomer = useSelector(state => state.customers.data)
     const dataChat = useSelector(state => state.customerChat.data)
+
+    const today = new Date()
 
     useEffect(() => {
         dispatch(fetchCustomers())
@@ -38,7 +42,6 @@ export default function CustomerChat() {
     }
 
     const handleContact = (data) => {
-        console.log('data', data)
         setCustomer(listCustomer.filter(item => item.id === data.id))
         setChat(dataChat.filter(item => item.displayReceiverNumber === data.nohp))
         setDisplayReceiverNumber(data.nohp)
@@ -49,6 +52,7 @@ export default function CustomerChat() {
         setCustomer([])
         setChat([])
         setMessageBody('')
+        setDisplayReceiverNumber([])
     }
 
     const handleNewChat = async (e) => {
@@ -56,7 +60,7 @@ export default function CustomerChat() {
         if (messageBody === '') {
             toast.error('Please enter a message')
         } else {
-            setChat(dataLama => [...dataLama, { messageBody, customerId: customer[0].id }])
+            setChat(dataLama => [...dataLama, { messageBody, createdAt }])
             const res = await fetch('/api/customer_chat', {
                 method: 'POST',
                 headers: {
@@ -65,7 +69,7 @@ export default function CustomerChat() {
                 body: JSON.stringify({
                     displayReceiverNumber,
                     messageBody,
-                    customer: customer[0].id,
+                    customer,
                 }),
             })
             if (res.ok) {
@@ -78,7 +82,6 @@ export default function CustomerChat() {
             }
         }
     }
-
 
     return (
         <>
@@ -95,12 +98,13 @@ export default function CustomerChat() {
                                     filter.map((data, index) =>
                                         <a href='#chat' key={index}>
                                             <div onClick={() => handleHistory(data)} className='flex flex-col gap-2' >
-                                                <div className={`${data.displayReceiverNumber === customer[0]?.nohp ? 'bg-primary-100' : ''} flex flex-row gap-4 items-center p-2 hover:bg-primary-100 hover:text-black cursor-pointer`}>
-                                                    <Avatar isBordered radius="sm" src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
+                                                <div className={`${data.displayReceiverNumber === displayReceiverNumber ? 'bg-primary-100' : ''} flex flex-row gap-4 items-center p-2 hover:bg-primary-100 hover:text-black cursor-pointer`}>
+                                                    <div><Avatar isBordered src="" showFallback size='md' color='secondary' /></div>
                                                     <div className='flex flex-col'>
-                                                        {/* <div className='font-bold'>{data.customer?.pic === '' ? data.customer?.pic : data.displayReceiverNumber}</div> */}
-                                                        <div className='font-bold'>{dataChat.filter(item => item.customer?.nohp === data.displayReceiverNumber).slice(-1)[0]?.customer?.pic ? dataChat.filter(item => item.displayReceiverNumber === data.displayReceiverNumber).slice(-1)[0]?.customer?.pic : data.displayReceiverNumber}</div>
-                                                        <div className='text-gray-500 text-sm'>{dataChat.filter(item => item.displayReceiverNumber === data.displayReceiverNumber).slice(-1)[0]?.messageBody}</div>
+                                                        <div className='font-bold line-clamp-1'>{dataChat.filter(item => item.displayReceiverNumber === data.displayReceiverNumber).slice(-1)[0]?.displayReceiverNumber === listCustomer.filter(item => item.nohp === data.displayReceiverNumber).slice(-1)[0]?.nohp ?
+                                                            listCustomer.filter(item => item.nohp === data.displayReceiverNumber).slice(-1)[0]?.pic :
+                                                            dataChat.filter(item => item.displayReceiverNumber === data.displayReceiverNumber).slice(-1)[0]?.displayReceiverNumber}</div>
+                                                        <div className='text-gray-500 text-sm line-clamp-1'>{dataChat.filter(item => item.displayReceiverNumber === data.displayReceiverNumber).slice(-1)[0]?.messageBody}</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -115,10 +119,10 @@ export default function CustomerChat() {
                                         <a href='#chat' key={data.id}>
                                             <div onClick={() => handleContact(data)} className='flex flex-col gap-2' >
                                                 <div className={`${data.nohp === customer[0]?.nohp ? 'bg-primary-100' : ''} flex flex-row gap-4 items-center p-2 hover:bg-primary-100 hover:text-black cursor-pointer`}>
-                                                    <Avatar isBordered radius="sm" src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
+                                                    <div><Avatar isBordered src="" showFallback size='md' color='secondary' /></div>
                                                     <div className='flex flex-col'>
-                                                        <div className='font-bold'>{data.pic === '' ? data.nohp : data.pic}</div>
-                                                        <div className='text-gray-500 text-sm'>{data.perusahaan}</div>
+                                                        <div className='font-bold line-clamp-1'>{data.pic === '' ? data.nohp : data.pic}</div>
+                                                        <div className='text-gray-500 text-sm line-clamp-1'>{data.perusahaan}</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -130,29 +134,31 @@ export default function CustomerChat() {
                     </div>
                 </div>
                 <div className='flex-1'>
-                    {customer.length === 0 ? null
+                    {displayReceiverNumber.length === 0 ? null
                         :
                         <>
                             <div className='bg-white h-14 flex items-center justify-center p-2 font-bold text-lg'>
                                 <div className='w-full text-center'>
-                                    {customer[0]?.pic === '' ? customer[0]?.nohp : customer[0]?.pic}
+                                    {displayReceiverNumber === customer[0]?.nohp ? customer[0]?.pic : displayReceiverNumber}
                                 </div>
-                                <MenuChat />
+                                <MenuChat customer={customer} newCustomer={displayReceiverNumber} />
                             </div>
                             <div className='flex flex-col h-[calc(100vh-250px)] gap-2 overflow-y-auto'>
-                                <div className="flex flex-col gap-1 overflow-y-auto flex-grow pr-1">
+                                <div className="flex flex-col gap-1 overflow-y-auto flex-grow pr-1 pt-2">
                                     {chat.map((x, index) => x.userId === null ?
-                                        <div className='flex mt-1 mb-1 max-w-[70%]' key={index}>
-                                            <div className='w-12'>
-                                                <Avatar radius="sm" src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
+                                        <div className='flex gap-2 mt-1 mb-1 max-w-[70%]' key={index}>
+                                            <div className='pl-1'>
+                                                <Avatar isBordered src="" showFallback size='md' color='secondary' />
                                             </div>
-                                            <div className='p-2 rounded-lg leading-tight bg-secondary text-secondary-foreground'>
-                                                {x.messageBody}
+                                            <div className='leading-tight '>
+                                                <div className='p-2 rounded-lg bg-secondary text-secondary-foreground'>{x.messageBody}</div>
+                                                <div className='text-xs text-gray-400 text-right'>{formatTanggalShort(today) === formatTanggalShort(x.createdAt) ? formatJam(x.createdAt) : formatTanggalShort(x.createdAt)}</div>
                                             </div>
                                         </div>
                                         :
-                                        <div key={index} className='bg-white p-2 rounded-lg mt-1 mb-1 leading-tight max-w-[70%] self-end'>
-                                            {x.messageBody}
+                                        <div key={index} className='mt-1 mb-1 leading-tight max-w-[70%] self-end'>
+                                            <div className='bg-white p-2 rounded-lg'>{x.messageBody}</div>
+                                            <div className='text-xs text-gray-400 text-right'>{formatTanggalShort(today) === formatTanggalShort(x.createdAt) ? formatJam(x.createdAt) : formatTanggalShort(x.createdAt)}</div>
                                         </div>
                                     )}
                                     <div id='chat'></div>

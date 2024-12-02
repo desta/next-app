@@ -1,48 +1,26 @@
-import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
-import { BiMenu } from "react-icons/bi";
+'use client'
+import React from 'react'
+import HapusChat from './HapusChat'
+import { Button } from '@nextui-org/react'
+import { BiMenu } from 'react-icons/bi'
+import TambahContact from './TambahContact'
+import HapusContact from './HapusContact'
+import EditContact from './EditContact'
 
-export default function MenuChat() {
-  const items = [
-    {
-      key: "new",
-      label: "New file",
-    },
-    {
-      key: "copy",
-      label: "Copy link",
-    },
-    {
-      key: "edit",
-      label: "Edit file",
-    },
-    {
-      key: "delete",
-      label: "Delete file",
-    }
-  ];
-
+export default function MenuChat({ customer, newCustomer }) {
+  const [open, setOpen] = React.useState(false)
   return (
-    <Dropdown>
-      <DropdownTrigger>
-        <Button 
-          isIconOnly
-          radius="none"
-          color="secondary"
-        >
-          <BiMenu size={24} />
-        </Button>
-      </DropdownTrigger>
-      <DropdownMenu aria-label="Dynamic Actions" items={items}>
-        {(item) => (
-          <DropdownItem
-            key={item.key}
-            color={item.key === "delete" ? "danger" : "default"}
-            className={item.key === "delete" ? "text-danger" : ""}
-          >
-            {item.label}
-          </DropdownItem>
-        )}
-      </DropdownMenu>
-    </Dropdown>
-  );
+    <div className="dropdown inline-block relative">
+      <Button isIconOnly radius='none' color='secondary' onClick={() => setOpen(!open)}><BiMenu size={24} /></Button>
+      <div className={`${open ? 'block' : 'hidden'} absolute right-0 p-2 bg-secondary flex flex-col gap-1`}>
+        {customer.length === 0 ?
+          <div className=""><TambahContact data={newCustomer} /></div>
+          :
+          <div className=""><EditContact data={customer}/></div>
+        }
+        <div className=""><HapusChat /></div>
+        <div className=""><HapusContact data={customer} /></div>
+      </div>
+    </div>
+  )
 }

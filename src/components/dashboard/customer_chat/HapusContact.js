@@ -1,7 +1,53 @@
-import React from 'react'
+'use client'
+import { fetchCustomerChat } from "@/redux/slices/customer/CustomerChat";
+import { fetchCustomers } from "@/redux/slices/customer/customers";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
+import { toast } from "react-hot-toast";
+import { BiTrash } from "react-icons/bi";
+import { useDispatch } from "react-redux";
 
-export default function HapusContact() {
+export default function HapusContact({ data }) {
+  const dispatch = useDispatch()
+
+  const handleSubmitForm = async (e) => {
+    e.preventDefault();
+    const res = await fetch(`/api/customer/${data[0].id}`, {
+      method: "DELETE",
+    });
+    if (res.ok) {
+      toast.success("Edit contact berhasil");
+      dispatch(fetchCustomers())
+      dispatch(fetchCustomerChat())
+      onOpenChange(close);
+    } else {
+      toast.error("Edit gagal");
+    }
+  };
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   return (
-    <div>HapusContact</div>
-  )
+    <>
+      <Button onPress={onOpen} radius="none" size="sm" className="flex justify-between" color="danger" fullWidth>Hapus contact <BiTrash size={14} /></Button>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="center">
+        <ModalContent>
+          {(onClose) => (
+            <form onSubmit={handleSubmitForm}>
+              <ModalHeader className="flex flex-col gap-1">Hapus contact customer </ModalHeader>
+              <ModalBody>
+                <p>Apakah anda yakin ingin menghapus contact customer ini?</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Tutup
+                </Button>
+                <Button type="submit" color="secondary" >
+                  Simpan
+                </Button>
+              </ModalFooter>
+            </form>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
+  );
 }

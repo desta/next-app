@@ -32,30 +32,27 @@ export async function POST(req, { params }) {
   //   senderName = wa.id
   // }
   const { displayReceiverNumber, messageBody, customer } = await req.json()
+  console.log('cuss', customer)
 
   let usr;
   if (session) {
-    usr = session.user.id 
+    usr = session.user.id
   } else {
     usr = {}
   }
-
-  let cus
-  if (customer) {
-    cus = customer
+  
+  let arr;
+  if (customer.length !== 0) {
+    arr =  { id: Number(customer[0].id) }
   } else {
-    cus = {}
+    arr = undefined
   }
 
   const customers = await prisma.customersChat.create({
     data: {
       displayReceiverNumber,
       messageBody,
-      customer: {
-        connect: {
-          id: cus
-        }
-      },
+      customer: { connect: arr },
       user: {
         connect: {
           id: usr

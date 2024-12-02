@@ -43,7 +43,7 @@ export default function Chat() {
                                 </div>
 
                             </div>
-                            <div className="flex gap-2 w-full bg-white">
+                            <div className="flex items-end gap-2 w-full bg-white">
                                 <Textarea minRows={1} placeholder='Type here...' color='primary' radius='none' />
                                 <Button type='submit' radius='none' isIconOnly className='bg-secondary text-secondary-foreground flex justify-center items-center text-xl hover:bg-black hover:text-primary'><BiSend /></Button>
                             </div>

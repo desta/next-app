@@ -32,7 +32,7 @@ export default function TambahCustomer() {
     });
 
     if (res.ok) {
-      toast.success("Registrasi customer berhasil");
+      toast.success("Tambah contact customer berhasil");
       dispatch(fetchCustomers())
       setPerusahaan("");
       setPic("");
@@ -41,7 +41,7 @@ export default function TambahCustomer() {
       setEmail("");
       onOpenChange(close);
     } else {
-      toast.error("Registrasi gagal");
+      toast.error("Tambah contact gagal");
     }
   };
   const { isOpen, onOpen, onOpenChange } = useDisclosure();

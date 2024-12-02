@@ -21,6 +21,12 @@ export async function PUT (req, { params }) {
 }
 
 export async function DELETE (req, {params}) {
+  const rem = await prisma.customersChat.deleteMany({
+    where:{
+      displayReceiverNumber: Number((await params).id)
+    }
+    
+  })
   try {   
     const removeCustomers = await prisma.customersChat.delete({
       where: {
