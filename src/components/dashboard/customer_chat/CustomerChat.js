@@ -23,7 +23,7 @@ export default function CustomerChat() {
     const dataChat = useSelector(state => state.customerChat.data)
 
     const today = new Date()
-
+    console.log('dd', displayReceiverNumber)
     useEffect(() => {
         dispatch(fetchCustomers())
         dispatch(fetchCustomerChat())
@@ -139,7 +139,10 @@ export default function CustomerChat() {
                         <>
                             <div className='bg-white h-14 flex items-center justify-center p-2 font-bold text-lg'>
                                 <div className='w-full text-center'>
-                                    {displayReceiverNumber === customer[0]?.nohp ? customer[0]?.pic : displayReceiverNumber}
+                                    {/* {displayReceiverNumber === customer[0]?.nohp ? customer[0]?.pic : displayReceiverNumber} */}
+                                    {dataChat.filter(item => item.displayReceiverNumber === customer[0]?.nohp).slice(-1)[0]?.displayReceiverNumber === listCustomer.filter(item => item.nohp === customer[0]?.nohp).slice(-1)[0]?.nohp ?
+                                                            listCustomer.filter(item => item.nohp === customer[0]?.nohp).slice(-1)[0]?.pic :
+                                                            dataChat.filter(item => item.displayReceiverNumber === customer[0]?.nohp).slice(-1)[0]?.displayReceiverNumber}
                                 </div>
                                 <MenuChat customer={customer} newCustomer={displayReceiverNumber} />
                             </div>

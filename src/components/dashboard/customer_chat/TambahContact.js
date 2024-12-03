@@ -1,7 +1,8 @@
 'use client'
+import { fetchCustomerChat } from "@/redux/slices/customer/CustomerChat";
 import { fetchCustomers } from "@/redux/slices/customer/customers";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input, Textarea } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { BiPhone, BiPlusCircle, BiUser } from "react-icons/bi";
 import { MdEmail } from "react-icons/md";
@@ -12,9 +13,12 @@ export default function TambahContact({ data }) {
   const [perusahaan, setPerusahaan] = useState("");
   const [pic, setPic] = useState("");
   const [alamat, setAlamat] = useState("");
-  const [nohp, setNohp] = useState(data);
+  const [nohp, setNohp] = useState("");
   const [email, setEmail] = useState("");
 
+  useEffect(()=>{
+    setNohp(data)
+  },[data])
   const handleSubmitForm = async (e) => {
     e.preventDefault();
     const res = await fetch("/api/customer", {
@@ -34,6 +38,7 @@ export default function TambahContact({ data }) {
     if (res.ok) {
       toast.success("Registrasi customer berhasil");
       dispatch(fetchCustomers())
+      dispatch(fetchCustomerChat())
       setPerusahaan("");
       setPic("");
       setAlamat("");

@@ -1,20 +1,27 @@
 'use client'
 import { fetchCustomers } from "@/redux/slices/customer/customers";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input, Textarea } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { BiEdit, BiPhone, BiUser } from "react-icons/bi";
 import { MdEmail } from "react-icons/md";
 import { useDispatch } from "react-redux";
 
 export default function EditContact({ data }) {
-  console.log('d',data)
   const dispatch = useDispatch()
-  const [perusahaan, setPerusahaan] = useState(data[0].perusahaan);
-  const [pic, setPic] = useState(data[0].pic);
-  const [alamat, setAlamat] = useState(data[0].alamat);
-  const [nohp, setNohp] = useState(data[0].nohp);
-  const [email, setEmail] = useState(data[0].email);
+  const [perusahaan, setPerusahaan] = useState();
+  const [pic, setPic] = useState();
+  const [alamat, setAlamat] = useState();
+  const [nohp, setNohp] = useState();
+  const [email, setEmail] = useState();
+
+  useEffect(() => {
+    setPerusahaan(data[0].perusahaan)
+    setPic(data[0].pic)
+    setAlamat(data[0].alamat)
+    setNohp(data[0].nohp)
+    setEmail(data[0].email)
+  }, [data])
 
   const handleSubmitForm = async (e) => {
     e.preventDefault();
