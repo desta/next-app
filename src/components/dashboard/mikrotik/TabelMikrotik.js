@@ -8,7 +8,7 @@ import { BiChevronDown, BiSearch } from "react-icons/bi";
 // import Hapus from "./Hapus";
 import { useDispatch, useSelector } from "react-redux";
 import { useSession } from "next-auth/react";
-import { capitalize } from "../../Utils";
+import { capitalize } from "../../../utils/Utils";
 import AddMikrotik from "./AddMikrotik";
 import { fetchMikrotikData } from "@/redux/slices/MikrotikData";
 

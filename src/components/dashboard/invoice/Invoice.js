@@ -4,7 +4,7 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Divide
 import React, { useRef } from 'react'
 import Link from 'next/link';
 import BuatInvoice from '../invoice/BuatInvoice';
-import { formatTanggal } from '@/components/Utils';
+import { formatTanggal } from '@/utils/Utils';
 
 export default function Invoice({ params }) {
   let subTotal = 0

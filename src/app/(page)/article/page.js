@@ -2,7 +2,7 @@ import { prisma } from '@/libs/prisma'
 import React from 'react'
 import parse from 'html-react-parser';
 import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image } from '@nextui-org/react';
-import { formatJam, formatTanggal } from '@/components/Utils';
+import { formatJam, formatTanggal } from '@/utils/Utils';
 
 export async function metadata() {
   const data = await prisma.app.findUnique({

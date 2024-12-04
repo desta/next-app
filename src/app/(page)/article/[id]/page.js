@@ -3,7 +3,7 @@ import { prisma } from '@/libs/prisma';
 import React from 'react'
 import TambahComment from '@/components/website/comment/TambahComment';
 import { VscCalendar } from 'react-icons/vsc';
-import { formatJam, formatTanggal } from '@/components/Utils';
+import { formatJam, formatTanggal } from '@/utils/Utils';
 
 export default async function page(props) {
     const params = (await props).searchParams;

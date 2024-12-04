@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect } from "react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination, Chip } from "@nextui-org/react";
-import { capitalize } from "../../Utils";
+import { capitalize } from "../../../utils/Utils";
 import { BiChevronDown, BiSearch } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import Tambah from "./Tambah";

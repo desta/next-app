@@ -1,4 +1,4 @@
-import { formatAgenda } from '@/components/Utils';
+import { formatAgenda } from '@/utils/Utils';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 export const fetchAgendas = createAsyncThunk("fetchAgendas", async () => {
     const response = await fetch("/api/agenda");

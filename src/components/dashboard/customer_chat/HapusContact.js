@@ -6,21 +6,27 @@ import { toast } from "react-hot-toast";
 import { BiTrash } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 
-export default function HapusContact({ data }) {
+export default function HapusContact({ data, params, setDisplayReceiverNumber }) {
   const dispatch = useDispatch()
-
   const handleSubmitForm = async (e) => {
     e.preventDefault();
     const res = await fetch(`/api/customer/${data[0].id}`, {
       method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        displayReceiverNumber: params
+      }),
     });
     if (res.ok) {
-      toast.success("Edit contact berhasil");
+      toast.success("Hapus contact berhasil");
       dispatch(fetchCustomers())
       dispatch(fetchCustomerChat())
       onOpenChange(close);
+      setDisplayReceiverNumber([])
     } else {
-      toast.error("Edit gagal");
+      toast.error("Hapus contact gagal");
     }
   };
   const { isOpen, onOpen, onOpenChange } = useDisclosure();

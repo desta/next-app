@@ -4,7 +4,7 @@ import mime from "mime";
 import { join } from "path";
 import { stat, mkdir, writeFile, unlink } from "fs/promises";
 import _ from "lodash";
-import { saltAndHashPassword } from "@/components/Utils";
+import { saltAndHashPassword } from "@/utils/Utils";
 
 export async function PUT(req, res) {
   // let data = await req.json()

@@ -33,3 +33,9 @@ export function formatJam(tanggal) {
   const options = { hour: 'numeric', minute: 'numeric' };
   return date.toLocaleTimeString('id-ID', options).replace('.', ':');
 }
+
+export function formatTimeStamp(tanggal){
+  const date = new Date(tanggal);
+  const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+  return date.toLocaleDateString('id-ID', options).replaceAll('/', '').replaceAll(' ', '').replaceAll('.', '');
+}

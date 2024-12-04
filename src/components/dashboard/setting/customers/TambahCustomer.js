@@ -12,7 +12,7 @@ export default function TambahCustomer() {
   const [perusahaan, setPerusahaan] = useState("");
   const [pic, setPic] = useState("");
   const [alamat, setAlamat] = useState("");
-  const [nohp, setNohp] = useState("");
+  const [nohp, setNohp] = useState();
   const [email, setEmail] = useState("");
 
   const handleSubmitForm = async (e) => {
@@ -32,7 +32,7 @@ export default function TambahCustomer() {
     });
 
     if (res.ok) {
-      toast.success("Tambah contact customer berhasil");
+      toast.success("Tambah customer berhasil");
       dispatch(fetchCustomers())
       setPerusahaan("");
       setPic("");
@@ -41,7 +41,7 @@ export default function TambahCustomer() {
       setEmail("");
       onOpenChange(close);
     } else {
-      toast.error("Tambah contact gagal");
+      toast.error("Tambah customer gagal");
     }
   };
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -73,6 +73,7 @@ export default function TambahCustomer() {
                     onValueChange={setPerusahaan}
                   />
                   <Input
+                    isRequired
                     endContent={
                       <BiUser className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                     }
@@ -103,6 +104,7 @@ export default function TambahCustomer() {
                     onValueChange={setAlamat}
                   />
                   <Input
+                    isRequired
                     endContent={
                       <BiLock className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                     }

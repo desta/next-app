@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from "react";
 import { useReactToPrint } from 'react-to-print';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination } from "@nextui-org/react";
-import { capitalize } from "../../../Utils";
+import { capitalize } from "../../../../utils/Utils";
 import { BiChevronDown, BiSearch } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { useSession } from "next-auth/react";

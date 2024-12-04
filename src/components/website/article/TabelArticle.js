@@ -17,7 +17,7 @@ import {
 } from "@nextui-org/react";
 import { BiChevronDown, BiSearch } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
-import { capitalize, formatJam, formatTanggal } from "@/components/Utils";
+import { capitalize, formatJam, formatTanggal } from "@/utils/Utils";
 import Edit from "./Edit";
 import Hapus from "./Hapus";
 import Tambah from "./Tambah";

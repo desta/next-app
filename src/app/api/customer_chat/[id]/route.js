@@ -19,22 +19,3 @@ export async function PUT (req, { params }) {
   })
   return Response.json(getCustomers)
 }
-
-export async function DELETE (req, {params}) {
-  const rem = await prisma.customersChat.deleteMany({
-    where:{
-      displayReceiverNumber: Number((await params).id)
-    }
-    
-  })
-  try {   
-    const removeCustomers = await prisma.customersChat.delete({
-      where: {
-        id: Number((await params).id)
-      }
-    })
-    return Response.json(removeCustomers)
-  } catch (error) {
-    return Response.json(error.message)
-  }
-}

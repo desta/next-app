@@ -6,7 +6,7 @@ import { BiChevronDown, BiEdit, BiSearch } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { useSession } from "next-auth/react";
 import { fetchQuotations } from "@/redux/slices/quotation/Quotation";
-import { capitalize } from "@/components/Utils";
+import { capitalize } from "@/utils/Utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 

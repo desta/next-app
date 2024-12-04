@@ -1,5 +1,5 @@
 import { prisma } from "@/libs/prisma"
-import { saltAndHashPassword } from "@/components/Utils";
+import { saltAndHashPassword } from "@/utils/Utils";
 import moment from "moment";
 
 export async function POST(req) {

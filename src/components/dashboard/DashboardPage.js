@@ -8,7 +8,7 @@ import { Card, CardBody, Table, TableHeader, TableColumn, TableBody, TableRow, T
 import ListNote from '@/components/dashboard/note/ListNote';
 import HomeCounterGraph from '@/components/dashboard/counter/HomeCounterGraph';
 import { fetchAgendas } from '@/redux/slices/agendas';
-import { formatAgenda } from '../Utils';
+import { formatAgenda } from '../../utils/Utils';
 
 const columns = [
   { uid: "title", name: "Title" },

@@ -1,4 +1,4 @@
-import { saltAndHashPassword } from "@/components/Utils";
+import { saltAndHashPassword } from "@/utils/Utils";
 import { prisma } from "@/libs/prisma";
 
 export async function PUT(req, { params }) {

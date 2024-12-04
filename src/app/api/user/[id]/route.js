@@ -1,5 +1,5 @@
 import { prisma } from "@/libs/prisma";
-import { saltAndHashPassword } from "@/components/Utils";
+import { saltAndHashPassword } from "@/utils/Utils";
 
 export async function PUT(req, { params }) {
   const data = await req.json()

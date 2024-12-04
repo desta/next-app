@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAgendas } from '@/redux/slices/agendas';
 import { Button, Textarea, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Chip, TimeInput, Spinner } from '@nextui-org/react'
 // import Calendar from 'react-calendar';
-import { formatAgenda } from '@/components/Utils';
+import { formatAgenda } from '@/utils/Utils';
 import { BiEdit, BiPlus, BiTrash } from 'react-icons/bi';
 import EditAgenda from './EditAgenda';
 import HapusAgenda from './HapusAgenda';

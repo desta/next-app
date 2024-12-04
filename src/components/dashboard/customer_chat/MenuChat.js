@@ -7,7 +7,7 @@ import TambahContact from './TambahContact'
 import HapusContact from './HapusContact'
 import EditContact from './EditContact'
 
-export default function MenuChat({ customer, newCustomer }) {
+export default function MenuChat({ customer, newCustomer, setDisplayReceiverNumber, chat, setChat }) {
   const [open, setOpen] = React.useState(false)
   return (
     <div className="dropdown inline-block relative">
@@ -16,10 +16,14 @@ export default function MenuChat({ customer, newCustomer }) {
         {customer.length === 0 ?
           <div className=""><TambahContact data={newCustomer} /></div>
           :
-          <div className=""><EditContact data={customer}/></div>
+          <div className=""><EditContact data={customer} /></div>
         }
-        <div className=""><HapusChat /></div>
-        <div className=""><HapusContact data={customer} /></div>
+        {chat.length !== 0 && <div className="">
+          <HapusChat data={customer} params={newCustomer} setDisplayReceiverNumber={setDisplayReceiverNumber} setChat={setChat} /></div>
+        }
+        {customer.length !== 0 && <div className="">
+          <HapusContact data={customer} params={newCustomer} setDisplayReceiverNumber={setDisplayReceiverNumber} /></div>
+        }
       </div>
     </div>
   )

@@ -13,40 +13,46 @@ export default function TambahContact({ data }) {
   const [perusahaan, setPerusahaan] = useState("");
   const [pic, setPic] = useState("");
   const [alamat, setAlamat] = useState("");
-  const [nohp, setNohp] = useState("");
+  const [nohp, setNohp] = useState();
   const [email, setEmail] = useState("");
 
-  useEffect(()=>{
+  useEffect(() => {
     setNohp(data)
-  },[data])
+  }, [data])
+
   const handleSubmitForm = async (e) => {
     e.preventDefault();
-    const res = await fetch("/api/customer", {
-      method: "POST",
-      body: JSON.stringify({
-        perusahaan,
-        pic,
-        alamat,
-        nohp,
-        email,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (res.ok) {
-      toast.success("Registrasi customer berhasil");
-      dispatch(fetchCustomers())
-      dispatch(fetchCustomerChat())
-      setPerusahaan("");
-      setPic("");
-      setAlamat("");
-      setNohp("");
-      setEmail("");
-      onOpenChange(close);
+    if (nohp === "") {
+      toast.error("No HP tidak boleh kosong")
     } else {
-      toast.error("Registrasi gagal");
+
+      const res = await fetch("/api/customer", {
+        method: "POST",
+        body: JSON.stringify({
+          perusahaan,
+          pic,
+          alamat,
+          nohp,
+          email,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (res.ok) {
+        toast.success("Registrasi customer berhasil");
+        dispatch(fetchCustomers())
+        dispatch(fetchCustomerChat())
+        setPerusahaan("");
+        setPic("");
+        setAlamat("");
+        setNohp("");
+        setEmail("");
+        onOpenChange(close);
+      } else {
+        toast.error("Registrasi gagal");
+      }
     }
   };
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -77,6 +83,7 @@ export default function TambahContact({ data }) {
                     onValueChange={setPerusahaan}
                   />
                   <Input
+                    isRequired
                     endContent={
                       <BiUser className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                     }
@@ -105,6 +112,7 @@ export default function TambahContact({ data }) {
                   />
                   <Input
                     isReadOnly
+                    isRequired
                     endContent={
                       <BiPhone className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                     }

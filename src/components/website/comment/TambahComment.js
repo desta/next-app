@@ -6,7 +6,7 @@ import { toast } from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import ReplyComment from './ReplyComment';
-import { formatJam, formatTanggal } from '@/components/Utils';
+import { formatJam, formatTanggal } from '@/utils/Utils';
 import { VscCalendar } from "react-icons/vsc";
 
 export default function TambahComment({ params }) {

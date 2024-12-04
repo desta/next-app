@@ -25,14 +25,7 @@ export async function POST(req, { params }) {
     }
   })
 
-  // let senderName;
-  // if (session) {
-  //   senderName = session.user.username
-  // } else {
-  //   senderName = wa.id
-  // }
   const { displayReceiverNumber, messageBody, customer } = await req.json()
-  console.log('cuss', customer)
 
   let usr;
   if (session) {
@@ -40,10 +33,10 @@ export async function POST(req, { params }) {
   } else {
     usr = {}
   }
-  
+
   let arr;
   if (customer.length !== 0) {
-    arr =  { id: Number(customer[0].id) }
+    arr = { id: Number(customer[0].id) }
   } else {
     arr = undefined
   }
@@ -61,4 +54,18 @@ export async function POST(req, { params }) {
     }
   })
   return Response.json(customers)
+}
+
+export async function DELETE(req, { params }) {
+  const data = await req.json()
+  try {
+    const removeChat = await prisma.customersChat.deleteMany({
+      where: {
+        displayReceiverNumber: data.displayReceiverNumber
+      },
+    })
+    return Response.json(removeChat)
+  } catch (error) {
+    return Response.json(error.message)
+  }
 }
