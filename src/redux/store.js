@@ -30,6 +30,7 @@ import SubMenu from './slices/SubMenu'
 import Agenda from './slices/agendas'
 import MediaAplication from './slices/media_aplication/MediaAplication'
 import customerChat from './slices/customer/CustomerChat'
+import chat from './slices/chat'
 
 export const store = configureStore({
   reducer: {
@@ -63,5 +64,6 @@ export const store = configureStore({
     Agenda,
     MediaAplication,
     customerChat,
+    chat,
   },
 })

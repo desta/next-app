@@ -13,6 +13,8 @@ export default function HomeCounter() {
         const a = res.filter(item => item.bulan[0].bulan === month)
         const b = a.filter(item => item.tahun[0].tahun === parseInt(year))
         
+        console.log('a',a)
+        console.log('b',b)
         const getVisit = Number(localStorage.getItem("visitCounter"));
 
         if (b.length === 0) {

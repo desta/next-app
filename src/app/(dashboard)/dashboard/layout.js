@@ -28,6 +28,10 @@ export default function layout({ children }) {
     getWindowSize()
   }, [])
 
+  useEffect(() => {
+    fetch("/api/socket"); // Initialize the WebSocket server
+  }, []);
+
   return (
     <>
       <div className="flex flex-col min-h-screen bg-primary-50">

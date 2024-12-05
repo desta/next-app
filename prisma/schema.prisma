@@ -51,6 +51,16 @@ model User {
   Agenda             Agenda[]
   MediaApplication   MediaApplication[]
   CustomersChat      CustomersChat[]
+  Chat               Chat[]
+}
+
+model Chat {
+  id        Int      @id @default(autoincrement())
+  chat      String   @default("") @db.Text
+  chatId    String   @db.Text
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
 }
 
 model App {
