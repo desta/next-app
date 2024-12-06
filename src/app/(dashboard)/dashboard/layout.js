@@ -4,7 +4,6 @@ import NavBar from '@/components/dashboard/NavBar'
 import React, { useEffect, useState } from 'react'
 import Breadcrumb from '@/components/dashboard/Breadcrumb'
 import Sidebar from '@/components/dashboard/Sidebar'
-import Chat from "@/components/dashboard/chat/Chat"
 
 export default function layout({ children }) {
 
@@ -59,7 +58,6 @@ export default function layout({ children }) {
           </div>
         </div>
       </div>
-      <Chat />
     </>
   )
 }

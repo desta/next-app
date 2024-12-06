@@ -12,27 +12,10 @@ import { toast } from "react-hot-toast";
 import { fetchChat } from "@/redux/slices/chat";
 import { useRouter } from "next/navigation";
 import io from "socket.io-client";
-
 let socket;
 
 export default function Chat() {
     const dispacth = useDispatch()
-    const [message, setMessage] = React.useState("");
-    const [messages, setMessages] = React.useState([]);
-
-    useEffect(() => {
-        socket = io();
-
-        // Listen for messages from the server
-        socket.on("message", (msg) => {
-            setMessages((prev) => [...prev, msg]);
-        });
-
-        return () => {
-            socket.disconnect();
-        };
-    }, []);
-
     const session = useSession()
     const router = useRouter()
     const [showChat, setShowChat] = React.useState(true)
@@ -40,55 +23,65 @@ export default function Chat() {
     const [targetUser, setTargetUser] = React.useState(null)
     const [chat, setChat] = React.useState('')
 
+    useEffect(() => {
+        socket = io();
+
+        // Listen for messages from the server
+        socket.on("message", (msg) => {
+            // setMessages((prev) => [...prev, msg]);
+            setChat(dataLama => [...dataLama, { dataChat: msg, createdAt: new Date() }])
+
+        });
+
+        return () => {
+            socket.disconnect();
+        };
+    }, []);
+
     const user = useSelector(state => state.user.data.filter(item => item.id !== session.data.user.id))
     const dataChat = useSelector(state => state.chat.data)
 
     const handleSelectUser = (usr) => {
-        socket.emit('join', usr.id);
         setShowMessage(false)
         setTargetUser(usr.id)
     }
 
     const handleClear = () => {
-        socket.emit('leave', targetUser);
         setShowMessage(true)
         setTargetUser(null)
     }
 
     useEffect(() => {
-        // dispacth(fetchUser())
-        // dispacth(fetchChat())
+        dispacth(fetchUser())
+        dispacth(fetchChat())
     }, [])
 
     const handleSendMessage = async (e) => {
         e.preventDefault()
-        socket.emit("message", message); // Send message to server
-        setMessages((prev) => [...prev, message]); // Add your message to the chat
-        setMessage(""); // Clear input field
-        // if (chat === '') {
-        //     toast.error('Please enter a message')
-        // } else {
-        //     // setChat(dataLama => [...dataLama, { messageBody, createdAt: new Date() }])
-        //     console.log('chat', chat)
-        //     const res = await fetch('/api/chat', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({
-        //             chat,
-        //             chatId: session.data.user.id + targetUser,
-        //         }),
-        //     })
-        //     if (res.ok) {
-        //         toast.success('Pesan terkirim')
-        //         dispacth(fetchChat())
-        //         setChat('')
-        //         router.push('#chat')
-        //     } else {
-        //         toast.error('Gagal mengirim pesan')
-        //     }
-        // }
+        if (chat === '') {
+            toast.error('Please enter a message')
+        } else {
+            socket.emit("message", chat); // Send message to server       
+            setChat(dataLama => [...dataLama, { dataChat: chat, createdAt: new Date() }])
+            const res = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat,
+                    chatId: session.data.user.id + targetUser,
+                }),
+            })
+            if (res.ok) {
+                toast.success('Pesan terkirim')
+                dispacth(fetchChat())
+                setChat('')
+                router.push('#chat')
+            } else {
+                toast.error('Gagal mengirim pesan')
+            }
+        }
 
     }
     return (
@@ -113,7 +106,7 @@ export default function Chat() {
                             </div>
                         </a>
                     )}
-                    {/* <div className={`${showMessage ? 'hidden' : 'block'} rounded-md`}>
+                    <div className={`${showMessage ? 'hidden' : 'block'} rounded-md`}>
                         {user.filter(usr => usr.id === targetUser).map((usr, index) =>
                             <div key={index} className="flex items-center pb-3">
                                 <div className="text-2xl hover:cursor-pointer text-primary hover:text-primary-300" onClick={handleClear}><FaLongArrowAltLeft /></div>
@@ -122,7 +115,8 @@ export default function Chat() {
                         )}
                         <div className="flex flex-col h-[375px] gap-2 overflow-y-auto">
                             <div className="flex flex-col gap-1 overflow-y-auto flex-grow pr-1">
-                                {dataChat.filter(item => item.chatId === session.data.user?.id + targetUser).map((data, index) =>
+                                {/* {dataChat.filter(item => item.chatId === session.data.user?.id + targetUser).map((data, index) => */}
+                                {dataChat.map((data, index) =>
                                     data.user?.id === session.data.user?.id ?
                                         <div className="bg-primary-300 p-1 max-w-[70%]" key={index}>
                                             {data.chat}
@@ -139,21 +133,57 @@ export default function Chat() {
                                 <Button type='submit' radius='none' isIconOnly className='bg-secondary text-secondary-foreground flex justify-center items-center text-xl hover:bg-black hover:text-primary'><BiSend /></Button>
                             </form>
                         </div>
-                    </div> */}
-                    <h1>Real-Time Chat</h1>
-                    <div>
-                        {messages.map((msg, index) => (
-                            <div key={index}>{msg}</div>
-                        ))}
                     </div>
-                    <input
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Type a message..."
-                    />
-                    <button onClick={handleSendMessage}>Send</button>
                 </div>
             </div>
         </div >
     )
 }
+
+// "use client";
+
+// import { useEffect, useState } from "react";
+// import io from "socket.io-client";
+
+// let socket;
+
+// export default function Chat() {
+//     const [message, setMessage] = useState("");
+//     const [messages, setMessages] = useState([]);
+
+//     useEffect(() => {
+//         socket = io();
+
+//         // Listen for messages from the server
+//         socket.on("message", (msg) => {
+//             setMessages((prev) => [...prev, msg]);
+//         });
+
+//         return () => {
+//             socket.disconnect();
+//         };
+//     }, []);
+
+//     const sendMessage = () => {
+//         socket.emit("message", message); // Send message to server
+//         setMessages((prev) => [...prev, message]); // Add your message to the chat
+//         setMessage(""); // Clear input field
+//     };
+
+//     return (
+//         <div>
+//             <h1>Real-Time Chat</h1>
+//             <div>
+//                 {messages.map((msg, index) => (
+//                     <div key={index}>{msg}</div>
+//                 ))}
+//             </div>
+//             <input
+//                 value={message}
+//                 onChange={(e) => setMessage(e.target.value)}
+//                 placeholder="Type a message..."
+//             />
+//             <button onClick={sendMessage}>Send</button>
+//         </div>
+//     );
+// }

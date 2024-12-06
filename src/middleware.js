@@ -4,8 +4,10 @@ import { NextResponse } from 'next/server';
 const protectedRoutes =[
     "/dashboard",
     "/dashboard/account",
-    "/dashboard/article",
+    "/dashboard/account",
+    "/dashboard/customer_chat",
     "/dashboard/gallery",
+    "/dashboard/media_aplication",
     "/dashboard/mikrotik",
     "/dashboard/product",
     "/dashboard/sales_invoice",

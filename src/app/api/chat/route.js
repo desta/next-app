@@ -4,7 +4,7 @@ import { prisma } from "@/libs/prisma"
 export async function GET() {
   const chat = await prisma.chat.findMany({
     orderBy: {
-      createdAt: "desc",
+      createdAt: "asc",
     },
   })
   return Response.json(chat)
