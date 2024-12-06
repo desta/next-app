@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect } from "react";
-import { BiBookAdd, BiNote, BiNotepad, BiUser, } from "react-icons/bi";
+import { BiBookAdd, BiNote, BiUser, } from "react-icons/bi";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Button, Divider, Tooltip } from "@nextui-org/react";
+import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Select, SelectItem, Tooltip } from "@nextui-org/react";
 import { LiaExchangeAltSolid } from "react-icons/lia";
 import { IoSettings } from "react-icons/io5";
-import { MdDashboard, MdEmail, MdWebAsset } from "react-icons/md";
-import { FaAngleLeft, FaAngleRight, FaUsersViewfinder } from "react-icons/fa6";
+import { MdDashboard, MdEmail } from "react-icons/md";
+import { FaAngleRight, FaUsersViewfinder } from "react-icons/fa6";
 import { MdRequestQuote } from "react-icons/md";
 import { SiSalesforce } from "react-icons/si";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,9 +16,28 @@ import parse from "html-react-parser"
 import { MenuLokasi } from "@/utils/MenuLokasi";
 import { TbWorldWww } from "react-icons/tb";
 
+const settings = [
+  { key: "app", label: "App", url: "/dashboard/setting_app" },
+  { key: "user", label: "User", url: "/dashboard/setting_user" },
+  { key: "faq", label: "FAQ", url: "/dashboard/setting_faq" },
+  { key: "ticket", label: "Ticket", url: "/dashboard/setting_ticket" },
+  { key: "smtp", label: "SMTP", url: "/dashboard/setting_smtp" },
+  { key: "customers", label: "Customers", url: "/dashboard/setting_customers" },
+  { key: "website", label: "Website", url: "/dashboard/website" },
+];
+
 export default function Sidebar({ open, setOpen }) {
   const dispatch = useDispatch()
   const menus = useSelector((state) => state.menu.data);
+
+
+  const [selectedKeys, setSelectedKeys] = React.useState(new Set(["Select"]));
+
+  const selectedValue = React.useMemo(
+    () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
+    [selectedKeys]
+  );
+
 
   useEffect(() => {
     dispatch(fetchMenus())
@@ -49,13 +68,7 @@ export default function Sidebar({ open, setOpen }) {
       <>
         <Link
           href={href}
-          className={` ${active
-            ?
-            "relative flex flex-row items-center h-9 focus:outline-none bg-white text-primary pl-4"
-            :
-            "relative flex pl-3 flex-row items-center h-9 focus:outline-none border-l-4 hover:border-primary-800 border-transparent pr-6 hover:bg-primary-200 hover:text-sidebar-hover text-sidebarcolor"
-            }`}
-        >
+          className={active ? '':''}>
           {children}
         </Link>
       </>
@@ -66,7 +79,7 @@ export default function Sidebar({ open, setOpen }) {
       <div className={`${open ? "w-14" : "w-64"} flex flex-col w-14 justify-between transition-all duration-300`}>
         <div className="pt-5">
           {menus.filter(a => a.lokasi === MenuLokasi.sidebar.name).map((menu) =>
-            <ActiveMenuLink href={menu.path} key={menu.id}>
+            <ActiveMenuLink href={menu.path} key={menu.id} set>
               <Tooltip key={menu.id} content={menu.title} showArrow placement="right" isDisabled={!open}>
                 <div className='flex-row flex items-center justify-between w-full'>
                   <div className='flex-row ml-4 flex items-center'>
@@ -115,8 +128,41 @@ export default function Sidebar({ open, setOpen }) {
               <MenuDrop href="/dashboard/website"><TbWorldWww /><span className='pl-2'>Website</span></MenuDrop>
             </div>
           </div>
+          <div className="flex justify-between items-center pl-5 pr-2">
+            <div className="flex items-center">
+              <IoSettings size={20} /><p className='pl-2'>Settings</p>
+            </div>
+            <Dropdown>
+              <DropdownTrigger>
+                <Button
+                  variant="bordered"
+                  size='sm'
+                  color="white"
+                >
+                  {selectedValue}
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="Settings"
+                variant="flat"
+                disallowEmptySelection
+                selectionMode="single"
+                selectedKeys={selectedKeys}
+                onSelectionChange={setSelectedKeys}
+                items={settings}
+              >
+                {(item) => (
+                  <DropdownItem
+                    key={item.label}
+                  >
+                    <MenuDrop href={item.url}><span className="w-full block">{item.label}</span></MenuDrop>
+                  </DropdownItem>
+                )}
+              </DropdownMenu>
+            </Dropdown>
+          </div>
         </div>
-        <div className="-right-5 absolute top-3/4 z-20"        >
+        <div className="-right-5 absolute top-3/4 z-20">
           <Button
             isIconOnly
             color="primary"
