@@ -17,8 +17,8 @@ app.prepare().then(() => {
     io.on("connection", (socket) => {
         console.log("User connected", socket.id);
 
-        socket.on("message", (msg) => {
-            socket.broadcast.emit("message", msg); // Send message to all except sender
+        socket.on("chat", (msg) => {
+            socket.broadcast.emit("chat", msg); // Send message to all except sender
         });
 
         socket.on("disconnect", () => {

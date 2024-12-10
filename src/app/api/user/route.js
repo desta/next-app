@@ -10,9 +10,6 @@ export const GET = auth(async function GET(req) {
           username: "asc",
         },
       ],
-      // include: {
-      //   izin: true,
-      // }
     });
     return Response.json(user);
   }

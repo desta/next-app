@@ -1,11 +1,13 @@
 import { auth } from "@/auth"
 import { prisma } from "@/libs/prisma"
 
-export async function GET() {
+export async function GET () {
   const chat = await prisma.chat.findMany({
-    orderBy: {
-      createdAt: "asc",
-    },
+    orderBy: [
+      {
+        createdAt: 'asc',
+      },
+    ],
   })
   return Response.json(chat)
 }

@@ -16,6 +16,10 @@ import parse from "html-react-parser"
 import { MenuLokasi } from "@/utils/MenuLokasi";
 import { TbWorldWww } from "react-icons/tb";
 
+const saleses = [
+  { key: "quotations", label: "Quotations", url: "/dashboard/sales_quotations" },
+];
+
 const settings = [
   { key: "app", label: "App", url: "/dashboard/setting_app" },
   { key: "user", label: "User", url: "/dashboard/setting_user" },
@@ -30,6 +34,12 @@ export default function Sidebar({ open, setOpen }) {
   const dispatch = useDispatch()
   const menus = useSelector((state) => state.menu.data);
 
+  const [sales, setSales] = React.useState(new Set(["Select"]));
+
+  const salesValue = React.useMemo(
+    () => Array.from(sales).join(", ").replaceAll("_", " "),
+    [sales]
+  );
 
   const [selectedKeys, setSelectedKeys] = React.useState(new Set(["Select"]));
 
@@ -38,6 +48,10 @@ export default function Sidebar({ open, setOpen }) {
     [selectedKeys]
   );
 
+  const handleClear = () => {
+    setSales(new Set(["Select"]));
+    setSelectedKeys(new Set(["Select"]));
+  }
 
   useEffect(() => {
     dispatch(fetchMenus())
@@ -61,6 +75,27 @@ export default function Sidebar({ open, setOpen }) {
       </>
     );
   };
+
+  const MenuHidden = ({ children, href }) => {
+    const pathname = usePathname();
+    const active = href === pathname;
+    return (
+      <>
+        <Link
+          href={href}
+          className={` ${active
+            ?
+            "relative flex flex-row items-center h-9 focus:outline-none bg-white text-primary pl-4"
+            :
+            "relative flex pl-3 flex-row items-center h-9 focus:outline-none border-l-4 hover:border-primary-800 border-transparent pr-6 hover:bg-primary-200 hover:text-sidebar-hover text-sidebarcolor"
+            }`}
+        >
+          {children}
+        </Link>
+      </>
+    );
+  };
+
   const MenuDrop = ({ children, href }) => {
     const pathname = usePathname();
     const active = href === pathname;
@@ -68,7 +103,7 @@ export default function Sidebar({ open, setOpen }) {
       <>
         <Link
           href={href}
-          className={active ? '':''}>
+          className={active ? '' : ''}>
           {children}
         </Link>
       </>
@@ -79,56 +114,124 @@ export default function Sidebar({ open, setOpen }) {
       <div className={`${open ? "w-14" : "w-64"} flex flex-col w-14 justify-between transition-all duration-300`}>
         <div className="pt-5">
           {menus.filter(a => a.lokasi === MenuLokasi.sidebar.name).map((menu) =>
-            <ActiveMenuLink href={menu.path} key={menu.id} set>
+            <ActiveMenuLink href={menu.path} key={menu.id}>
               <Tooltip key={menu.id} content={menu.title} showArrow placement="right" isDisabled={!open}>
-                <div className='flex-row flex items-center justify-between w-full'>
+                <div className='flex-row flex items-center justify-between w-full' onClick={handleClear}>
                   <div className='flex-row ml-4 flex items-center'>
                     <span className='pr-1'>{parse(menu.icon)}</span>
-                    <span className={`${open ? 'hidden' : 'block'} pl-2`}>{menu.title}</span>
+                    <span className={`${open ? 'text-transparent' : 'text-nowrap'} transition-all duration-300 pl-2`}>{menu.title}</span>
                   </div>
                 </div>
               </Tooltip>
             </ActiveMenuLink>
           )}
 
-          {/* =============== Dropdown menu sales =============== */}
-          <div className='pl-0 pr-4 border-l-4 dropdown relative flex flex-row items-center h-9 focus:outline-none hover:border-primary-800 border-transparent hover:bg-primary-200 hover:text-sidebar-hover text-sidebarcolor hover:cursor-pointer my-1'>
-            <div className='flex-row flex items-center justify-between w-full'>
-              <div className='flex-row flex items-center ml-4'>
-                <span className='pr-2'><SiSalesforce className="w-5 h-5" stroke="currentColor" /></span>
-                <span className={`${open ? 'hidden' : 'block'}`}>Sales</span>
-              </div>
-              <div className={`${open ? 'ml-2' : 'mr-2'} text-sm tracking-wide truncate`}>
-                <FaAngleRight />
-              </div>
+          {/* start sales =============================================== */}
+          <Tooltip content='Sales' showArrow placement="right" isDisabled={!open}>
+            <div className={`${open ? 'block' : 'hidden'} pl-0 pr-4 border-l-4 dropdown relative flex flex-row items-center h-9 focus:outline-none hover:border-primary-800 border-transparent hover:bg-primary-200 hover:text-sidebar-hover text-sidebarcolor hover:cursor-pointer my-1`}>
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button
+                    size='sm'
+                    color="white"
+                  >
+                    <SiSalesforce className="w-5 h-5 -ml-3" />
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  aria-label="Settings"
+                  variant="flat"
+                  disallowEmptySelection
+                  selectionMode="single"
+                  selectedKeys={sales}
+                  onSelectionChange={setSales}
+                  items={saleses}
+                >
+                  {(item) => (
+                    <DropdownItem
+                      key={item.label}
+                      onClick={() => setSelectedKeys(new Set(["Select"]))}
+                    >
+                      <MenuDrop href={item.url}><span className="w-full block">{item.label}</span></MenuDrop>
+                    </DropdownItem>
+                  )}
+                </DropdownMenu>
+              </Dropdown>
             </div>
-            <div className='dropdown-content pr-1 min-w-52 bg-sidebar text-sidebar-foreground py-1 -mt-1 rounded-se-lg'>
-              <MenuDrop href="/dashboard/sales_quotations"><MdRequestQuote /><span className='pl-2'>Quotations</span></MenuDrop>
+          </Tooltip>
+
+          <div className={`${open ? 'hidden' : 'block'} flex justify-between items-center pl-5 pr-2 py-[6px]`}>
+            <div className="flex items-center">
+              <SiSalesforce className="w-5 h-5" /><p className='pl-2'>Sales</p>
             </div>
+            <Dropdown>
+              <DropdownTrigger>
+                <Button
+                  variant="bordered"
+                  size='sm'
+                  color="white"
+                  className="h-5"
+                >
+                  {salesValue}
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="Settings"
+                variant="flat"
+                disallowEmptySelection
+                selectionMode="single"
+                selectedKeys={sales}
+                onSelectionChange={setSales}
+                items={saleses}
+              >
+                {(item) => (
+                  <DropdownItem
+                    key={item.label}
+                    onClick={() => setSelectedKeys(new Set(["Select"]))}
+                  >
+                    <MenuDrop href={item.url}><span className="w-full block">{item.label}</span></MenuDrop>
+                  </DropdownItem>
+                )}
+              </DropdownMenu>
+            </Dropdown>
           </div>
-          <Divider className="bg-white mx-2 w-auto" />
-          {/* =============== Dropdown menu setting =============== */}
-          <div className='pl-0 pr-4 border-l-4 dropdown relative flex flex-row items-center h-9 focus:outline-none hover:border-primary-800 border-transparent hover:bg-primary-200 hover:text-sidebar-hover text-sidebarcolor hover:cursor-pointer my-1 z-30'>
-            <div className='flex-row flex items-center justify-between w-full'>
-              <div className='flex-row flex items-center ml-4'>
-                <span className='pr-2'><IoSettings className="w-5 h-5" stroke="currentColor" /></span>
-                <span className={`${open ? 'hidden' : 'block'}`}>Setting</span>
-              </div>
-              <div className={`${open ? 'ml-2' : 'mr-2'} text-sm tracking-wide truncate`}>
-                <FaAngleRight />
-              </div>
+          {/* end sales ================ */}
+
+          {/* start settings ================= */}
+          <Tooltip content='Settings' showArrow placement="right" isDisabled={!open}>
+            <div className={`${open ? 'block' : 'hidden'} pl-0 pr-4 border-l-4 dropdown relative flex flex-row items-center h-9 focus:outline-none hover:border-primary-800 border-transparent hover:bg-primary-200 hover:text-sidebar-hover text-sidebarcolor hover:cursor-pointer my-1`}>
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button
+                    size='sm'
+                    color="white"
+                  >
+                    <IoSettings className="w-5 h-5 -ml-3" />
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  aria-label="Settings"
+                  variant="flat"
+                  disallowEmptySelection
+                  selectionMode="single"
+                  selectedKeys={selectedKeys}
+                  onSelectionChange={setSelectedKeys}
+                  items={settings}
+                >
+                  {(item) => (
+                    <DropdownItem
+                      key={item.label}
+                      onClick={() => setSales(new Set(["Select"]))}
+                    >
+                      <MenuDrop href={item.url}><span className="w-full block">{item.label}</span></MenuDrop>
+                    </DropdownItem>
+                  )}
+                </DropdownMenu>
+              </Dropdown>
             </div>
-            <div className='dropdown-content pr-1 min-w-52 bg-sidebar text-sidebar-foreground py-1 -mt-1 rounded-se-lg'>
-              <MenuDrop href="/dashboard/setting_app"><MdDashboard /><span className='pl-2'>App</span></MenuDrop>
-              <MenuDrop href="/dashboard/setting_user"><BiUser /><span className='pl-2'>User</span></MenuDrop>
-              <MenuDrop href="/dashboard/setting_faq"><BiNote /><span className='pl-2'>FAQ</span></MenuDrop>
-              <MenuDrop href="/dashboard/setting_ticket"><BiBookAdd /><span className='pl-2'>Ticket</span></MenuDrop>
-              <MenuDrop href="/dashboard/setting_smtp"><MdEmail /><span className='pl-2'>SMTP</span></MenuDrop>
-              <MenuDrop href="/dashboard/setting_customers"><FaUsersViewfinder /><span className='pl-2'>Customers</span></MenuDrop>
-              <MenuDrop href="/dashboard/website"><TbWorldWww /><span className='pl-2'>Website</span></MenuDrop>
-            </div>
-          </div>
-          <div className="flex justify-between items-center pl-5 pr-2">
+          </Tooltip>
+
+          <div className={`${open ? 'hidden' : 'block'} flex justify-between items-center pl-5 pr-2 py-[10px]`}>
             <div className="flex items-center">
               <IoSettings size={20} /><p className='pl-2'>Settings</p>
             </div>
@@ -138,6 +241,7 @@ export default function Sidebar({ open, setOpen }) {
                   variant="bordered"
                   size='sm'
                   color="white"
+                  className="h-5"
                 >
                   {selectedValue}
                 </Button>
@@ -154,6 +258,7 @@ export default function Sidebar({ open, setOpen }) {
                 {(item) => (
                   <DropdownItem
                     key={item.label}
+                    onClick={() => setSales(new Set(["Select"]))}
                   >
                     <MenuDrop href={item.url}><span className="w-full block">{item.label}</span></MenuDrop>
                   </DropdownItem>
@@ -162,6 +267,8 @@ export default function Sidebar({ open, setOpen }) {
             </Dropdown>
           </div>
         </div>
+        {/* end settings =================== */}
+
         <div className="-right-5 absolute top-3/4 z-20">
           <Button
             isIconOnly

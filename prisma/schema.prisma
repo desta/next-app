@@ -58,7 +58,7 @@ model Chat {
   id        Int      @id @default(autoincrement())
   chat      String   @default("") @db.Text
   chatId    String   @db.Text
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   createdAt DateTime @default(now())
 }

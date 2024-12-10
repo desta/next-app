@@ -22,47 +22,58 @@ export default function Chat() {
     const [showMessage, setShowMessage] = React.useState(true)
     const [targetUser, setTargetUser] = React.useState(null)
     const [chat, setChat] = React.useState('')
-
+    const [messages, setMessages] = React.useState([])
+    
     useEffect(() => {
+        initialize();
         socket = io();
-
-        // Listen for messages from the server
-        socket.on("message", (msg) => {
-            // setMessages((prev) => [...prev, msg]);
-            setChat(dataLama => [...dataLama, { dataChat: msg, createdAt: new Date() }])
-
-        });
-
+        socket.on("chat", (msg) => {
+            setMessages(dataLama => [...dataLama, { chat: msg, createdAt: new Date() }])
+        })
+        // // Listen for messages from the server
+        // socket.on("message", (msg) => {
+        //     // setMessages((prev) => [...prev, msg]);
+        //     setMessages(dataLama => [...dataLama, { messages: msg, createdAt: new Date() }])
+            
+        // });
+        
         return () => {
             socket.disconnect();
         };
     }, []);
 
     const user = useSelector(state => state.user.data.filter(item => item.id !== session.data.user.id))
-    const dataChat = useSelector(state => state.chat.data)
-
+    // const dataChat = useSelector(state => state.chat.data)
+    
     const handleSelectUser = (usr) => {
         setShowMessage(false)
         setTargetUser(usr.id)
     }
-
+    
     const handleClear = () => {
         setShowMessage(true)
         setTargetUser(null)
     }
-
+    
     useEffect(() => {
         dispacth(fetchUser())
         dispacth(fetchChat())
     }, [])
 
+    const initialize = async () => {
+        const dataChat = await fetch("/api/chat");
+        const data = await dataChat.json();
+        setMessages([...data])        
+    }
+            console.log('msg',messages)
     const handleSendMessage = async (e) => {
         e.preventDefault()
         if (chat === '') {
             toast.error('Please enter a message')
         } else {
-            socket.emit("message", chat); // Send message to server       
-            setChat(dataLama => [...dataLama, { dataChat: chat, createdAt: new Date() }])
+            const socket = io();
+            socket.emit("chat", chat); // Send message to server       
+            // setMessages(dataLama => [...dataLama, { chat: chat, createdAt: new Date() }])
             const res = await fetch('/api/chat', {
                 method: 'POST',
                 headers: {
@@ -113,10 +124,10 @@ export default function Chat() {
                                 <p className="w-full text-center font-bold text-primary">{usr.name}</p>
                             </div>
                         )}
-                        <div className="flex flex-col h-[375px] gap-2 overflow-y-auto">
+                        <div className="flex flex-col h-[175px] gap-2 overflow-y-auto">
                             <div className="flex flex-col gap-1 overflow-y-auto flex-grow pr-1">
                                 {/* {dataChat.filter(item => item.chatId === session.data.user?.id + targetUser).map((data, index) => */}
-                                {dataChat.map((data, index) =>
+                                {messages.map((data, index) =>
                                     data.user?.id === session.data.user?.id ?
                                         <div className="bg-primary-300 p-1 max-w-[70%]" key={index}>
                                             {data.chat}
@@ -140,50 +151,75 @@ export default function Chat() {
     )
 }
 
-// "use client";
-
-// import { useEffect, useState } from "react";
+// 'use client'
+// import React, { useEffect, useState } from 'react'
 // import io from "socket.io-client";
-
 // let socket;
 
 // export default function Chat() {
+//     const [name, setName] = useState("");
 //     const [message, setMessage] = useState("");
 //     const [messages, setMessages] = useState([]);
 
+    
 //     useEffect(() => {
+//         initialize();
+        
 //         socket = io();
-
-//         // Listen for messages from the server
-//         socket.on("message", (msg) => {
-//             setMessages((prev) => [...prev, msg]);
-//         });
-
 //         return () => {
 //             socket.disconnect();
-//         };
+//         }
 //     }, []);
+    
+//     const initialize = async () => {
+//         await fetch("/api/socket");
+//         socket = io();
+//         socket.on("receive-message", (data) => {
+//             setMessages((messages) => [...messages, data]);
+//         });
+//     }
+    
 
-//     const sendMessage = () => {
-//         socket.emit("message", message); // Send message to server
-//         setMessages((prev) => [...prev, message]); // Add your message to the chat
-//         setMessage(""); // Clear input field
-//     };
+//     const handleSubmit = (e) => {
+//         e.preventDefault();
+//         socket.emit("send-message", { name, message });
+//         setMessage("");
+//     }
 
 //     return (
 //         <div>
-//             <h1>Real-Time Chat</h1>
-//             <div>
-//                 {messages.map((msg, index) => (
-//                     <div key={index}>{msg}</div>
-//                 ))}
-//             </div>
-//             <input
-//                 value={message}
-//                 onChange={(e) => setMessage(e.target.value)}
-//                 placeholder="Type a message..."
-//             />
-//             <button onClick={sendMessage}>Send</button>
+//             <h1>NEXT SOCKET.IO</h1>
+//             <form onSubmit={handleSubmit}>
+//                 <input
+//                     type="text"
+//                     placeholder="Enter your name"
+//                     value={name}
+//                     onChange={(e) => setName(e.target.value)}
+//                     required
+//                 />
+//                 <br />
+//                 <input
+//                     type="text"
+//                     placeholder="Enter your message"
+//                     value={message}
+//                     onChange={(e) => setMessage(e.target.value)}
+//                     required
+//                 />
+//                 <br />
+//                 <button type="submit">Send</button>
+//             </form>
+//             <hr />
+
+//             <h2>Messages</h2>
+//             <ul>
+//                 {
+//                     messages.map((msg, i) => (
+//                         <li key={i}>
+//                             <strong>{msg.name}</strong> : {msg.message}
+//                         </li>
+//                     ))
+//                 }
+//             </ul>
 //         </div>
 //     );
-// }
+// };
