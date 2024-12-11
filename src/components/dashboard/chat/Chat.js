@@ -2,7 +2,7 @@
 import { RiArrowUpDoubleFill } from "react-icons/ri";
 import { RiArrowDownDoubleFill } from "react-icons/ri";
 import { FaLongArrowAltLeft } from "react-icons/fa";
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Avatar, Button, Textarea } from "@nextui-org/react";
 import { BiSend } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,12 +12,13 @@ import { toast } from "react-hot-toast";
 import { fetchChat } from "@/redux/slices/chat";
 import { useRouter } from "next/navigation";
 import io from "socket.io-client";
-let socket;
 
 export default function Chat() {
+    let socket;
     const dispacth = useDispatch()
     const session = useSession()
     const router = useRouter()
+    const scrollTarget = useRef(null);
     const [showChat, setShowChat] = React.useState(true)
     const [showMessage, setShowMessage] = React.useState(true)
     const [targetUser, setTargetUser] = React.useState(null)
@@ -30,24 +31,17 @@ export default function Chat() {
         socket.on("chat", (msg) => {
             setMessages(dataLama => [...dataLama, { chat: msg, createdAt: new Date() }])
         })
-        // // Listen for messages from the server
-        // socket.on("message", (msg) => {
-        //     // setMessages((prev) => [...prev, msg]);
-        //     setMessages(dataLama => [...dataLama, { messages: msg, createdAt: new Date() }])
-            
-        // });
-        
         return () => {
             socket.disconnect();
         };
     }, []);
 
-    const user = useSelector(state => state.user.data.filter(item => item.id !== session.data.user.id))
-    // const dataChat = useSelector(state => state.chat.data)
+    const dataUser = useSelector(state => state.user.data)
+    const user = dataUser.filter(item => item.id !== session?.data.user.id)
     
     const handleSelectUser = (usr) => {
-        setShowMessage(false)
-        setTargetUser(usr.id)
+        setShowMessage(false);
+        setTargetUser(usr.id);
     }
     
     const handleClear = () => {
@@ -65,7 +59,17 @@ export default function Chat() {
         const data = await dataChat.json();
         setMessages([...data])        
     }
-            console.log('msg',messages)
+
+    useEffect(() => {
+		(scrollTarget.current).scrollIntoView();	
+	}, [handleSelectUser]);
+
+    useEffect(() => {
+		if (scrollTarget.current) {
+			(scrollTarget.current).scrollIntoView({ behavior: 'smooth' });
+		}
+	}, [messages.length]);
+
     const handleSendMessage = async (e) => {
         e.preventDefault()
         if (chat === '') {
@@ -73,7 +77,6 @@ export default function Chat() {
         } else {
             const socket = io();
             socket.emit("chat", chat); // Send message to server       
-            // setMessages(dataLama => [...dataLama, { chat: chat, createdAt: new Date() }])
             const res = await fetch('/api/chat', {
                 method: 'POST',
                 headers: {
@@ -88,7 +91,6 @@ export default function Chat() {
                 toast.success('Pesan terkirim')
                 dispacth(fetchChat())
                 setChat('')
-                router.push('#chat')
             } else {
                 toast.error('Gagal mengirim pesan')
             }
@@ -107,7 +109,7 @@ export default function Chat() {
             <div className={`${showChat ? '' : ''} bg-primary h-[calc(100%-50px)] w-full fixed rounded-md shadow-lg shadow-secondary/50 p-1`}>
                 <div className="bg-white h-full w-full shadow-lg rounded-md shadow-secondary/50 p-2 flex flex-col gap-2">
                     {user.map((usr, index) =>
-                        <a href='#chat' key={index} className={`${showMessage ? 'block' : 'hidden'}`}>
+                        <div key={index} className={`${showMessage ? 'block' : 'hidden'}`}>
                             <div onClick={() => handleSelectUser(usr)} className={`${showMessage ? 'block' : 'hidden'} flex items-center p-1 rounded-md hover:bg-primary-300 cursor-pointer`}>
                                 <div className="w-12"><Avatar radius="sm" src="https://i.pravatar.cc/150?u=a042581f4e29026024d" /></div>
                                 <div className='flex flex-col'>
@@ -115,7 +117,7 @@ export default function Chat() {
                                     <div className='text-gray-500 text-sm'>biji</div>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                     )}
                     <div className={`${showMessage ? 'hidden' : 'block'} rounded-md`}>
                         {user.filter(usr => usr.id === targetUser).map((usr, index) =>
@@ -137,7 +139,7 @@ export default function Chat() {
                                             {data.chat}
                                         </div>
                                 )}
-                                <div id="chat"></div>
+                                <div ref={scrollTarget}></div>
                             </div>
                             <form onSubmit={handleSendMessage} className="flex gap-2 w-full bg-white">
                                 <Textarea onChange={(e) => setChat(e.target.value)} value={chat} minRows={1} placeholder='Type here...' color='primary' radius='none' />
