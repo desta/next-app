@@ -6,6 +6,7 @@ Chat
 https://github.com/jglchen/nextjs-socket-chat
 https://www.youtube.com/watch?v=b79LOKfXzOk
 https://socket.io/get-started/private-messaging-part-1
+https://www.youtube.com/watch?v=_h7Pc1woq-I
 
 ## Getting Started
 

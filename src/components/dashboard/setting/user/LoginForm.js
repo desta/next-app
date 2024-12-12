@@ -13,6 +13,7 @@ import { fetchAccount } from "@/redux/slices/account";
 import { signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import { fetchApp } from "@/redux/slices/app";
+import socket from "@/socket";
 
 let validationSchema = yup.object().shape({
   username: yup.string().required("Tidak boleh kosong"),
@@ -21,6 +22,7 @@ let validationSchema = yup.object().shape({
 
 export default function LoginForm() {
   const router = useRouter();
+  let usernameAlreadySelected = false;
   const dispatch = useDispatch()
   const app = useSelector((state) => state.app.data);
   const [isVisible, setIsVisible] = useState(false);
@@ -42,6 +44,12 @@ export default function LoginForm() {
     dispatch(fetchApp())
   }, [])
 
+  const onUsernameSelection = (username) =>{
+    usernameAlreadySelected = true;
+    socket.auth = { username };
+    socket.connect();
+  }
+  
   const handleSubmitForm = async (data) => {
     setLoading(true);
     const res = await signIn("credentials", {
@@ -60,6 +68,7 @@ export default function LoginForm() {
       dispatch(fetchAccount())
       router.push('/dashboard');
       // toast.success('Selamat datang!!');
+      onUsernameSelection(data.username);
     }
   };
   return (

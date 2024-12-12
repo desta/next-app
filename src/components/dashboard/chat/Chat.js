@@ -11,10 +11,9 @@ import { useSession } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import { fetchChat } from "@/redux/slices/chat";
 import { useRouter } from "next/navigation";
-import io from "socket.io-client";
+import { socket } from "@/socket";
 
 export default function Chat() {
-    let socket;
     const dispacth = useDispatch()
     const session = useSession()
     const router = useRouter()
@@ -26,14 +25,18 @@ export default function Chat() {
     const [messages, setMessages] = React.useState([])
     
     useEffect(() => {
+        socket.connect();
+        socket.on("welcome", (msg) =>{
+            toast.success(msg)
+            console.log(msg)
+        })
         initialize();
-        socket = io();
         socket.on("chat", (msg) => {
             setMessages(dataLama => [...dataLama, { chat: msg, createdAt: new Date() }])
         })
         return () => {
             socket.disconnect();
-        };
+        };        
     }, []);
 
     const dataUser = useSelector(state => state.user.data)
@@ -52,12 +55,19 @@ export default function Chat() {
     useEffect(() => {
         dispacth(fetchUser())
         dispacth(fetchChat())
-    }, [])
+        socket.on("welcome", (msg) => {
+            console.log('ooo',msg)
+        });
+        socket.on("connect", () => {
+         console.log('connected')   
+        }
+        )
+    }, []);
 
     const initialize = async () => {
         const dataChat = await fetch("/api/chat");
         const data = await dataChat.json();
-        setMessages([...data])        
+        setMessages([...data])
     }
 
     useEffect(() => {
@@ -75,7 +85,6 @@ export default function Chat() {
         if (chat === '') {
             toast.error('Please enter a message')
         } else {
-            const socket = io();
             socket.emit("chat", chat); // Send message to server       
             const res = await fetch('/api/chat', {
                 method: 'POST',
