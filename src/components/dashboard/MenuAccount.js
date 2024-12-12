@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAccount } from '@/redux/slices/account';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { socket } from '@/socket';
 
 export default function MenuAccount({ order, setOrder }) {
   const dispatch = useDispatch()
@@ -31,6 +32,10 @@ export default function MenuAccount({ order, setOrder }) {
     [selectedKeys]
   );
 
+  const handleOut = () => {
+    logout();
+    socket.disconnect();
+  }
   useEffect(() => {
     dispatch(fetchAccount())
     const userTheme = localStorage.getItem('theme');
@@ -134,7 +139,7 @@ export default function MenuAccount({ order, setOrder }) {
           >
             Tema
           </DropdownItem>
-          <DropdownItem key="logout" color="danger" endContent={<IoMdLogOut className="text-large" />} onClick={() => logout()}>Keluar</DropdownItem>
+          <DropdownItem key="logout" color="danger" endContent={<IoMdLogOut className="text-large" />} onClick={handleOut}>Keluar</DropdownItem>
         </DropdownSection>
       </DropdownMenu>
     </Dropdown>

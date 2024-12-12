@@ -13,7 +13,7 @@ import { fetchAccount } from "@/redux/slices/account";
 import { signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import { fetchApp } from "@/redux/slices/app";
-import socket from "@/socket";
+import { socket } from "@/socket";
 
 let validationSchema = yup.object().shape({
   username: yup.string().required("Tidak boleh kosong"),
@@ -44,12 +44,12 @@ export default function LoginForm() {
     dispatch(fetchApp())
   }, [])
 
-  const onUsernameSelection = (username) =>{
+  const onUsernameSelection = (username) => {
     usernameAlreadySelected = true;
     socket.auth = { username };
     socket.connect();
   }
-  
+
   const handleSubmitForm = async (data) => {
     setLoading(true);
     const res = await signIn("credentials", {
