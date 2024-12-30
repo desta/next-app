@@ -29,7 +29,7 @@ export default function FormRegister({ onClose }) {
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [akses, setAkses] = useState();
+  const [akses, setAkses] = useState(new Set([]));
   const [password, setPassword] = useState("");
   const [ulangiPassword, setUlangiPassword] = useState("");
   const {
@@ -41,14 +41,22 @@ export default function FormRegister({ onClose }) {
   } = useForm({
     resolver: yupResolver(validationSchema),
   });
+
+  const handleSelectionChange = (e) => {
+    setAkses(new Set(e.target.value.split(",")));
+  };
+
   const handleSubmitForm = async () => {
+    let arr = [];
+    akses.forEach((item) => arr.push(item));
+
     const res = await fetch("/api/user", {
       method: "POST",
       body: JSON.stringify({
         username,
         name,
         email,
-        akses,
+        akses: arr,
         password,
         image: ""
       }),
@@ -126,7 +134,7 @@ export default function FormRegister({ onClose }) {
             onValueChange={setEmail}
           />
           <Select
-            items={AksesList}
+            // items={AksesList}
             labelPlacement='outside'
             className="font-bold"
             color='primary'
@@ -138,14 +146,15 @@ export default function FormRegister({ onClose }) {
             // isInvalid={!!errors.akses}
             // errorMessage={errors.akses?.message}
             isRequired
-            selectedKeys={[akses]}
-            onChange={(e) => setAkses(e.target.value)}
+            selectedKeys={akses}
+            selectionMode="multiple"
+            onChange={handleSelectionChange}
           >
-           {Object.keys(AksesList).map((item) => (
-                    <SelectItem key={AksesList[item].akses}>
-                      {AksesList[item].akses}
-                    </SelectItem>
-                  ))}
+            {Object.keys(AksesList).map((item) => (
+              <SelectItem key={AksesList[item].akses}>
+                {AksesList[item].akses}
+              </SelectItem>
+            ))}
           </Select>
           <Input
             endContent={

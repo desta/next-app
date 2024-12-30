@@ -1,5 +1,6 @@
-"use client";
-
 import { io } from "socket.io-client";
 
-export const socket = io({autoConnect: false});
+const URL = "http://localhost:3000";
+const socket = io(URL, { autoConnect: false });
+
+export default socket;

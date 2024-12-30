@@ -119,7 +119,7 @@ export default function Sidebar({ open, setOpen }) {
                 <div className='flex-row flex items-center justify-between w-full' onClick={handleClear}>
                   <div className='flex-row ml-4 flex items-center'>
                     <span className='pr-1'>{parse(menu.icon)}</span>
-                    <span className={`${open ? 'text-transparent' : 'text-nowrap'} transition-all duration-300 pl-2`}>{menu.title}</span>
+                    <span className={`${open ? 'text-transparent' : ''} text-nowrap transition-all duration-300 pl-2`}>{menu.title}</span>
                   </div>
                 </div>
               </Tooltip>

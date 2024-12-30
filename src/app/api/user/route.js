@@ -10,6 +10,9 @@ export const GET = auth(async function GET(req) {
           username: "asc",
         },
       ],
+      include: {
+        akses: true,
+      }
     });
     return Response.json(user);
   }
@@ -32,36 +35,23 @@ export const GET = auth(async function GET(req) {
 // }
 
 export async function POST(req) {
-  try {
-    const data = await req.json();
-    const { email, username, name, password, akses } = data;
-    const hashPassword = saltAndHashPassword(password)
-    if (akses === "Administrator") {
-      const newUser = await prisma.user.create({
-        data: {
-          username,
-          name,
-          email,
-          akses: akses || "User",
-          password: hashPassword,
-          image: "",
-        },
-      });
-      return Response.json(newUser);
-    } else {
-      const newUser = await prisma.user.create({
-        data: {
-          username,
-          name,
-          email,
-          akses: akses || "User",
-          password: hashPassword,
-          image: "",
-        },
-      });
-      return Response.json(newUser);
-    }
-  } catch (error) {
-    console.log('Create user failed', error);
-  }
+  const data = await req.json();
+  const { email, username, name, password, akses } = data;
+  const hashPassword = saltAndHashPassword(password)
+
+  const newUser = await prisma.user.create({
+    data: {
+      username,
+      name,
+      email,
+      password: hashPassword,
+      image: "",
+      akses: {
+        connectOrCreate: akses.map((item) => {
+          return { where: {akses: item}, create: {akses: item}};
+        })
+      },
+    },
+  });
+  return Response.json(newUser);
 }

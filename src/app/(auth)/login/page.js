@@ -1,3 +1,4 @@
+import { auth } from '@/auth';
 import LoginForm from '@/components/dashboard/setting/user/LoginForm'
 import { prisma } from '@/libs/prisma'
 import { redirect } from 'next/navigation'
@@ -8,8 +9,9 @@ export const metadata = {
 };
 
 export default async function page() {
-  const install = await prisma.install.findFirst() 
+  const session = await auth();
+  const install = await prisma.install.findFirst();  
   if (install === null) return redirect('/install')
-  else   
-  return <LoginForm />
+  else if (session === null) return <LoginForm />
+  else return redirect('/dashboard')
 }

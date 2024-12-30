@@ -82,12 +82,12 @@ export default function TabelUser() {
 
   const renderCell = React.useCallback((user, columnKey) => {
     const cellValue = user[columnKey];
-
+    console.log(cellValue);
     switch (columnKey) {
-      case "izin":
+      case "akses":
         return (
           <div className="relative flex justify-center items-center gap-2">
-            <Izin params={user} />
+           {cellValue.map(item => item.akses).join(", ")}
           </div>
         );
       case "actions":

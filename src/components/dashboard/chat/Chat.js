@@ -11,7 +11,7 @@ import { useSession } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import { fetchChat } from "@/redux/slices/chat";
 import { useRouter } from "next/navigation";
-import { socket } from "@/socket";
+import socket from "@/socket";
 
 export default function Chat() {
     const dispacth = useDispatch()
@@ -27,34 +27,34 @@ export default function Chat() {
     useEffect(() => {
         // socket.connect();
         initialize();
-        socket.on("users", (users) => {
-            users.forEach((user) => {
-              user.self = user.userID === socket.id;
-              initReactiveProperties(user);
-            });
-            // put the current user first, and then sort by username
-            this.users = users.sort((a, b) => {
-              if (a.self) return -1;
-              if (b.self) return 1;
-              if (a.username < b.username) return -1;
-              return a.username > b.username ? 1 : 0;
-            });
-        });
+        // socket.on("users", (users) => {
+        //     users.forEach((user) => {
+        //       user.self = user.userID === socket.id;
+        //       initReactiveProperties(user);
+        //     });
+        //     // put the current user first, and then sort by username
+        //     this.users = users.sort((a, b) => {
+        //       if (a.self) return -1;
+        //       if (b.self) return 1;
+        //       if (a.username < b.username) return -1;
+        //       return a.username > b.username ? 1 : 0;
+        //     });
+        // });
         
-        socket.on("user connected", (user) => {
-            initReactiveProperties(user);
-            this.users.push(user);
-            console.log('uu',user)
-          });
+        // socket.on("user connected", (user) => {
+        //     initReactiveProperties(user);
+        //     this.users.push(user);
+        //     console.log('uu',user)
+        //   });
           
         socket.on("chat", (msg) => {
             setMessages(dataLama => [...dataLama, { chat: msg, createdAt: new Date() }])
         })
-        return () => {
-            socket.disconnect();
-        };        
+        // return () => {
+        //     socket.disconnect();
+        // };        
     }, []);
-console.log('data user',users)
+
     const dataUser = useSelector(state => state.user.data)
     const user = dataUser.filter(item => item.id !== session?.data.user.id)
     
@@ -94,6 +94,7 @@ console.log('data user',users)
         if (chat === '') {
             toast.error('Please enter a message')
         } else {
+            // socket = io();
             socket.emit("chat", chat); // Send message to server   
             setMessages(dataLama => [...dataLama, { chat: chat, createdAt: new Date() }])    
             const res = await fetch('/api/chat', {

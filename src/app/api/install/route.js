@@ -15,15 +15,31 @@ export async function POST(req) {
           homepage,
         }
       },
+      akses: {
+        create: [
+          { akses: 'Administrator'},
+          { akses: 'Admin'},
+          { akses: 'User'},
+        ],
+      },
       user: {
         create: {
           name,
           email,
           username,
           password: hashPassword,
-          akses: "Administrator",
+          akses: {
+            connectOrCreate: {
+              where: {
+                akses: "Administrator",
+              },
+              create: {
+                akses: "Administrator",
+              },
+            },
+          },
         }
-      },
+      },      
       menu: {
         create: [
           { title: 'Dashboard', path: '/dashboard', lokasi: 'Sidebar', icon: '<i class="bi bi-columns-gap"></i>', urutan: 1 },

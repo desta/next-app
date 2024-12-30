@@ -34,10 +34,10 @@ app.prepare().then(() => {
         }
         socket.emit("users", users);
         
-        socket.broadcast.emit("user connected", {
-            userID: socket.id,
-            username: socket.username,
-        });
+        // socket.broadcast.emit("user connected", {
+        //     userID: socket.id,
+        //     username: socket.username,
+        // });
 
         socket.on("chat", (msg) => {
             socket.broadcast.emit("chat", msg); // Send message to all except sender

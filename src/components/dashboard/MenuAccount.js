@@ -8,9 +8,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAccount } from '@/redux/slices/account';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { socket } from '@/socket';
+import socket from '@/socket';
 
-export default function MenuAccount({ order, setOrder }) {
+export default function MenuAccount() {
   const dispatch = useDispatch()
   const account = useSelector((state) => state.account.data)
   const [mounted, setMounted] = useState(false);
@@ -19,9 +19,18 @@ export default function MenuAccount({ order, setOrder }) {
 
   const ActiveMenuLink = ({ children, href }) => {
     const pathname = usePathname();
+    const active = href === pathname;
     return (
       <>
-        <Link href={href}>{children}
+        <Link
+          href={href}
+          className={` ${active ?
+            ''
+            :
+            ''
+            }`}
+        >
+          {children}
         </Link>
       </>
     );
@@ -69,6 +78,7 @@ export default function MenuAccount({ order, setOrder }) {
       <DropdownMenu
         aria-label="Menu account"
         className="p-3"
+        variant="light"
       >
         <DropdownSection aria-label="Profile & Theme">
           <DropdownItem
@@ -77,29 +87,29 @@ export default function MenuAccount({ order, setOrder }) {
             className="h-14 gap-2 opacity-100"
           >
             <ActiveMenuLink href="/dashboard/account">
-            <div className='flex gap-3 items-center pl-1'>
-              <Avatar
-                as="button"
-                size="sm"
-                className="transition-transform"
-                src={account.image}
-                isBordered color="secondary"
-              />
-              <div>
-                <p className='font-bold'>{account.name}</p>
-                <p>{account.akses}</p>
+              <div className='flex gap-3 items-center pl-1'>
+                <Avatar
+                  as="button"
+                  size="sm"
+                  className="transition-transform"
+                  src={account.image}
+                  isBordered color="secondary"
+                />
+                <div>
+                  <p className='font-bold'>{account.name}</p>
+                  <p>{account.akses}</p>
+                </div>
               </div>
-            </div>
             </ActiveMenuLink>
           </DropdownItem>
           <DropdownItem key="settings" showDivider>
-            <ActiveMenuLink href="/dashboard/account"><span className="w-full block">Akun saya</span></ActiveMenuLink>
+            <ActiveMenuLink href="/dashboard/account"><span className="w-full block hover:text-primary hover:pl-2 ease-out duration-100">Akun saya</span></ActiveMenuLink>
           </DropdownItem>
           <DropdownItem key="faq">
-            <ActiveMenuLink href="/dashboard/account/faq"><span className="w-full block">FAQ</span></ActiveMenuLink>
+            <ActiveMenuLink href="/dashboard/account/faq"><span className="w-full block hover:text-primary hover:pl-2 ease-out duration-100">FAQ</span></ActiveMenuLink>
           </DropdownItem>
           <DropdownItem key="support" showDivider>
-            <ActiveMenuLink href="/dashboard/account/support"><span className="w-full block">Support</span></ActiveMenuLink>
+            <ActiveMenuLink href="/dashboard/account/support"><span className="w-full block hover:text-primary hover:pl-2 ease-out duration-100">Support</span></ActiveMenuLink>
           </DropdownItem>
           <DropdownItem
             isReadOnly
@@ -139,7 +149,7 @@ export default function MenuAccount({ order, setOrder }) {
           >
             Tema
           </DropdownItem>
-          <DropdownItem key="logout" color="danger" endContent={<IoMdLogOut className="text-large" />} onClick={handleOut}>Keluar</DropdownItem>
+          <DropdownItem key="logout" className='hover:bg-red-500 hover:!text-white' endContent={<IoMdLogOut className="text-large" />} onClick={() => handleOut()}>Keluar</DropdownItem>
         </DropdownSection>
       </DropdownMenu>
     </Dropdown>

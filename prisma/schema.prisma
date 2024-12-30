@@ -30,7 +30,6 @@ model User {
   emailVerified      DateTime?
   image              String               @default("") @db.Text
   password           String
-  akses              String               @default("User")
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
   Authenticator      Authenticator[]
@@ -52,6 +51,13 @@ model User {
   MediaApplication   MediaApplication[]
   CustomersChat      CustomersChat[]
   Chat               Chat[]
+  akses              Akses[]
+}
+
+model Akses {
+  id        Int      @id @default(autoincrement())
+  akses     String   @unique
+  User      User[]
 }
 
 model Chat {
