@@ -36,6 +36,14 @@ export const PagesList = {
                     footer: {
                         id: 2,
                         title: 'Footer',
+                    },
+                    nav1: {
+                        id: 3,
+                        title: 'Nav1',
+                    },
+                    nav2: {
+                        id: 4,
+                        title: 'Nav2',
                     }
                 }
             },

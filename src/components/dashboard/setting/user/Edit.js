@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { edit, fetchUser } from "@/redux/slices/user";
 import { fetchAccount } from "@/redux/slices/account";
 import { MdAlternateEmail } from "react-icons/md";
-import { AksesList } from "@/utils/AksesList";
+import { fetchAkses } from "@/redux/slices/akses";
 
 
 let validationSchema = yup.object().shape({
@@ -51,6 +51,13 @@ export default function Edit({ params }) {
   const [akses, setAkses] = useState(params.akses.map((item) => item.akses));
   const [password, setPassword] = useState();
   const edit = useSelector((state) => state.edit);
+  const aksesList = useSelector((state) => state.akses.data);
+
+  useEffect(() => {
+    dispatch(fetchAkses())
+  },[])
+
+  console.log('akse',aksesList)
   const {
     setError,
     register,
@@ -208,9 +215,9 @@ export default function Edit({ params }) {
                       selectionMode="multiple"
                       onChange={handleSelectionChange}
                     >
-                      {Object.keys(AksesList).map((item) => (
-                        <SelectItem key={AksesList[item].akses}>
-                          {AksesList[item].akses}
+                      {aksesList.map((item) => (
+                        <SelectItem key={item.akses}>
+                          {item.akses}
                         </SelectItem>
                       ))}
                     </Select>

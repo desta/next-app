@@ -6,11 +6,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { today, getLocalTimeZone } from "@internationalized/date";
 import dynamic from 'next/dynamic';
 import { Spinner } from '@nextui-org/react';
-import Clock from "react-live-clock"
+// import Clock from "react-live-clock"
 
-// const Clock = dynamic(() => import("react-live-clock"), {
-//     ssr: false, loading: () => <div className="flex gap-2 items-center"><Spinner size="sm" /><p>Loading...</p></div>,
-//   });
+const Clock = dynamic(() => import("react-live-clock"), {
+    ssr: false, loading: () => <div className="flex gap-2 items-center"><Spinner size="sm" /><p>Loading...</p></div>,
+  });
 
 function getGreetingTime(m) {
     let g = null; //return g

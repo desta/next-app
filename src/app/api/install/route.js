@@ -17,9 +17,8 @@ export async function POST(req) {
       },
       akses: {
         create: [
-          { akses: 'Administrator'},
-          { akses: 'Admin'},
-          { akses: 'User'},
+          { akses: 'Admin' },
+          { akses: 'User' },
         ],
       },
       user: {
@@ -35,11 +34,11 @@ export async function POST(req) {
               },
               create: {
                 akses: "Administrator",
-              },
+              }
             },
           },
         }
-      },      
+      },
       menu: {
         create: [
           { title: 'Dashboard', path: '/dashboard', lokasi: 'Sidebar', icon: '<i class="bi bi-columns-gap"></i>', urutan: 1 },

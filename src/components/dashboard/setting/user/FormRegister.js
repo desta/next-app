@@ -1,6 +1,6 @@
 "use client";
 import { Button, Input, Select, SelectItem } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiLock, BiUser } from "react-icons/bi";
 import { MdAlternateEmail } from "react-icons/md";
 import { useForm } from "react-hook-form";
@@ -10,7 +10,7 @@ import { toast } from 'react-hot-toast';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser, tambah } from "@/redux/slices/user";
 import { usePathname } from "next/navigation";
-import { AksesList } from "@/utils/AksesList";
+import { fetchAkses } from "@/redux/slices/akses";
 
 let validationSchema = yup.object({
   username: yup.string().required("Tidak boleh kosong"),
@@ -32,6 +32,13 @@ export default function FormRegister({ onClose }) {
   const [akses, setAkses] = useState(new Set([]));
   const [password, setPassword] = useState("");
   const [ulangiPassword, setUlangiPassword] = useState("");
+  const aksesList = useSelector((state) => state.akses.data);
+
+  useEffect(() => {
+    dispatch(fetchAkses())
+  }, [])
+
+
   const {
     setError,
     register,
@@ -150,9 +157,9 @@ export default function FormRegister({ onClose }) {
             selectionMode="multiple"
             onChange={handleSelectionChange}
           >
-            {Object.keys(AksesList).map((item) => (
-              <SelectItem key={AksesList[item].akses}>
-                {AksesList[item].akses}
+            {aksesList.map((item) => (
+              <SelectItem key={item.akses}>
+                {item.akses}
               </SelectItem>
             ))}
           </Select>
