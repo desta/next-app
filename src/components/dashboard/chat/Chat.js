@@ -11,9 +11,10 @@ import { useSession } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import { fetchChat } from "@/redux/slices/chat";
 import { useRouter } from "next/navigation";
-import { socket } from "@/socket";
+import io from "socket.io-client";
 
 export default function Chat() {
+    let socket;
     const dispacth = useDispatch()
     const session = useSession()
     const router = useRouter()
@@ -24,7 +25,9 @@ export default function Chat() {
     const [chat, setChat] = React.useState('')
     const [messages, setMessages] = React.useState([])
     const [users, setUsers] = React.useState([])
+
     useEffect(() => {
+        socket = io();
         // socket.connect();
         initialize();
         socket.on("users", (users) => {
@@ -94,6 +97,8 @@ console.log('data user',users)
         if (chat === '') {
             toast.error('Please enter a message')
         } else {
+        socket = io();
+
             socket.emit("chat", chat); // Send message to server   
             setMessages(dataLama => [...dataLama, { chat: chat, createdAt: new Date() }])    
             const res = await fetch('/api/chat', {
