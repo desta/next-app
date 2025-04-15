@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { BiBookAdd, BiNote, BiUser, } from "react-icons/bi";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Select, SelectItem, Tooltip } from "@nextui-org/react";
+import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Select, SelectItem, Tooltip, Accordion, AccordionItem } from "@nextui-org/react";
 import { LiaExchangeAltSolid } from "react-icons/lia";
 import { IoSettings } from "react-icons/io5";
 import { MdDashboard, MdEmail } from "react-icons/md";
@@ -31,6 +31,14 @@ const settings = [
 ];
 
 export default function Sidebar({ open, setOpen }) {
+  const itemClasses = {
+    base: "py-0 w-full px-3",
+    title: "font-normal text-medium text-sidebarcolor",
+    indicator: "text-medium text-white",
+    content: "text-small -mx-4 bg-white",
+  };
+
+
   const dispatch = useDispatch()
   const menus = useSelector((state) => state.menu.data);
 
@@ -65,9 +73,9 @@ export default function Sidebar({ open, setOpen }) {
         <Link
           href={href}
           className={` ${active ?
-            "relative flex flex-row items-center h-9 focus:outline-none bg-white text-primary my-1 pl-1"
+            "relative flex flex-row items-center h-9 focus:outline-none text-primary my-1 ml-1 bg-white"
             :
-            "relative flex flex-row items-center h-9 focus:outline-none border-l-4 hover:border-primary-800 border-transparent hover:bg-primary-200 hover:text-sidebar-hover text-sidebarcolor my-1"
+            "relative flex flex-row items-center h-9 focus:outline-none border-l-4 hover:border-primary-800 border-transparent hover:bg-primary-200 hover:text-sidebar-hover text-white my-1"
             }`}
         >
           {children}
@@ -76,18 +84,17 @@ export default function Sidebar({ open, setOpen }) {
     );
   };
 
-  const MenuHidden = ({ children, href }) => {
+  const ActiveMenuDown = ({ children, href }) => {
     const pathname = usePathname();
     const active = href === pathname;
     return (
       <>
         <Link
           href={href}
-          className={` ${active
-            ?
-            "relative flex flex-row items-center h-9 focus:outline-none bg-white text-primary pl-4"
+          className={` ${active ?
+            "relative flex flex-row items-center h-9 focus:outline-none text-primary my-1"
             :
-            "relative flex pl-3 flex-row items-center h-9 focus:outline-none border-l-4 hover:border-primary-800 border-transparent pr-6 hover:bg-primary-200 hover:text-sidebar-hover text-sidebarcolor"
+            "relative flex flex-row items-center h-9 focus:outline-none border-l-4 -ml-1 hover:border-primary-800 border-transparent hover:bg-primary-200 hover:text-sidebar-hover text-black my-1"
             }`}
         >
           {children}
@@ -119,7 +126,7 @@ export default function Sidebar({ open, setOpen }) {
                 <div className='flex-row flex items-center justify-between w-full' onClick={handleClear}>
                   <div className='flex-row ml-4 flex items-center'>
                     <span className='pr-1'>{parse(menu.icon)}</span>
-                    <span className={`${open ? 'text-transparent' : 'text-nowrap'} transition-all duration-300 pl-2`}>{menu.title}</span>
+                    <span className={`${open ? 'text-transparent' : ''} text-nowrap transition-all duration-300 pl-2`}>{menu.title}</span>
                   </div>
                 </div>
               </Tooltip>
@@ -159,6 +166,29 @@ export default function Sidebar({ open, setOpen }) {
               </Dropdown>
             </div>
           </Tooltip>
+          <Accordion isCompact itemClasses={itemClasses} keepContentMounted>
+            <AccordionItem
+              key="1"
+              aria-label="Content"
+              title="Content"
+              startContent={
+                <SiSalesforce className="w-5 h-5" />
+              }
+            >
+              {menus.filter(a => a.lokasi === MenuLokasi.sidebar.name).map((menu) =>
+                <ActiveMenuDown href={menu.path} key={menu.id}>
+                  <Tooltip key={menu.id} content={menu.title} showArrow placement="right" isDisabled={!open}>
+                    <div className='flex-row flex items-center justify-between w-full' onClick={handleClear}>
+                      <div className='flex-row ml-4 flex items-center'>
+                        <span className='pr-1'>{parse(menu.icon)}</span>
+                        <span className={`${open ? 'text-transparent' : ''} text-nowrap transition-all duration-300 pl-2`}>{menu.title}</span>
+                      </div>
+                    </div>
+                  </Tooltip>
+                </ActiveMenuDown>
+              )}
+            </AccordionItem>           
+          </Accordion>
 
           <div className={`${open ? 'hidden' : 'block'} flex justify-between items-center pl-5 pr-2 py-[6px]`}>
             <div className="flex items-center">

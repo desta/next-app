@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { edit, fetchUser } from "@/redux/slices/user";
 import { fetchAccount } from "@/redux/slices/account";
 import { MdAlternateEmail } from "react-icons/md";
-import { AksesList } from "@/utils/AksesList";
+import { fetchAkses } from "@/redux/slices/akses";
 
 
 let validationSchema = yup.object().shape({
@@ -48,10 +48,16 @@ export default function Edit({ params }) {
   const [username, setUsername] = useState(params.username);
   const [name, setName] = useState(params.name);
   const [email, setEmail] = useState(params.email);
-  const [akses, setAkses] = useState(params.akses);
-  // const [image, setImage] = useState(null);
-  const [password, setPassword] = useState(null);
+  const [akses, setAkses] = useState(params.akses.map((item) => item.akses));
+  const [password, setPassword] = useState();
   const edit = useSelector((state) => state.edit);
+  const aksesList = useSelector((state) => state.akses.data);
+
+  useEffect(() => {
+    dispatch(fetchAkses())
+  },[])
+
+  console.log('akse',aksesList)
   const {
     setError,
     register,
@@ -61,6 +67,10 @@ export default function Edit({ params }) {
   } = useForm({
     resolver: yupResolver(validationSchema),
   });
+
+  const handleSelectionChange = (e) => {
+    setAkses(new Set(e.target.value.split(",")));
+  };
 
   const handleSubmitForm = async () => {
     // const formData = new FormData();
@@ -73,19 +83,21 @@ export default function Edit({ params }) {
     //   formData.append("password", password);
     // }
     // const res = await fetch(`/api/user/update`, {
+    let arr = [];
+    akses.forEach((item) => arr.push(item));
     const res = await fetch(`/api/user/${params.id}`, {
       method: 'PUT',
       // body: formData
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         username,
         name,
         email,
-        akses,
+        akses: arr,
         password,
       }),
-      headers: {
-        "Content-Type": "application/json",
-      },
     })
 
     if (res.ok) {
@@ -187,27 +199,25 @@ export default function Edit({ params }) {
                       onChange={(e) => setEmail(e.target.value)}
                     />
                     <Select
-                      items={AksesList}
+                      // items={AksesList}
                       labelPlacement='outside'
                       className="font-bold"
                       color='primary'
                       label="Akses"
                       placeholder="Akses"
                       variant="bordered"
-                      id="akses"
                       name="akses"
-                      selectedKeys={[akses]}
+                      // {...register("akses")}
+                      // isInvalid={!!errors.akses}
+                      // errorMessage={errors.akses?.message}
                       isRequired
-                      onSelectionChange={(e) => {
-                        setAkses(e.currentKey);
-                      }}
-                    // {...register("akses")}
-                    // isInvalid={!!errors.akses}
-                    // errorMessage={errors.akses?.message}
+                      selectedKeys={akses}
+                      selectionMode="multiple"
+                      onChange={handleSelectionChange}
                     >
-                      {Object.keys(AksesList).map((item) => (
-                        <SelectItem key={AksesList[item].akses}>
-                          {AksesList[item].akses}
+                      {aksesList.map((item) => (
+                        <SelectItem key={item.akses}>
+                          {item.akses}
                         </SelectItem>
                       ))}
                     </Select>

@@ -15,13 +15,28 @@ export async function POST(req) {
           homepage,
         }
       },
+      akses: {
+        create: [
+          { akses: 'Admin' },
+          { akses: 'User' },
+        ],
+      },
       user: {
         create: {
           name,
           email,
           username,
           password: hashPassword,
-          akses: "Administrator",
+          akses: {
+            connectOrCreate: {
+              where: {
+                akses: "Administrator",
+              },
+              create: {
+                akses: "Administrator",
+              }
+            },
+          },
         }
       },
       menu: {

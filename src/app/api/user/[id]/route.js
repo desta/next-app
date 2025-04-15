@@ -2,37 +2,49 @@ import { prisma } from "@/libs/prisma";
 import { saltAndHashPassword } from "@/utils/Utils";
 
 export async function PUT(req, { params }) {
-  const data = await req.json()
+  const data = await req.json();
   const { password, akses } = data;
 
-  let hashPassword
-  if (password) {
-    // const salt = await bcrypt.genSalt(10)
+  let hashPassword;
+  if (password !== undefined) {
     hashPassword = saltAndHashPassword(password)
+    const updateUser = await prisma.user.update({
+      where: {
+        id: await params.id,
+      },
+      data: {
+        ...data,
+        password: hashPassword,
+        akses: {
+          // set: akses.map((item) => {
+          //   return { where: { akses: item }, create: { akses: item } };
+          // })
+          set: akses.map(akses => ({ akses: akses }))
+        },
+      },
+      include: {
+        akses: true,
+      }
+    });
+    return Response.json(updateUser);
   }
-
-  if (akses === "Administrator") {
-    const newUser = await prisma.user.update({
+  else {
+    const updateUser = await prisma.user.update({
       where: {
-        id: (await params).id,
+        id: await params.id,
       },
       data: {
         ...data,
-        password: hashPassword,
+        password: undefined,
+        akses: {
+          set: akses.map(akses => ({ akses: akses }))
+        },
       },
+      include: {
+        akses: true,
+      }
     });
-    return Response.json(newUser);
-  } else {
-    const newUser = await prisma.user.update({
-      where: {
-        id: params.id,
-      },
-      data: {
-        ...data,
-        password: hashPassword,
-      },
-    });
-    return Response.json(newUser);
+    return Response.json(updateUser);
   }
 }
 

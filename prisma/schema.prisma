@@ -14,10 +14,11 @@ datasource db {
 
 model Install {
   id      Int           @id @default(0)
-  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   app     App           @relation(fields: [appId], references: [id], onDelete: Cascade)
   menu    Menu[]
   counter HomeCounter[]
+  akses   Akses[]
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String
   appId   Int
 }
@@ -30,13 +31,11 @@ model User {
   emailVerified      DateTime?
   image              String               @default("") @db.Text
   password           String
-  akses              String               @default("User")
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
   Authenticator      Authenticator[]
   Session            Session[]
   Account            Account[]
-  Install            Install[]
   Ticket             Ticket[]
   ticketReply        ticketReply[]
   Quotation          Quotation[]
@@ -52,6 +51,17 @@ model User {
   MediaApplication   MediaApplication[]
   CustomersChat      CustomersChat[]
   Chat               Chat[]
+  akses              Akses[]
+  Install            Install[]
+  News               News[]
+}
+
+model Akses {
+  id        Int      @id @default(autoincrement())
+  akses     String   @unique
+  User      User[]
+  Install   Install? @relation(fields: [installId], references: [id], onDelete: Cascade)
+  installId Int?
 }
 
 model Chat {
@@ -288,6 +298,26 @@ model ArticleCategory {
   Article  Article[]
 }
 
+model News {
+  id        Int            @id @default(autoincrement())
+  title     String
+  content   String         @default("") @db.Text
+  publish   Boolean        @default(true)
+  category  NewsCategory[]
+  tanggal   DateTime       @default(now())
+  update    DateTime       @updatedAt
+  createdBy User           @relation(fields: [userId], references: [id])
+  gallery   Gallery[]
+  userId    String
+}
+
+model NewsCategory {
+  id       Int    @id @default(autoincrement())
+  category String @unique
+  news     News?  @relation(fields: [newsId], references: [id])
+  newsId   Int?
+}
+
 model Comment {
   id           Int            @id @default(autoincrement())
   nama         String
@@ -376,6 +406,7 @@ model Gallery {
   article          Article[]
   Component        Component[]
   MediaApplication MediaApplication[]
+  News             News[]
 }
 
 model Note {
