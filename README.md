@@ -1,13 +1,5 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Tutorials
-
-Chat
-https://github.com/jglchen/nextjs-socket-chat
-https://www.youtube.com/watch?v=b79LOKfXzOk
-https://socket.io/get-started/private-messaging-part-1
-https://www.youtube.com/watch?v=_h7Pc1woq-I
-
 ## Getting Started
 
 First, run the development server:

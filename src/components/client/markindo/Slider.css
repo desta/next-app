@@ -1,9 +1,0 @@
-@media screen and (max-width: 600px) {
-    .swiper-button-prev{
-        display: none;
-    }
-    .swiper-button-next{
-        display: none;
-    }
-    
-}
